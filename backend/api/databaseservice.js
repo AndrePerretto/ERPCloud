@@ -9,8 +9,8 @@ const ObjectID = require('mongodb').ObjectID
 const router = express.Router()
 server.use('/api', router)
 // config for your database
-//var config = {user: 'sa', password: 'IntSql2015@', server: '52.89.63.119',  database: 'eCloud-homologa'};
-var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
+var config = {user: 'sa', password: 'IntSql2015@', server: '52.89.63.119',  database: 'eCloud-homologa'};
+//var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
 
 var EnterpriseID = "";
 var UserID = "";
