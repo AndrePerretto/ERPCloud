@@ -95,7 +95,8 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
         var tabGenID2 = guid();
         gridButtons = fillButtonGrid("1df8627a-f0a4-4c50-8a1c-eb6d7d5d04e5_" + tabGenID2 + "_table", tabGenID2);
         result[0].html = replaceAll(result[0].html, result[0].tabgenid, tabGenID2)
-        result[0].html = replaceAll(result[0].html, "undefined", "");
+       // result[0].html = replaceAll(result[0].html, "undefined", "");
+       // result[0].html = replaceAll(result[0].html, "null", "");
 
         var forcingTemplate = "";
         var layoutType = "";
@@ -114,6 +115,8 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
         tabGenID = tabGenID2;
         var wizard = $("[data-guidwizard='" + tabGenID + "']");
         $("textarea").val("");
+        $("[value='undefined']").val("");
+        $("[value='null']").val("");
         //gridButtons = fillButtonGrid("194536c8-48b0-43de-b464-cb9b5da4683e_" + tabGenID + "_table", tabGenID);
         
         for (var i = 0; i < wizard.length; i++) {
@@ -1495,6 +1498,7 @@ function OpenFormSearch(tabGenID) {
                 loaderImage(idfiltergen,true)
                 $(target).find("#Filtrar").click();
                 //loaderImage(idfiltergen,false)
+                $(".panel-body").css('height', '');
             }
         }
     }
