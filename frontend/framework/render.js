@@ -854,7 +854,23 @@ function openLayout(button, tabGenID) {
                                     keyfield = arraykey[1];
                                 }
                                 if (keyfield) {
-                                    
+                                    if(key.indexOf("dt_") >= 0){
+                                        var date = new Date(element[key]);
+                                        var dia = (date.getDate() + 1);
+                                        var mes = (date.getMonth() + 1);
+                                        var ano =  date.getFullYear();
+
+                                        if(dia.toString().length == 1){
+                                            dia = "0" + dia;
+                                        }
+
+                                        if(mes.toString().length == 1){
+                                            mes = "0" + mes;
+                                        }
+
+                                        element[key] = dia + '/' + mes + '/' + ano;
+                                        //element[key] = element[key].substr(0,element[key].indexOf('T'))
+                                    }
 
                                     if(keyfield.toLowerCase() == "id"){
                                         if (!element.Id) {
