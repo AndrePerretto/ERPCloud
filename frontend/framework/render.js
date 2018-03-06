@@ -95,7 +95,8 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
         var tabGenID2 = guid();
         gridButtons = fillButtonGrid("1df8627a-f0a4-4c50-8a1c-eb6d7d5d04e5_" + tabGenID2 + "_table", tabGenID2);
         result[0].html = replaceAll(result[0].html, result[0].tabgenid, tabGenID2)
-        
+        result[0].html = replaceAll(result[0].html, "undefined", "");
+
         var forcingTemplate = "";
         var layoutType = "";
         var urlRenderLayout = "";
@@ -461,6 +462,322 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
 
     }});
     return tabGenID;
+}
+
+
+
+function sharpGrid(containerID) {
+    //define a tabela
+    var table = $("#" + containerID + "_table table");
+    //marcação nas linhas para que a paginação contabilize todas as linhas inicialmente
+    $("#" + containerID + "_table table tbody tr").addClass("filtered");
+    //funcao que atribui o mecanismo de search nos campos da tabela
+    sharpGridSearch(containerID);
+    sharpGridPager(containerID);
+    //atribuição de evento onde, ao incluir ou excluir itens da tabela, sejam novamente chamadas as funcoes de paginacao e edicao
+    if (table) {
+        table.bind('DOMNodeInserted DOMNodeRemoved',
+            function (event, item) {
+                sharpGridPager(containerID);                
+            });
+    }
+}
+
+function sharpGridSearch(containerID) {
+
+    var table = $("#" + containerID + "_table table");
+    var classSharpGrid;
+    var idSharpGrid;
+    var divSharpGrid;
+    var inputSearch;
+
+    classSharpGrid = "sharpGrid";
+    idSharpGrid = containerID + "_sharpGrid";
+    idSearchBox = containerID + "_searchBox";
+
+    if (!$("#" + idSharpGrid).length) {
+        divSharpGrid = "<div class=\"fixed-table-body " + classSharpGrid + "\" id=\"" + idSharpGrid + "\" ></div>";
+
+        inputSearch = "<div class=\"searchBox\">"
+        inputSearch += "<div class='form-group' style=\"height:35px;\">"
+        inputSearch += "<div class='control-group col-md-3' style=\"padding: 0; position: absolute; right: 10px;\">"
+
+        inputSearch += "<input data-serializable='false' placeholder=\"Buscar...\" id=\"" + idSearchBox + "\" type=\"text\" class='form-control'/>"
+
+        inputSearch += "</div>"
+        inputSearch += "<label class='col-md' style=\"position:absolute;right: 15px; z-index: 1; top: 1%;\"><i class='fa fa-search'></i></label>"
+        inputSearch += "</div>"
+        inputSearch += "</div>"
+
+
+
+
+        table.wrap(divSharpGrid);
+        $("#" + idSharpGrid).prepend(inputSearch)
+        jQuery.expr[':'].contains = function (a, i, m) {
+            return jQuery(a).text().toUpperCase()
+                .indexOf(m[3].toUpperCase()) >= 0;
+        };
+        $("#" + idSearchBox).on("keyup", function () {
+            var term = $(this).val()
+            var listCell = table.find("td:contains(\'" + term + "\')").not(".no-search");
+            var ind = [];
+            listCell.each(function (i) {
+                ind.push($(this).parent("tr"));
+            })
+            $("#" + containerID + "_table table tbody" + " tr").hide();
+            if (ind.length) {
+                $("#" + containerID + "_table table tbody" + " tr").removeClass("filtered");
+                for (var i = 0; i < ind.length; i++) {
+                    $(ind[i]).addClass("filtered");
+                }
+            }
+            else {
+                if (term.length > 0) {
+                    $("#" + containerID + "_table table tbody" + " tr").removeClass("filtered");
+
+                }
+                else {
+                    $("#" + containerID + "_table table tbody" + " tr").addClass("filtered");
+                }
+            }
+            $("#" + containerID + "_table table tbody" + " tr.filtered").show();
+            sharpGridPager(containerID);
+        });
+        sharpGridPager(containerID);
+    }
+}
+
+function sharpGridPager(containerID) {
+    var pageactive = $("[activepage='" + containerID + "_true']").html();
+    var activeobject = $("[activepage='" + containerID + "_true']");
+
+    $("#" + containerID + "_table").find(".pager").remove();
+
+    var table = $("#" + containerID + "_table table")
+
+    var currentPage = 0;
+
+    if (pageactive) {
+        currentPage = parseInt(pageactive)
+        currentPage = currentPage - 1;
+    }
+    var numPerPage = 10;
+    var numPage = $("#" + containerID + "_table").attr("data-numberpage");
+    if (numPage) {
+        numPerPage = numPage;
+    }
+
+    var $table = table;
+
+    $table.bind('repaginate', function () {
+        $table.find('tbody tr.filtered').hide().slice(currentPage * numPerPage, (currentPage + 1) * numPerPage).show();
+
+
+    });
+
+    $table.trigger('repaginate');
+    var numRows = $table.find('tbody tr.filtered').length;
+    var numPages = Math.ceil(numRows / numPerPage);
+    var $pager = $('<div class="pager"></div>');
+
+    for (var page = 0; page < numPages; page++) {
+        $('<span class="page-number btn btn-default"></span>').text(page + 1).bind('click', {
+            newPage: page
+        }, function (event) {
+            currentPage = event.data['newPage'];
+            $table.trigger('repaginate');
+            $(this).siblings().attr("activepage", containerID + "_false");
+            $(this).siblings().attr("numberpage", currentPage);
+            $(this).addClass('active')
+                .switchClass("btn-default", "btn-primary", 1000, "easeInOutQuad")
+                .siblings()
+                .removeClass('active')
+                .switchClass("btn-primary", "btn-default", 1000, "easeInOutQuad");
+
+            $(this).attr("activepage", containerID + "_true");
+            $(this).attr("numberpage", currentPage);
+        }).appendTo($pager).addClass('clickable');
+    }
+
+    if (numPages > 0) {
+        //$pager.insertAfter($table).find('span.page-number:first').addClass('active')
+        //            .switchClass("btn-default", "btn-primary", 1000, "easeInOutQuad");
+
+        $pager.insertAfter($table).find('span.page-number')
+                          .switchClass("btn-default", "btn-default", 1000, "easeInOutQuad");
+
+        if ($pager) {
+            if ($pager.length > 0) {
+                if ($pager[0].children) {
+                    if ($pager[0].children.length > 0) {
+                        var classList = $pager[0].children;
+                        for (i = 0; i < classList.length; i++) {
+                            if ($(classList[i]).html() == (currentPage + 1).toString()) {
+                                $(classList[i]).attr("activepage", containerID + "_true");
+                                $(classList[i]).addClass("active");
+                                $(classList[i]).addClass("btn-primary")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    var btnnovodisabled = $("#" + containerID + "_btnnovo").hasClass("disabled");
+    if (btnnovodisabled) {
+        $("." + containerID.replace("_nav", "").replace("table_", "") + "_edit").addClass("disabled");
+    } else {
+        $("." + containerID.replace("_nav", "").replace("table_", "") + "_edit").removeClass("disabled");
+    }
+}
+
+
+function sharpGridEditor(containerID) {
+    var container = $("#" + containerID)
+    var table = $("#" + containerID + "_table table tbody")
+    var cells = table.find("td:not(.buttons)");
+    cells.off();
+    for (var i = 0; i < cells.length; i++) {
+        $(cells[i]).on("click", function (e) {
+            $(document).one('click', function () {
+                sharpGridEditorClearCells(table)
+            });
+            if (!$(this).hasClass("editing")) {
+                sharpGridEditorClearCells(table);
+                $(this).addClass("editing")
+                var cell = $(this)
+                var cellData = $(this).find(".cellData")[0];
+                controlID = cell.attr("data-controlid");
+                var registerid = cell.attr("data-registerid");
+                controle = container.find(
+                    "input[data-controlid='" + controlID + "']," +
+                    "select[data-controlid='" + controlID + "']," +
+                    "textarea[data-controlid='" + controlID + "']" +
+                    "span[data-controlid='" + controlID + "']"
+                    ).not(".inlineEditor");
+
+
+                if (controle.length) {
+                    var newID = controle[0].id + "_inlineEditor";
+                    var cellForm = $("<form  class=\"input-group sharpGridEditor\"></form>")
+                    var cellFormID = controle[0].id + gerarGUID();
+                    var buttonSave = $("<span id= " + controle[0].id + "_button  class=\"input-group-btn\"><a id='" + controlID + "_btngrid' href=\"#\" onclick=\"javascript:sharpGridEditorSave(this);\" class=\"btn btn-primary\"><i class=\"fa fa-save\"></i></a></span>");
+                    cellForm.attr("id", cellFormID).addClass("inlineEditor");
+                    cell.prepend(cellForm);
+                    cellForm = $("#" + cellFormID);
+                    switch (controle[0].type) {
+                        case "text":
+                            var control = controle;
+                            controle = $(controle[0]).clone(true);
+
+
+                            if (controle.length > 0) {
+                                controle[0].id = newID;
+                                var classe = controle[0].className;
+                                controle[0].className = classe.replace("hidden", "");
+                                $(controle[0]).attr("data-registerid", registerid);
+                                value = $(cellData).text();
+                                controle.val(value)
+                                controle.keyup();
+                                $(cellData).hide()
+
+
+                                if ($(control[0]).attr("data-controlinputtype") == "TEXTCURRENCY") {
+                                    var buttonCurrency = $(control[0]).parent().find("span").clone(true);
+                                    if (buttonCurrency) {
+                                        if (buttonCurrency.length > 0) {
+                                            cellForm.prepend(buttonCurrency[0]);
+                                            var panelCurrency = $("#" + $(control[0]).attr("id") + "_panel").clone(true);
+                                            if (panelCurrency) {
+                                                if (panelCurrency.length > 0) {
+                                                    //var div = "<div id='" + $(control[0]).attr("id") + "_div'></div>";
+                                                    var div = "<div class='' id='" + $(control[0]).attr("id") + "_div' style='position:absolute;z-index:100000; padding: 8px;'></div>";
+                                                    cellForm.prepend(div);
+                                                    $("#" + $(control[0]).attr("id") + "_div").prepend(panelCurrency[0]);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                cellForm.prepend(controle);
+                                cellForm.attr("control-type", "text")
+                            }
+
+
+                            break;
+                        case "email":
+                        case "password":
+                            controle = $(controle[0]).clone(true);
+                            if (controle.length > 0) {
+                                controle[0].id = newID;
+                                var classe = controle[0].className;
+                                controle[0].className = classe.replace("hidden", "");
+                                $(controle[0]).attr("data-registerid", registerid);
+                                value = $(cellData).text();
+                                controle.val(value)
+                                controle.keyup();
+                                $(cellData).hide()
+
+                                cellForm.prepend(controle);
+                                cellForm.attr("control-type", "text")
+                            }
+
+                            break;
+                        case "checkbox":
+                            controle = $(controle[0]).clone(true);
+                            controle[0].id = newID;
+                            $(controle[0]).removeClass()
+                            controle[0].removeAttribute("style");
+                            value = $(cellData).html();
+                            value = (value == '<i class="fa fa-check"></i><span></span>') ? true : false;
+                            $(cellData).hide()
+                            var cellFormBackup = cellForm[0].outerHTML;
+                            $(controle).className = "form-control";
+                            $(controle).removeClass("hidden");
+                            $(controle[0]).attr("data-registerid", registerid);
+                            cellForm.prepend("<div></div>").prepend(controle);
+                            carregaIcheckCheckBox(newID)
+
+                            if (value) {
+                                $("#" + newID).iCheck('check');
+                            }
+                            $("#" + newID).parent("div").wrap(cellFormBackup);
+
+                            cellForm.attr("control-type", "checkbox")
+                            break;
+                        case "select-one":
+                            controle = $(controle[0]).clone(true);
+                            controle[0].id = newID;
+                            value = $(cellData).text();
+                            controle.find("option").filter(function () {
+                                return $(this).text() === value;
+                            }).attr("selected", "selected");
+                            $(cellData).hide()
+                            $(controle).className = "form-control";
+                            $(controle).removeClass("hidden");
+                            $(controle[0]).attr("data-registerid", registerid);
+                            cellForm.prepend(controle);
+                            cellForm.attr("control-type", "select")
+                            break;
+                        default:
+
+                    }
+                    $("#" + cellFormID).append(buttonSave);
+                }
+            }
+            else {
+                e.stopPropagation();
+                return false;
+            }
+            e.stopPropagation();
+            return false;
+        })
+    }
 }
 
 
