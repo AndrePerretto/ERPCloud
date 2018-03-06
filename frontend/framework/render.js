@@ -47,6 +47,11 @@ var filtro = "";
 }
 
 function f_aba(nameLayout,layoutID,titleMenu,loadData, enterpriseID){
+
+    if($("[layoutid='" + layoutID + "']").length > 0){
+        return;
+    }
+
     var tabGenID = guid();
     var EnterpriseName = "";
     layoutID = layoutID.toUpperCase();
