@@ -574,11 +574,11 @@ function openLayout(button, tabGenID) {
                             data: data
                         });
 
-                        var idfiltergen = $("#table_" + tabGenID + "_btnnovo").attr("data-tabgenlayout")
-                        var buttonNew = $("[data-tabgenlayout='" + idfiltergen + "']").clone();                        
-                        $(".pull-right.search").prepend(buttonNew);
-                        $("[data-tabgenlayout='" + idfiltergen + "']").hide()
-                        buttonNew.show();
+                        //var idfiltergen = $("#table_" + tabGenID + "_btnnovo").attr("data-tabgenlayout")
+                        //var buttonNew = $("[data-tabgenlayout='" + idfiltergen + "']").clone();                        
+                        //$(".pull-right.search").prepend(buttonNew);
+                        //$("[data-tabgenlayout='" + idfiltergen + "']").hide()
+                        //buttonNew.show();
                         
                         $(".panel-heading").remove();
                         $(".pull-right.search").css("display", "flex")
@@ -1168,7 +1168,7 @@ function OpenFormSearch(tabGenID) {
 
     $(".columns.columns-right.btn-group.pull-right").hide();
     //$("#" + id + "_alertaModalFormSearchShow").modal('show');
-    var target = $("#" + tabGenID).parents().find(".panel-nav");
+    var target = $("#" + tabGenID).parent().find(".panel-nav");
     
     if (target) {
         if ($(target).find("#Filtrar")) {
