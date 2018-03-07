@@ -63,10 +63,10 @@ function f_aba(nameLayout,layoutID,titleMenu,loadData, enterpriseID){
 
     tabGenID = fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
 
-    if (loadData == "true") {
-        var dados = "&Filtro=*"
-        openData(dados, layoutID, tabGenID);
-    }
+    //if (loadData == "true") {
+    //    var dados = "&Filtro=*"
+    //    openData(dados, layoutID, tabGenID);
+    //}
     
 }
 
@@ -91,7 +91,7 @@ function atualizaAba(formID, layoutID, tabGenID, forcingTemplate, layoutType, ur
 function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID){
     
     layoutID = layoutID.toUpperCase();
-    $.ajax({async:false, url: returnCookie("urlPlataform") + "/api/layout/" + layoutID, success: function(result){	
+    $.ajax({async:true, url: returnCookie("urlPlataform") + "/api/layout/" + layoutID, success: function(result){	
         var tabGenID2 = guid();
         gridButtons = fillButtonGrid("1df8627a-f0a4-4c50-8a1c-eb6d7d5d04e5_" + tabGenID2 + "_table", tabGenID2);
         result[0].html = replaceAll(result[0].html, result[0].tabgenid, tabGenID2)
@@ -197,6 +197,13 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
 
         //Binda o plugin de data
         $("[data-nativedatatype='Data']").datetimepicker({
+            lang: "pt",
+            timepicker: false,
+            format: 'd/m/Y',
+            formatDate: 'Y/m/d',
+        });
+
+        $("[data-nativedatatype='DataHora']").datetimepicker({
             lang: "pt",
             timepicker: false,
             format: 'd/m/Y',
@@ -461,7 +468,10 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
             }
 
         });    
-        
+        if (loadData == "true") {
+            var dados = "&Filtro=*"
+            openData(dados, layoutID, tabGenID);
+        }
 
     }});
     return tabGenID;
@@ -1118,6 +1128,13 @@ function fillScreen(data, template, layoutID){
 
                         switch (attribute) {
                             case "Data":
+                                var arrayvalue = value.split("T");
+                                if (arrayvalue.length > 0) {
+                                    value = arrayvalue[0];
+                                    value = formatDate(value);
+                                }
+                                break;
+                            case "DataHora":
                                 var arrayvalue = value.split("T");
                                 if (arrayvalue.length > 0) {
                                     value = arrayvalue[0];
