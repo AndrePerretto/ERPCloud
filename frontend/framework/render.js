@@ -14,10 +14,12 @@ function CreateAba(nameLayout, layoutID, titleMenu, dados, navigation, container
     $("#controls-tabs").append(tab);
     $("#controls-recipient").append("<div class='tab-pane fade in  controls-recipient active' id='" + tabGenID + "'>");
 
-    fillTab(nameLayout,layoutID,titleMenu,false, enterpriseID, tabGenID)
+    fillTab(nameLayout,layoutID,titleMenu,false, enterpriseID, tabGenID, function(){
+        openData(dados, layoutID, tabGenID);
+    })
 
 
-    openData(dados, layoutID, tabGenID);
+    
 }
 
 function openData(dados, layoutID, tabGenID){
@@ -88,7 +90,7 @@ function atualizaAba(formID, layoutID, tabGenID, forcingTemplate, layoutType, ur
     var enterpriseID = "";
     fillTab(formID,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
 }
-function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID){
+function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID, callback){
     
     layoutID = layoutID.toUpperCase();
     $.ajax({async:true, url: returnCookie("urlPlataform") + "/api/layout/" + layoutID, success: function(result){	
@@ -467,7 +469,12 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
                 }
             }
 
-        });    
+        }); 
+        
+        if(callback){
+            callback();
+        }
+        
         if (loadData == "true") {
             var dados = "&Filtro=*"
             openData(dados, layoutID, tabGenID);
@@ -1465,6 +1472,15 @@ function fillContainer(data){
                                 $("[data-table='" + table + "'][data-field='" + field + "']").iCheck('check');
                             }else{
                                 $("[data-table='" + table + "'][data-field='" + field + "']").iCheck('uncheck');
+                            }
+                            break;
+                        case "Moeda":
+                            var arrayvalue = value.toString().split(".")
+                            if (arrayvalue.length > 1) {
+                                if(arrayvalue[arrayvalue.length - 1].length == 2){
+                                    value = value.toString().replace(",","").toString().replace(".",",");
+                                }
+                                
                             }
                             break;
                         default:

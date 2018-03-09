@@ -337,6 +337,7 @@ function SerializeFields(param){
                     myJson["valor"] = elements[i].value
                 }
             }
+
             
             myJson["field"] = $(elements[i]).attr("data-field")
             myJson["table"] = $(elements[i]).attr("data-table") 

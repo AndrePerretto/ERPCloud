@@ -11,7 +11,7 @@ function query()
     var config = {
         user: 'sa',
         password: 'IntSql2015@',
-        server: '52.89.63.119', 
+        server: '172.31.8.216', 
         database: 'eCloud-homologa' 
     };
 
