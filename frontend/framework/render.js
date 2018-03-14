@@ -1,4 +1,5 @@
 var gridButtons = new Object();
+var tabGuidABA;
 
 function CreateAba(nameLayout, layoutID, titleMenu, dados, navigation, containerType, forcingTemplate, layoutType, callInstance) {
     var enterpriseID = returnCookie("EnterpriseID");
@@ -8,14 +9,42 @@ function CreateAba(nameLayout, layoutID, titleMenu, dados, navigation, container
     var EnterpriseName = "";
     layoutID = layoutID.toUpperCase();
 
-    $("#controls-recipient > .active").removeClass("active");
-    $("#controls-tabs .active").removeClass("active");
-    var tab = "<li layoutid='" + layoutID + "_" + tabGenID + "' class='active'><a href='#" + tabGenID + "' data-toggle='tab' title='" + EnterpriseName + "'>" + titleMenu + "&nbsp&nbsp<img src='images/loader.gif' height='15px' /></a></li>";
-    $("#controls-tabs").append(tab);
-    $("#controls-recipient").append("<div class='tab-pane fade in  controls-recipient active' id='" + tabGenID + "'>");
+    switch (containerType) {
+        case "MODAL":
+            modal = true;
+
+            $("#alertaModal").html("<div layoutid='" + layoutID + "_" + tabGenID + "' id='alertaModal_panel' class='panel' style='margin-bottom: 0px!important;' callInstance='" + callInstance + "'><div class='panel-body'></div></div>");
+
+            $("#mensagem").html("");
+
+            $('#alertaModalShow').modal();
+
+            //função efetua o close do Modal para que os dados de um modal não carregue em outro.
+            $('#alertaModalShow').on('hidden.bs.modal', function (e) { $("#alertaModal_panel").remove(); })
+
+            formID = "alertaModal";
+
+            var tab = "<li layoutid='" + layoutID + "_" + tabGenID + "' class='active'><a href='#" + tabGenID + "' data-toggle='tab' title='" + EnterpriseName + "'>" + titleMenu + "&nbsp&nbsp<img src='images/loader.gif' height='15px' /></a></li>";
+            $("#" + formID).append(tab);
+            $("#" + formID).append("<div class='tab-pane fade in  controls-recipient active' id='" + tabGenID + "'>");
+
+            break;
+        default:
+            $("#controls-recipient > .active").removeClass("active");
+            $("#controls-tabs .active").removeClass("active");
+            var tab = "<li layoutid='" + layoutID + "_" + tabGenID + "' class='active'><a href='#" + tabGenID + "' data-toggle='tab' title='" + EnterpriseName + "'>" + titleMenu + "&nbsp&nbsp<img src='images/loader.gif' height='15px' /></a></li>";
+            $("#controls-tabs").append(tab);
+            $("#controls-recipient").append("<div class='tab-pane fade in  controls-recipient active' id='" + tabGenID + "'>");
+            break;
+    }
 
     fillTab(nameLayout,layoutID,titleMenu,false, enterpriseID, tabGenID, function(){
-        openData(dados, layoutID, tabGenID);
+        openData(dados, layoutID, tabGenID);        
+        
+        if(callInstance){
+            callInstance()
+        }
+        
     })
 
 
@@ -50,7 +79,7 @@ var filtro = "";
 
 function f_aba(nameLayout,layoutID,titleMenu,loadData, enterpriseID){
 
-    if($("[layoutid='" + layoutID + "']").length > 0){
+    if($("[layoutid*='" + layoutID + "']").length > 0){
         return;
     }
 
@@ -95,6 +124,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
     layoutID = layoutID.toUpperCase();
     $.ajax({async:true, url: returnCookie("urlPlataform") + "/api/layout/" + layoutID, success: function(result){	
         var tabGenID2 = guid();
+        tabGuidABA = tabGenID2;
         gridButtons = fillButtonGrid("1df8627a-f0a4-4c50-8a1c-eb6d7d5d04e5_" + tabGenID2 + "_table", tabGenID2);
         result[0].html = replaceAll(result[0].html, result[0].tabgenid, tabGenID2)
        // result[0].html = replaceAll(result[0].html, "undefined", "");
@@ -1601,3 +1631,49 @@ function fillButtonGrid(id, tabgen){
 
     return retorno;
 }
+
+
+function FormOpeningDSG(id, typeOpeningLayout, nameLayout, layoutID, titleMenu, forcingTemplate, enterpriseID) {
+    $('#' + id).attr('EventHide', 'true');
+    //FormOpening(TypeOpeningLayout, nameLayout, LayoutID, TitleMenu, ForcingTemplate);
+    containerType = "MODAL";
+    var dados = "&enterpriseID=" + enterpriseID;
+    //CreateAba(nameLayout, layoutID, titleMenu, dados, false, containerType, forcingTemplate)
+    var tabGenID = guid();
+    var EnterpriseName = "";
+    layoutID = layoutID.toUpperCase();
+    
+    CreateAba(nameLayout, layoutID, titleMenu, dados, false, containerType, forcingTemplate, "VERTICAL", function(){
+        //var objgrid = $("[id*='_" + tabGenID + "_table']");
+        var objgrid = $("[id*='" + tabGuidABA + "_table'][data-template='MASTERDETAIL']")
+        for (let index = 0; index < objgrid.length; index++) {
+            const element = objgrid[index];
+            $(element).html("");
+        }
+
+        $("[layoutid*='" + layoutID + "_" + "']").html("");
+
+    });
+
+}
+
+
+
+
+
+function OpenAbaDSG(nameLayout, layoutID, titleMenu, enterpriseID) {
+    var title = titleMenu.replace("%20", " ");
+    title = title.replace("%20", " ");
+    title = title.replace("%20", " ");
+    title = title.replace("%20", " ");
+    title = title.replace("%20", " ");
+    title = title.replace("%20", " ");
+
+
+    f_aba(nameLayout,layoutID,title,'true', enterpriseID)
+
+    
+
+}
+
+ 

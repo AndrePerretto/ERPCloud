@@ -61,7 +61,18 @@ function bindAutocomplete(controlID, nameLayout, LayoutID, TitleMenu, PropertyID
                 } else {
                     var item = $("#" + id);
                     if (item.attr("localAutoComplete") == "false") {
-                        filleditnavigation(chaveid,LayoutID, "" ,"36905f00-0531-f073-3701-c5719ec12ca6_nav" )
+
+                        var tabgen = $("[data-formid*='" + LayoutID + "'][id*='_btnnovo']").attr("id");
+                        tabgen = tabgen.replace("table_","").replace("_btnnovo",""); 
+
+                        if($("[id='" + id + "_key']").attr("onclick")){
+                            LayoutID = $("[id='" + id + "_key']").attr("onclick");
+                            LayoutID =  LayoutID.replace("javascript:OpenAba('" + nameLayout + "','","");
+                            LayoutID =  LayoutID.substr(0, LayoutID.indexOf("'"));
+                        }
+                        
+
+                        filleditnavigation(chaveid,LayoutID, "" ,tabgen)
 
                         //$.ajax({
                         //    url: getGlobalParameters("urlPlataforma") + "/api/database/DataSearch",
