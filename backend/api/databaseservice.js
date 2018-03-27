@@ -15,6 +15,8 @@ var config = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database
 
 var EnterpriseID = "";
 var UserID = "";
+//var serverWindows = "http://localhost:2444";
+var serverWindows = "http://homologa.empresariocloud.com.br";
 
 router.route('/listall/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
@@ -566,12 +568,12 @@ function beforeSave(submit, callback){
 
         arraySubmitObject.push(SubmitObject)
     }
-    //callWebAPI(arraySubmitObject,"http://homologa.empresariocloud.com.br/api/DataBase/BeforeSave", function(retorno){
-    callWebAPI(arraySubmitObject,"http://localhost:2444/api/DataBase/BeforeSave", function(retorno){
+    
+    callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/BeforeSave", function(retorno){
+    //callWebAPI(arraySubmitObject,   serverWindows + "/api/DataBase/BeforeSave", function(retorno){
         callback(retorno)
     })
     
-
 }
 
 
@@ -604,7 +606,7 @@ function afterSave(submit){
         arraySubmitObject.push(SubmitObject)
     }
     //callWebAPI(arraySubmitObject, "http://homologa.empresariocloud.com.br/api/DataBase/AfterSave")
-    callWebAPI(arraySubmitObject, "http://localhost:2444/api/DataBase/AfterSave")
+    callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/AfterSave")
     
 }
 
@@ -725,6 +727,7 @@ function createInsert(submit, index, guid){
 
     //}
     
+
     return insertOrUpdate;
 }
 

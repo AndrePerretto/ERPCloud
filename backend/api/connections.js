@@ -15,6 +15,13 @@ function query()
         database: 'eCloud-homologa' 
     };
 
+    var config2 = {
+        user: 'sa',
+        password: '1234567890',
+        server: '127.0.0.1', 
+        database: 'eCloud-homologa' 
+    };
+
     // connect to your database
     sql.connect(config, function (err) {    
         if (err) console.log(err);

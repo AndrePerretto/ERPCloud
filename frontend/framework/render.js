@@ -975,7 +975,7 @@ function openLayout(button, tabGenID) {
 
 
     
-function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID) {
+function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID, fillgrid, containerID) {
 
     $.ajax({url: returnCookie("urlPlataform") + "/api/findid2/" + filtro + "/" + LayoutID, success: function(result){
         var EnterpriseID = returnCookie("EnterpriseID");
@@ -992,7 +992,7 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID) {
                 FormID = $(formTelaIDNavigation[0]).attr("data-formid");
                 tabGenID = $(formTelaIDNavigation[0]).attr("data-tabgenlayout");
 
-                fillScreen(result, "", LayoutID);
+                fillScreen(result, "", LayoutID, fillgrid);
 
                 var formID = $(formTelaIDNavigation[0]).attr("data-tabgenlayout");
                 var $tabNav = $(formTelaIDNavigation[0]).parents("form .panel.panel-nav");
@@ -1000,22 +1000,32 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID) {
                 $($tabNav).hide();
                 $("#" + formID).show();
 
-                if ($("#" + tabGenID).find("form")) {
-                    if ($("#" + tabGenID).find("form").length > 0) {
-                        var principaldt = $($("#" + tabGenID).find("form")[0]).attr("principaldatatypeid");
+                var fillFK = true;
+                if(containerID){
+                    if(containerID != FormID){
+                        fillFK = false;
+                    }
+                }
 
-                        if (principaldt) {
-                            var arrayFK = $( "input[name*='FK_" + principaldt + "']" )
-
-                            if (arrayFK) {
-                               for (let index = 0; index < arrayFK.length; index++) {
-                                   const element = arrayFK[index];
-                                   $(element).val(filtro)
-                               } 
+                if(fillFK){
+                    if ($("#" + tabGenID).find("form")) {
+                        if ($("#" + tabGenID).find("form").length > 0) {
+                            var principaldt = $($("#" + tabGenID).find("form")[0]).attr("principaldatatypeid");
+    
+                            if (principaldt) {
+                                var arrayFK = $( "input[name*='FK_" + principaldt + "']" )
+    
+                                if (arrayFK) {
+                                   for (let index = 0; index < arrayFK.length; index++) {
+                                       const element = arrayFK[index];
+                                       $(element).val(filtro)
+                                   } 
+                                }
                             }
                         }
                     }
                 }
+                
                 
                 var wizard = $("[data-guidwizard='" + tabGenID + "']");
         
@@ -1042,7 +1052,7 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID) {
 }
 
 
-function fillScreen(data, template, layoutID){
+function fillScreen(data, template, layoutID, fillgrid){
     var arraytable = [];
     var arraydatagrid = [[]];
     var arraydataJSON = [[]];
@@ -1093,6 +1103,10 @@ function fillScreen(data, template, layoutID){
             }
              
             var th = $("[data-table='" + table + "'][data-fielddata='" + field + "']");
+
+            if(fillgrid == false){
+                th = [];
+            }
 
             if(th.length > 0){              
                

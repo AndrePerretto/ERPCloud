@@ -71,8 +71,13 @@ function bindAutocomplete(controlID, nameLayout, LayoutID, TitleMenu, PropertyID
                             LayoutID =  LayoutID.substr(0, LayoutID.indexOf("'"));
                         }
                         
+                        var fillgrid = true;
+                        if($("[id='" + id + "']").attr("data-serializable") == "true"){
+                            fillgrid = false;
+                        }
 
-                        filleditnavigation(chaveid,LayoutID, "" ,tabgen)
+
+                        filleditnavigation(chaveid,LayoutID, "" ,tabgen, fillgrid, containerID)
 
                         //$.ajax({
                         //    url: getGlobalParameters("urlPlataforma") + "/api/database/DataSearch",
