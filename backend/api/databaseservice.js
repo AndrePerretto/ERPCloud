@@ -13,11 +13,11 @@ server.use('/api', router)
 var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
 //var config = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'eCloud-homologa'};
 
-var EnterpriseID = "";
-var UserID = "";
 //var serverWindows = "http://localhost:2444";
 var serverWindows = "http://homologa.empresariocloud.com.br";
 
+var EnterpriseID = "";
+var UserID = "";
 router.route('/listall/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
     var url = "mongodb://localhost:27017/erpcloud";
@@ -1483,6 +1483,9 @@ code = ""
 
     res.send(result);
 });
+
+
+
 
 
 

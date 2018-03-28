@@ -161,7 +161,6 @@ function getGlobalParameters(parametro) {
     
         //global.urlDesenvolvimento = "http://localhost:13886/";
         global.urlPlataform = "http://"+ window.location.hostname +":3002"
-        
         //global.urlPlataforma = "http://localhost:2444"
         //global.urlInterface = "http://localhost:2444"
         

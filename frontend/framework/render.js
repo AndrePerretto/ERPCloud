@@ -115,9 +115,14 @@ function fechaAba(id) {
 }
 
 function atualizaAba(formID, layoutID, tabGenID, forcingTemplate, layoutType, urlRenderLayout, urlRenderLayoutData, titleMenu) {
-    var loadData = "";
-    var enterpriseID = "";
-    fillTab(formID,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
+    fechaAba(tabGenID);
+
+    var enterpriseID = returnCookie("EnterpriseID");
+    f_aba(formID,layoutID,titleMenu,false, enterpriseID)
+
+    //var loadData = "";
+    //var enterpriseID = "";
+    //fillTab(formID,layoutID,titleMenu,loadData, enterpriseID, tabGenID)
 }
 function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID, callback){
     
@@ -134,7 +139,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         var layoutType = "";
         var urlRenderLayout = "";
         var urlRenderLayoutData = "";
-        var titleMenu = "";
+        //var titleMenu = "";
         var data = result[0].html;
         var formID = layoutID;
 
@@ -1562,7 +1567,7 @@ function editGridLine(button, containerID, ID) {
 
 
   
-function atualizaAba(formID, layoutID, tabGenID, forcingTemplate, layoutType, urlRenderLayout, urlRenderLayoutData, titleMenu) {
+function atualizaAba2(formID, layoutID, tabGenID, forcingTemplate, layoutType, urlRenderLayout, urlRenderLayoutData, titleMenu) {
     $("#controls-tabs li a[href='#" + tabGenID + "'] .tabControls").replaceWith("<img src='images/loader.gif' height='15px' />");
     if (urlRenderLayout) {
         getAjaxParameter(urlRenderLayout, urlRenderLayoutData, function () {
