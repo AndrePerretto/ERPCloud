@@ -10,11 +10,13 @@ const router = express.Router()
 server.use('/api', router)
 // config for your database
 //var config = {user: 'sa', password: 'IntSql2015@', server: '52.89.63.119',  database: 'eCloud-homologa'};
-var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
-//var config = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'eCloud-homologa'};
 
-//var serverWindows = "http://localhost:2444";
-var serverWindows = "http://homologa.empresariocloud.com.br";
+var config = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'eCloud-homologa'};
+//var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
+
+var serverWindows = "http://localhost:2444";
+//var serverWindows = "http://homologa.empresariocloud.com.br";
+
 
 var EnterpriseID = "";
 var UserID = "";
@@ -399,9 +401,7 @@ router.route('/save').post(function(req, res) {
                     }
                 }
 
-                if (booleanBefore) {
-                    
-
+                if (booleanBefore) {      
                     
                     if (submit[ind]["id"] == "" || !submit[ind]["id"]) {
                         
