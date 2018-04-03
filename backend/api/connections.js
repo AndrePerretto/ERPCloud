@@ -8,14 +8,14 @@ function query()
 {
 
     // config for your database
-    var config = {
+    var config2 = {
         user: 'sa',
         password: 'IntSql2015@',
         server: '52.89.63.119', 
         database: 'eCloud-homologa' 
     };
 
-    var config2 = {
+    var config = {
         user: 'sa',
         password: '1234567890',
         server: '127.0.0.1', 
