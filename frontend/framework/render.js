@@ -1689,7 +1689,7 @@ function fillButtonGrid(id, tabgen){
 
 
 function RefreshDropDown(id, controlID, propertyID, parameters) {
-    var dados = "controlID=" + controlID + "&propertyID=" + propertyID + "&enterpriseID=" + globalEnterpriseID;
+    var dados = "controlID=" + controlID + "&propertyID=" + propertyID + "&enterpriseID=" + returnCookie("EnterpriseID");
     var url = getGlobalParameters("urlPlataforma") + "/api/render/RefreshDropDown";
 
     $.ajax({
