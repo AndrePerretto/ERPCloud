@@ -224,7 +224,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             }
         }
 
-        //getDropdownHTML(layoutID, tabGenID);
+        getDropdownHTML(layoutID, tabGenID);
 
         $(".panel-body").css("height","100%")
 
@@ -1631,6 +1631,42 @@ function toogleColapseContainer(selectorContainer,close) {
 
 function getDropdownHTML(LayoutID, tabGenID){
 
+    
+        var parameters = "?LayoutID=" + LayoutID + "&EnterpriseID=" + returnCookie("EnterpriseID") + "&UserID=" + returnCookie("UserID") + "&tabGenID=" + tabGenID;
+
+        $.ajax({
+            url: getGlobalParameters("urlPlataforma") + "/api/publish/getDropdownHTML" + parameters,
+            type: "GET",
+            async: true,
+            success: function (data) {
+
+                for (var key in data) {
+                    var value = data[key];
+                    //$("#" + tabGenID + "_" + key).html(value);
+                    document.getElementById(tabGenID + "_" + key).innerHTML = value;
+                    var id = document.getElementById(tabGenID + "_" + key).id;
+                    var controlid = $("#" + id).attr("data-controlid");
+                    var propertyid = $("#" + id).attr("data-propertyid");
+                    EventHideModal(id, controlid, propertyid);
+                }
+
+            },
+            error: function (xhr) {
+                //alert(xhr);
+            }
+        });
+    
+        
+}
+
+function EventHideModal(id, controlID, propertyID, parameters) {
+    $('#alertaModalShow').on('hide.bs.modal', function () {
+        var ok = $('#' + id).attr('EventHide');
+        if (ok == 'true') {
+            RefreshDropDown(id, controlID, propertyID, parameters);
+            $('#' + id).attr('EventHide', 'false');
+        }
+    })  
 }
 
 function fillButtonGrid(id, tabgen){
@@ -1651,6 +1687,78 @@ function fillButtonGrid(id, tabgen){
     return retorno;
 }
 
+
+function RefreshDropDown(id, controlID, propertyID, parameters) {
+    var dados = "controlID=" + controlID + "&propertyID=" + propertyID + "&enterpriseID=" + globalEnterpriseID;
+    var url = getGlobalParameters("urlPlataforma") + "/api/render/RefreshDropDown";
+
+    $.ajax({
+        type: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'text/plain'
+        },
+        url: url + "?" + dados,
+        dataType: "json",
+        cors: true,
+        async: true,
+        crossDomain: true,
+        //data: {
+        //    Dados: dados
+        //},
+        success: function (result) {
+
+            if (result.property) {
+                if (result.property.value.length > 0) {
+                    var select = document.getElementById(id);
+
+                    var opcoes = [select.options.length];
+                    for (var i = 0; i < select.options.length; i++) {
+                        opcoes[i] = select.options[i].text;
+                    }
+
+                    for (i = 0; i < select.length; i) {
+                        select.remove(i);
+                        if (select.length == 0) {
+                            break;
+                        }
+                    }
+
+                    for (var i = 0; i < result.property.value.length; i++) {
+                        var x = document.getElementById(id);
+                        var option = document.createElement("option");
+                        option.value = result.property.value[i];
+                        option.text = result.property.text[i];
+                        x.add(option);
+                    }
+
+                    select = document.getElementById(id);
+
+                    for (var i = 0; i < select.options.length; i++) {
+                        var text = select.options[i].text;
+                        var temTexto = false;
+                        for (var y = 0; y < opcoes.length; y++) {
+                            if (text == opcoes[y]) {
+                                temTexto = true;
+                            }
+                        }
+                        if (temTexto == false) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+
+
+                }
+            }
+            
+        },
+        error: function (result) {
+
+        }
+
+    });
+}
 
 function FormOpeningDSG(id, typeOpeningLayout, nameLayout, layoutID, titleMenu, forcingTemplate, enterpriseID) {
     $('#' + id).attr('EventHide', 'true');
