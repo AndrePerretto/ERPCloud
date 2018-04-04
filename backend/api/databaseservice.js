@@ -9,17 +9,62 @@ const ObjectID = require('mongodb').ObjectID
 const router = express.Router()
 server.use('/api', router)
 // config for your database
+var config = {};
 //var config = {user: 'sa', password: 'IntSql2015@', server: '52.89.63.119',  database: 'eCloud-homologa'};
-
 //var config = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'eCloud-homologa'};
-var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
+//var config = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'eCloud-homologa'};
 
+var serverWindows = "";
 //var serverWindows = "http://localhost:2444";
-var serverWindows = "http://homologa.empresariocloud.com.br";
+//var serverWindows = "http://homologa.empresariocloud.com.br";
 
+var configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
 
 var EnterpriseID = "";
 var UserID = "";
+
+router.route('/*').get(function(req, res, next) {
+    var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
+    
+    var parts = full.split('.');
+    var dados;
+    if (parts.length > 3) {
+        dados = parts[0];
+    }
+    dados = dados.replace("http://","");
+    serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
+
+    var database = ""; //"eCloud-foodtown";
+    var server = ""; //"127.0.0.1";
+    var password = ""; //"1234567890";
+    var user = ""; //"sa";
+
+    var select = "SELECT nm_DatabaseName_Aplication AS 'database',  ";
+    select += " nm_ServerIP_Aplication AS 'server', ";
+    select += " password_Aplication AS 'password', ";
+    select += " nm_User_Aplication AS 'user' ";
+    select += " FROM Enterprise WHERE domainName='" + dados + "' ";
+
+    sql.close();
+    sql.connect(configEnvironment, function (err) {    
+        if (err) console.log(err);
+        var request = new sql.Request();
+        request.query(select, function (err, recordset) {            
+            if (err) console.log(err)
+            if(recordset.recordsets[0].length > 0){
+                const element = recordset.recordsets[0][0];
+                database = element.database;
+                server = element.server;
+                password = element.password;
+                user = element.user;
+                
+                config = {user: user, password: password, server: server,  database: database};
+                next();
+            }
+        });
+    });    
+});
+
 router.route('/listall/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
     var url = "mongodb://localhost:27017/erpcloud";
@@ -314,10 +359,7 @@ function incremento(submit, callback){
       
             var select = "SELECT nr_incremento, nm_campo FROM incremento WHERE nm_tabela = '" + table + "' AND nm_campo='" + field + "'"
            
-        
-
             request = new sql.Request();
-
             
             request.query(select, function (err, recordset) {	
                 if (err) console.log(err)
@@ -363,9 +405,7 @@ router.route('/save').post(function(req, res) {
     var arrayretorno = [];
     var retorno = "["
 
-
-    
-   var ind = -1;
+    var ind = -1;
 
     incremento(submit, function(resultado, submit){
         sql.close()
@@ -513,12 +553,7 @@ router.route('/save').post(function(req, res) {
                     }
                 }   
             })
-
         } 
-
-           
-          
-      
     }).catch(function(err) {
         if (err) {
             console.log('SQL Connection Error: ' + err);
@@ -539,8 +574,7 @@ router.route('/save').post(function(req, res) {
 })
 
 function beforeSave(submit, callback){
-    var retorno = false;
-    
+    var retorno = false;    
     var arraySubmitObject = [];
     
     for (var key in submit) {
@@ -553,7 +587,6 @@ function beforeSave(submit, callback){
         SubmitObject["oldValue"].push(submit[key]);
         SubmitObject["EnterpriseID"] = submit["EnterpriseID"];
         SubmitObject["UserID"] = submit["UserID"];
-
         SubmitObject["nativeDataType"] = "";
         SubmitObject["sequenceRecording"] = "0";
         SubmitObject["controlID"] = "";
@@ -563,9 +596,6 @@ function beforeSave(submit, callback){
         SubmitObject["title"] = "";
         SubmitObject["message"] = [];
         SubmitObject["visibleGrid"] = false;
-
-
-
         arraySubmitObject.push(SubmitObject)
     }
     
@@ -576,10 +606,8 @@ function beforeSave(submit, callback){
     
 }
 
-
 function afterSave(submit){
-    var retorno = false;
-    
+    var retorno = false;    
     var arraySubmitObject = [];
     
     for (var key in submit) {
@@ -592,7 +620,6 @@ function afterSave(submit){
         SubmitObject["oldValue"].push(submit[key]);
         SubmitObject["EnterpriseID"] = submit["EnterpriseID"];
         SubmitObject["UserID"] = submit["UserID"];
-
         SubmitObject["nativeDataType"] = "";
         SubmitObject["sequenceRecording"] = "0";
         SubmitObject["controlID"] = "";
@@ -602,22 +629,18 @@ function afterSave(submit){
         SubmitObject["title"] = "";
         SubmitObject["message"] = [];
         SubmitObject["visibleGrid"] = false;
-
         arraySubmitObject.push(SubmitObject)
     }
     //callWebAPI(arraySubmitObject, "http://homologa.empresariocloud.com.br/api/DataBase/AfterSave")
-    callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/AfterSave")
-    
+    callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/AfterSave")    
 }
 
 function createInsert(submit, index, guid){
-    var insertOrUpdate = ""
+    var insertOrUpdate = "";
     var ind = 0;
-    var table = "";    
-    
-    var sqlfields = ""
-    var sqlvalues = ""         
-        
+    var table = "";        
+    var sqlfields = "";
+    var sqlvalues = "";
     ind = 0;
         
     sqlfields = "( "
@@ -698,7 +721,6 @@ function createInsert(submit, index, guid){
                     break;
             }
 
-
             if (ind == 0) {
                 sqlvalues += "" + submit[index][key] + " "
                 if (key.includes("_INCREMENT")) {
@@ -714,19 +736,13 @@ function createInsert(submit, index, guid){
             }
 
             ind += 1
-        }      
-        
-    }
-    
+        }
+    }    
     
     sqlfields += ") "
     sqlvalues += ") "
-
     insertOrUpdate += " INSERT INTO " + table + " ";
     insertOrUpdate +=  sqlfields + " " + sqlvalues
-
-    //}
-    
 
     return insertOrUpdate;
 }
@@ -814,8 +830,7 @@ function createUpdate(submit, index){
             }
 
             ind += 1
-        }      
-        
+        }
     }
     
     if (sqlvalues) {
@@ -824,9 +839,7 @@ function createUpdate(submit, index){
         update = "";
     }
     
-    
     return update;
-
 }
 
 router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
@@ -879,11 +892,7 @@ router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
             });
         });    
      //}
-
-    
-
 });
-
 
 router.route('/DeleteData/:containerID/:id').get(function(req, res) {
     var id = req.param('id');
@@ -1006,18 +1015,15 @@ function refreshIncrement(table, field){
     return retorno;
 }
 
-function select(select){
-      
-        
-        return null;
+function select(select){        
+    return null;
 }
 
 router.route('/teste').get(function(req, res) {
     var Client = require('node-rest-client').Client;
     
    // direct way 
-   var client = new Client();
-    
+   var client = new Client();    
     
    //client.get("http://localhost:2444/api/compiler/CsharpCompiler?EnterpriseID=f1495bcf-9258-4245-8edf-d0fac225412d&Class=CadCliente&Function=ConsultaCNPJ&ValueParameters[0]=07.361.429/0001-53",
    //    function (data, response) {
@@ -1484,11 +1490,7 @@ code = ""
     res.send(result);
 });
 
-
-
-
-
-
+    
 module.exports = database
 
 

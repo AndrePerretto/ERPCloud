@@ -163,11 +163,11 @@ function getGlobalParameters(parametro) {
         global.urlPlataform = "http://"+ window.location.hostname +":3002"
         //global.urlPlataforma = "http://localhost:2444"
         //global.urlInterface = "http://localhost:2444"
+        global.urlSearch = "http://" + window.location.host + ":8983"
         
         global.urlPlataforma = "http://homologa.empresariocloud.com.br"
         global.urlInterface = "http://homologa.empresariocloud.com.br"
 
-        global.urlSearch = "http://" + window.location.host + ":8983"
     
         if (parametro) {
             return global[parametro]
@@ -586,4 +586,64 @@ function ConvertToNumberFixed(string) {
 
 function gerarGUID(){
     return guid();
+}
+
+
+function getAjaxParameter(url, dados, callback) {
+    var retorno = false;
+    var errorcount = 0;
+
+    $.ajax({
+        type: "get",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'text/plain'
+        },
+        url: url + "?Dados=" + dados,
+        dataType: "json",
+        //cors: true,
+        async: true,
+        crossDomain: true,
+        success: function (result) {
+            resultadoParametroExterno = result;
+            retorno = result;
+            if (callback) {
+                callback(result);
+            }
+        },
+        timeout: 120000,
+        error: function (result) {
+
+            if (!errorcount) {
+                errorcount = 0;
+            }
+
+            errorcount += 1;
+
+            if (errorcount <= 3) {
+                getAjaxParameter(url, dados, callback, errorcount);
+            }
+        }
+
+    });
+
+    if (errorcount > 3) {
+        errorcount = 0;
+        notification({ messageText: "Falha na comunicação com o servidor", messageTitle: "Desculpe!", fix: false, type: "warning", icon: "thumbs-down" });
+    }
+
+    var tipo;
+    var mensagem;
+
+    if (resultadoParametroExterno != null) {
+        if (resultadoParametroExterno.length > 0) {
+            if (resultadoParametroExterno[0].message != null) {
+                tipo = resultadoParametroExterno[0].message[0].type;
+                mensagem = resultadoParametroExterno[0].message[0].title[0].text;
+                Alerta(tipo, mensagem);
+            }
+        }
+    }
+
+    return retorno;
 }

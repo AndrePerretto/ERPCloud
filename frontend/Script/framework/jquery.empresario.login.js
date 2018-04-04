@@ -20,7 +20,7 @@ jQuery(document).ready(function($) {
     // Bind progress buttons and simulate loading progress
     ladda_button_call();
 
-    document.getElementById('date').valueAsDate = new Date();
+    //document.getElementById('date').valueAsDate = new Date();
 });
 /*** Switch Call ***/
 function bootstrap_switch_trigger_call(){
@@ -55,7 +55,7 @@ function login_view_submit(){
             lang = element[0].getAttribute("data-idiom");
         }
         
-        var date = document.getElementById("date").value;
+        var date = new Date(); //document.getElementById("date").value;
 
         var element2 = $('#templateModel').find(":selected");//document.getElementById("idiom");
 
@@ -74,7 +74,10 @@ function login_view_submit(){
             success: function (response) {
                 if (trataRetorno(response)) {                    
                     //var setUrl = window.location.origin + '/index.html'
-                    var setUrl = getGlobalParameters("urlInterface") + "/login.aspx?enterpriseID=" + empID + "&userID=" + response.ID + "&language=" + lang + "&date=" + date + "&templateModel=" + templateModel + "&EnterpriseName=" + empDsc;
+                    var enterpriseID = $("#enterpriseLink").val();
+                    createCookie("EnterpriseID", enterpriseID, 99);
+                    createCookie("UserID", response.ID, 99);
+                    var setUrl = "http://" + window.location.host; //getGlobalParameters("urlInterface") + "/login.aspx?enterpriseID=" + empID + "&userID=" + response.ID + "&language=" + lang + "&date=" + date + "&templateModel=" + templateModel + "&EnterpriseName=" + empDsc;
                     window.location.assign(setUrl);                    
                 }
             },
@@ -140,14 +143,14 @@ function trataRetorno(response) {
             //GerarCookie("empresarioERP", "logado", 1);
             return true;
         } else {
-            //alert("Usuário inválido!!!");
+            //alert("Usuï¿½rio invï¿½lido!!!");
             notification({ messageTitle: response.title[0].text, messageText: response.title[0].toolTip, fix: false, type: "warning", icon: "thumbs-down" });
 
             
             return false;
         }
     } else {
-        alert("Usuário inválido!!!");
+        alert("UsuÃ¡rio invÃ¡lido!!!");
         return false;
     }
 }

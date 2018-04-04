@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- Viewport metatags -->
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- iOS webapp metatags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- iOS webapp icons -->
+    <link rel="apple-touch-icon-precomposed" href="Images/ios/fickle-logo-72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="Images/ios/fickle-logo-72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="Images/ios/fickle-logo-114.png" />
+
+    <!-- TODO: Add a favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>Empresario Cloud</title>
+
+    <!--Page loading plugin Start -->
+    <link rel="stylesheet" href="Style/plugins/pace.css">
+    <script src="Script/pace.min.js"></script>
+    <!--Page loading plugin End   -->
+
+    <!-- Plugin Css Put Here -->
+    <link href="Style/bootstrap.min.css" rel="stylesheet">
+    <link href="Style/animate.css" rel="stylesheet">
+    <link rel="stylesheet" href="Style/plugins/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="Style/plugins/ladda-themeless.min.css">
+
+    <link href="Style/plugins/humane_themes/bigbox.css" rel="stylesheet">
+    <link href="Style/plugins/humane_themes/libnotify.css" rel="stylesheet">
+    <link href="Style/plugins/humane_themes/jackedup.css" rel="stylesheet">
+    <link href="Style/plugins/amaranjs/jquery.amaran.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/all-themes.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/awesome.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/default.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/blur.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/user.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/rounded.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/readmore.css" rel="stylesheet" />
+    <link href="Style/plugins/amaranjs/theme/metro.css" rel="stylesheet" />
+
+    <!-- Plugin Css End -->
+    <!-- Custom styles Style -->
+    <link href="Style/style.css" rel="stylesheet">
+    <!-- Custom styles Style End-->
+
+    <!-- Responsive Style For-->
+    <link href="Style/responsive.css" rel="stylesheet">
+    <!-- Responsive Style For-->
+
+    <!-- Custom styles for this template -->
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-screen" onload="$('.login-box').removeClass('hidden').addClass('animated bounceInDown');">
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="login-box hidden">
+                        <div class="login-content">
+
+                            <img id="logoEmpresario" src="Images/logo-color.png" 
+                            <h3 class="" id="welcome"><span class="animated pulse" style="
+  -webkit-animation-iteration-count: infinite;">Carregando perfil da empresa</span></h3>
+                        
+                        </div>
+
+                        <div class="login-form" id="login-form">
+                            <div class="loadingBox"></div>
+                            <form id="form-login" method="post" action="#" class="form-horizontal ls_form">
+                                <div class="control-group col-md-6">
+                                    <label>Login</label><div class="input-group ls-group-input">
+                                        <input name="username" id="iUserName" class="form-control" type="text" placeholder="Login">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    </div>
+                                </div>
+                                <div class="control-group col-md-6">
+                                    <label>Senha</label><div class="input-group ls-group-input">
+                                        <input id="iPassword" type="password" placeholder="Senha" name="password" class="form-control" value="">
+                                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    </div>
+                                </div>
+                                <div class="control-group col-md-6">
+
+                                    <label>Idioma</label>
+                                    <div class="input-group ls-group-input">
+                                        <select name="language" id="idiom" class="form-control" placeholder="Idioma" type="">
+                                        </select>
+                                        <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group col-md-6">
+                                    <label>Empresa</label>
+                                    <div class="input-group ls-group-input">
+                                        <input id="iEnterpriseID" type="hidden" name="EnterpriseID" class="form-control" value="">
+                                        <select id="enterpriseLink" class="form-control" placeholder="empresa" type="">
+                                        </select>
+                                        <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                    </div>
+                                </div>
+                              
+                                <div class="control-group col-md-12">
+                                        <label></label>
+                                    <div class="input-group ls-group-input login-btn-box  col-md-12 col-sm-12 col-xs-12">
+                                        <button class="btn ls-dark-btn ladda-button col-md-12 col-sm-12 col-xs-12" data-style="slide-down">
+                                            <span class="ladda-label"><i class="fa fa-key"></i></span>
+                                            <span class="ladda-spinner"></span>
+                                        </button>
+
+                                    </div>
+                                    
+                                </div>
+                                <div style="clear:both"></div>
+                            </form>
+                          
+                            
+                        </div>
+                        <div class="forgot-pass-box">
+                            <form id="form-email" action="#" class="form-horizontal ls_form">
+                                <div class="control-group">
+                                    <div class="input-group ls-group-input">
+                                        <input id="email" type="text" placeholder="Email" name="email" class="form-control" value="">
+                                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="input-group ls-group-input login-btn-box">
+                                        <button class="btn ls-dark-btn col-md-12 col-sm-12 col-xs-12">
+                                            <i class="fa fa-rocket"></i>
+                                        </button>
+                                    </div>
+                                    <a class="login-view" href="javascript:void(0)">Login</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="copy-right big-screen hidden-xs hidden-sm">
+            <span>&#169;</span> Empresário ERP Cloud
+        </p>
+    </section>
+
+</body>
+   
+<script src="Script/lib/jquery-2.1.1.min.js"></script>
+<script src="Script/lib/jquery.easing.js"></script>
+<script src="Script/bootstrap-switch.min.js"></script>
+<!--Script for notification start-->
+<script src="Script/loader/spin.js"></script>
+<script src="Script/loader/ladda.js"></script>
+<script src="Script/humane.min.js"></script>
+<!--Script for notification end-->
+    <script src="Script/jquery.amaran.js"></script>
+    <script src="Script/pages/layout.js"></script>
+
+<script src="Script/framework/jquery.empresario.login.js"></script>
+<script src="Script/framework/jquery.empresario.environment.js"></script>
+<script src="framework/general.js"></script>
+<script src="Script/framework/jquery.empresario.message.js"></script>
+    
+
+<script>
+    var retorno = checkEnvironment();
+</script>
+         
+</html>
+

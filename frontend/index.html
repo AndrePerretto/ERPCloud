@@ -157,16 +157,15 @@
                     </ul>
                 </div>
 
-                <!--Collapse navigation menu icon end -->
-                <!--Top Navigation Start-->
-
                 <ul>
+                    <!--
                     <li class="dropdown">
-                        <!--Notification drop down start-->
+                        <!--Notification drop down start
                         <a id="Empresas" class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
                             <span class="fa fa-refresh"></span>
-                            <!--<span class="badge badge-red">6</span>-->
+                            <span class="badge badge-red">6</span>
                         </a>
+                    
 
                         <div id="empresa" class="dropdown-menu right top-notification">
                             <h4>Empresas</h4>
@@ -176,14 +175,12 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--Notification drop down end-->
                     </li>
 
                     <li class="dropdown">
-                        <!--All task drop down start-->
                         <a id="taskNumber" class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
                             <span class="fa fa-tasks"></span>
-                            <!--<span class="badge badge-lightBlue"></span>-->
+                            <span class="badge badge-lightBlue"></span>
                         </a>
                         <div id="task" class="dropdown-menu right top-dropDown-1">
                             <h4>Tarefas</h4>
@@ -193,13 +190,11 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--All task drop down end-->
                     </li>
                     <li class="dropdown">
-                        <!--Notification drop down start-->
                         <a id="notificationNumber" class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
                             <span class="fa fa-bell"></span>
-                            <!--<span class="badge badge-red">6</span>-->
+                            <span class="badge badge-red">6</span>
                         </a>
 
                         <div id="notification" class="dropdown-menu right top-notification">
@@ -210,9 +205,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <!--Notification drop down end-->
                     </li>
-                    <!--
+                    
                     <li class="dropdown">
                       
                         <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
@@ -228,10 +222,9 @@
                                 </li>
                             </ul>
                         </div>
-                        >
+                       
                     </li>
-					-->
-                    <!--<li class="hidden-xs">
+                   <li class="hidden-xs">
                         <a class="right-sidebar" href="javascript:void(0)">
                             <i class="fa fa-comment-o"></i>
                         </a>
@@ -248,8 +241,7 @@
                             <span id="UpdateSystemLabel"></span>
                         </a>
                     </li>
--->
-                    <!--<li class="hidden-xs">
+                    <li class="hidden-xs">
                         <a class="right-sidebar-setting" href="javascript:void(0)">
                             <i class="fa fa-cogs"></i>
                         </a>
@@ -259,9 +251,10 @@
                             <i class="fa fa-lock"></i>
                         </a>
                     </li>
-					-->
+                    -->
+                    
                     <li>
-                        <a href="login.aspx">
+                        <a href="login.html">
                             <i class="fa fa-power-off" onclick="logoff()"></i>
                         </a>
                     </li>
@@ -667,9 +660,15 @@
 
             var Site = window.Site;
             $(document).ready(function () {
+                if(!returnCookie("EnterpriseID") || !returnCookie("UserID")){
+                    var setUrl = "http://" + window.location.host + "/login.html"; //getGlobalParameters("urlInterface") + "/login.aspx?enterpriseID=" + empID + "&userID=" + response.ID + "&language=" + lang + "&date=" + date + "&templateModel=" + templateModel + "&EnterpriseName=" + empDsc;
+                    window.location.assign(setUrl);   
+                    return;
+                }
+
             Site.run()
-                createCookie("EnterpriseID", "561bf579-5655-42de-a290-038c6f76b974", 99);
-                createCookie("UserID", "de5d2469-ae66-4696-9147-004f86f7d0d9", 99);
+                //createCookie("EnterpriseID", "561bf579-5655-42de-a290-038c6f76b974", 99);
+                //createCookie("UserID", "de5d2469-ae66-4696-9147-004f86f7d0d9", 99);
 				var url = "http://" + window.location.hostname + ":3002";
                 createCookie("urlPlataform", url, 99);
 
