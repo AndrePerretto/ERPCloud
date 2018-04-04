@@ -584,7 +584,7 @@ function getAjaxParameter(url, dados, callback) {
         },
         url: url + "?Dados=" + dados,
         dataType: "json",
-        //cors: true,
+        cors: true,
         async: true,
         crossDomain: true,
         success: function (result) {

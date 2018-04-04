@@ -25,7 +25,7 @@ function checkEnvironment(sn_loadEnterprises) {
     if (parts.length > 3) {
         dados = parts[0];
     }else {
-        window.location = "http://intelecta.com.br";;
+        window.location = "http://intelecta.com.br";
     }
 
     //Desenvolvimento
