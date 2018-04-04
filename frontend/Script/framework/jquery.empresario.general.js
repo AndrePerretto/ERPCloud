@@ -371,36 +371,18 @@ function getGlobalParameters(parametro) {
 
     var global = new Object();
 
-    //Servidor homologação
-    //global.urlPlataforma = "http://54.149.163.193:80"
-    //global.urlInterface = "http://54.149.163.193:80"
-
-    //global.urlPlataforma = "http://54.149.163.193:81"
-    //global.urlInterface = "http://54.149.163.193:81"
-
-    //Local
-    //global.urlInterface = "http://localhost:27707"
-    //global.urlPlataforma = "http://localhost:9000"
-
-    //global.urlInterface = "http://localhost:27707"
-    //global.urlPlataforma = "http://localhost:27707"
-
-    //Servidor produção
-    //global.urlInterface = "http://52.89.57.100/"
-    //global.urlPlataforma = "http://52.89.57.100/"
-
-    //global.urlInterface = "http://" + window.location.host
-    //global.urlPlataforma = "http://" + window.location.host
-
-    //global.urlDesenvolvimento = "http://localhost:13886/";
-
-    //global.urlSearch = "http://" + window.location.host + ":8983"
     global.urlPlataform = "http://"+ window.location.hostname +":3002"
-    //global.urlPlataforma = "http://localhost:2444"
-    //global.urlInterface = "http://localhost:2444"
     
-    global.urlPlataforma = "http://homologa.empresariocloud.com.br"
-    global.urlInterface = "http://homologa.empresariocloud.com.br"
+    var full = window.location.host;
+    var parts = full.split('.');
+    if (parts.length > 3) {
+        dados = parts[0];
+        global.urlPlataforma = "http://" + dados + ".empresariocloud.com.br"
+        global.urlInterface = "http://" + dados + ".empresariocloud.com.br"
+    }else {
+        global.urlPlataforma = "http://localhost:2444"
+        global.urlInterface = "http://localhost:2444"
+    }
 
     global.urlSearch = "http://" + window.location.host + ":8983"
 
