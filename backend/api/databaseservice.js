@@ -1031,14 +1031,14 @@ function select(select){
 }
 
 router.route('/teste').get(function(req, res) {
-    var Client = require('node-rest-client').Client;
+    //var Client = require('node-rest-client').Client;
     
    // direct way 
-   var client = new Client();    
+   //var client = new Client();    
     
    //client.get("http://localhost:2444/api/compiler/CsharpCompiler?EnterpriseID=f1495bcf-9258-4245-8edf-d0fac225412d&Class=CadCliente&Function=ConsultaCNPJ&ValueParameters[0]=07.361.429/0001-53",
    //    function (data, response) {
-        var objectId = new ObjectID();
+        //var objectId = new ObjectID();
            // parsed response body as js object 
            res.send(req.host)
            // raw response 
