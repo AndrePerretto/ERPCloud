@@ -25,16 +25,14 @@ function checkEnvironment(sn_loadEnterprises) {
     if (parts.length > 3) {
         dados = parts[0];
     }else {
-        window.location = "http://intelecta.com.br";
+        if(full.indexOf("localhost") > -1){
+            dados = "homologa";
+        }else{
+            window.location = "http://intelecta.com.br";
+        }
     }
 
-    //Desenvolvimento
-    //dados = "homologa";
-
-    //if (!sn_loadEnterprises)
-        getAjaxParameter(url, dados, function (result) { welcome(result) });
-    //else
-    //    getAjaxParameter(url, dados, function (result) { CreateEnterprise(result) });
+    getAjaxParameter(url, dados, function (result) { welcome(result) });    
 }
 
 function welcome(json) {

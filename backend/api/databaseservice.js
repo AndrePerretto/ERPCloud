@@ -18,7 +18,9 @@ var serverWindows = "";
 //var serverWindows = "http://localhost:2444";
 //var serverWindows = "http://homologa.empresariocloud.com.br";
 
-var configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+var configEnvironment = {};
+//var configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+//var configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
 
 var EnterpriseID = "";
 var UserID = "";
@@ -27,14 +29,23 @@ router.route('/*').get(function(req, res, next) {
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
     
     var parts = full.split('.');
-    var dados;
+    var dados = "";
     if (parts.length > 3) {
         dados = parts[0];
     }
     dados = dados.replace("http://","");
-    serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
 
-    var database = ""; //"eCloud-foodtown";
+    if(full.indexOf("localhost") > -1){
+        serverWindows = "http://localhost:2444";
+        dados = "homologa";
+        configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+    }else{
+        serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
+        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
+    }
+
+    console.log(serverWindows)
+    var database = ""; //"eCloud-homologa";
     var server = ""; //"127.0.0.1";
     var password = ""; //"1234567890";
     var user = ""; //"sa";
@@ -1029,7 +1040,7 @@ router.route('/teste').get(function(req, res) {
    //    function (data, response) {
         var objectId = new ObjectID();
            // parsed response body as js object 
-           res.send(objectId)
+           res.send(req.host)
            // raw response 
    //        console.log(response);
    //    });
