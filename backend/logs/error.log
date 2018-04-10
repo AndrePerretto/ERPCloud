@@ -1,0 +1,727 @@
+2018-04-05T16:23:10.591Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:24:38.163Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=2
+2018-04-05T16:26:26.498Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=2
+2018-04-05T16:27:46.483Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:29:23.684Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:30:34.480Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:43:57.207Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:45:06.079Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:46:24.572Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-06T13:01:24.494Z - error: Error when processing render request Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12) requestId=2
+2018-04-06T13:01:24.499Z - error: Error during processing request: http://localhost:5488/api/report/Orders details: Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12)
+2018-04-06T13:03:26.628Z - error: Error when processing render request Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12) requestId=4
+2018-04-06T13:03:26.629Z - error: Error during processing request: http://localhost:5488/api/report/Orders details: Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12)
+2018-04-06T13:32:27.464Z - error: uncaughtException: ENOENT: no such file or directory, scandir 'C:\Users\Perretto\AppData\Local\Temp\jsreport\autocleanup' date=Fri Apr 06 2018 10:32:27 GMT-0300 (Hora oficial do Brasil), pid=9564, uid=null, gid=null, cwd=D:\ERPCloud\backend, execPath=C:\nodejs\node.exe, version=v6.11.3, argv=[C:\nodejs\node.exe, D:\ERPCloud\backend\server.js], rss=92147712, heapTotal=75714560, heapUsed=65430408, external=1405717, loadavg=[0, 0, 0], uptime=3596.9661991, trace=[column=null, file=null, function=Error, line=null, method=null, native=true, column=18, file=fs.js, function=Object.fs.readdirSync, line=953, method=readdirSync, native=false, column=20, file=D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\reap\index.js, function=null, line=98, method=null, native=false, column=null, file=null, function=Array.forEach, line=null, method=forEach, native=true, column=13, file=D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\reap\index.js, function=Reaper.start, line=97, method=start, native=false, column=12, file=D:\ERPCloud\backend\node_modules\jsreport-core\lib\reporter.js, function=Timeout._onTimeout, line=517, method=_onTimeout, native=false, column=11, file=timers.js, function=ontimeout, line=386, method=null, native=false, column=5, file=timers.js, function=Timer.unrefdHandle, line=492, method=unrefdHandle, native=false], stack=[Error: ENOENT: no such file or directory, scandir 'C:\Users\Perretto\AppData\Local\Temp\jsreport\autocleanup',     at Error (native),     at Object.fs.readdirSync (fs.js:953:18),     at D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\reap\index.js:98:20,     at Array.forEach (native),     at Reaper.start (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\reap\index.js:97:13),     at Timeout._onTimeout (D:\ERPCloud\backend\node_modules\jsreport-core\lib\reporter.js:517:12),     at ontimeout (timers.js:386:11),     at Timer.unrefdHandle (timers.js:492:5)]
+2018-04-06T14:12:08.798Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=1
+2018-04-06T14:12:08.801Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:12:15.282Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=2
+2018-04-06T14:12:15.285Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:12:48.853Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=3
+2018-04-06T14:12:48.855Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:18:05.074Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=5
+2018-04-06T14:18:05.075Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:20:56.264Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=6
+2018-04-06T14:20:56.266Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:23:19.186Z - error: Error when processing render request Error during rendering report: Cannot convert undefined or null to object evalmachine.<anonymous>:366
+    return result[Object.keys(result)[0]]
+                         ^
+
+TypeError: Cannot convert undefined or null to object
+    at xml2jsonUnwrap (evalmachine.<anonymous>:366:26)
+    at Object.add (evalmachine.<anonymous>:182:23)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=11
+2018-04-06T14:23:19.190Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot convert undefined or null to object evalmachine.<anonymous>:366
+    return result[Object.keys(result)[0]]
+                         ^
+
+TypeError: Cannot convert undefined or null to object
+    at xml2jsonUnwrap (evalmachine.<anonymous>:366:26)
+    at Object.add (evalmachine.<anonymous>:182:23)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:36:17.678Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=16
+2018-04-06T14:36:17.681Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:36:41.014Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=17
+2018-04-06T14:36:41.019Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:36:59.008Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=18
+2018-04-06T14:36:59.018Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:37:33.756Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=19
+2018-04-06T14:37:33.758Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:38:42.497Z - error: Error when processing render request Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=22
+2018-04-06T14:38:42.499Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:38:48.213Z - error: Error when processing render request Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=23
+2018-04-06T14:38:48.215Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:40:31.758Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=25
+2018-04-06T14:40:31.759Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:40:37.573Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=26
+2018-04-06T14:40:37.576Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T16:20:45.666Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=29
+2018-04-06T16:20:45.670Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:21:15.434Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=30
+2018-04-06T16:21:15.437Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:21:23.379Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=31
+2018-04-06T16:21:23.383Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:22:47.981Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=32
+2018-04-06T16:22:47.985Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41

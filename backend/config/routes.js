@@ -14,5 +14,7 @@ module.exports = function(server) {
     DataBaseService.register(router, '/database')
     const ControlService = require('../api/controlservice')
     ControlService.register(router, '/controls')
+    const ReportsService = require('../api/reportsservice')
+    ReportsService.register(router, '/reports')
     
 }

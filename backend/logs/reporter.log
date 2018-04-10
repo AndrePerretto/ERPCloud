@@ -1,0 +1,1230 @@
+2018-04-05T15:42:40.955Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T15:42:40.977Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T15:42:41.059Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T15:42:41.125Z - info: Extensions location cache not found, crawling directories
+2018-04-05T15:42:47.264Z - info: Found 30 extensions
+2018-04-05T15:42:47.578Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T15:42:47.587Z - debug: Discovered 30 extensions
+2018-04-05T15:42:47.590Z - info: Using extension jsrender
+2018-04-05T15:42:47.612Z - info: Using extension fop-pdf
+2018-04-05T15:42:48.663Z - info: Using extension handlebars
+2018-04-05T15:42:48.714Z - info: Using extension templates
+2018-04-05T15:42:48.848Z - info: Using extension html-to-xlsx
+2018-04-05T15:42:51.885Z - info: Using extension data
+2018-04-05T15:42:53.072Z - info: Using extension phantom-pdf
+2018-04-05T15:42:54.431Z - info: Using extension text
+2018-04-05T15:42:54.492Z - info: Using extension assets
+2018-04-05T15:42:54.759Z - info: Using extension scripts
+2018-04-05T15:42:55.516Z - info: Using extension xlsx
+2018-04-05T15:43:06.206Z - info: Creating memory store
+2018-04-05T15:43:06.296Z - info: reporter initialized
+2018-04-05T15:43:06.304Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T15:43:06.306Z - info: Rendering anonymous template { recipe:phantom-pdf,engine:handlebars} requestId=1
+2018-04-05T15:43:06.307Z - debug: Data item not defined for this template. requestId=1
+2018-04-05T15:43:06.329Z - debug: Rendering engine handlebars requestId=1
+2018-04-05T15:43:08.848Z - debug: Compiled template not found in the cache, compiling timestamp=Thu Apr 05 2018 12:43:08 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:43:08.851Z - debug: Executing recipe phantom-pdf requestId=1
+2018-04-05T15:43:16.623Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Thu Apr 05 2018 12:43:16 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:43:16.627Z - debug: Request file:///C%3A%5CUsers%5CPerretto%5CAppData%5CLocal%5CTemp%5Cjsreport%5C0a251290-38e8-11e8-b4ac-d7617e19cd66html.html timestamp=Thu Apr 05 2018 12:43:16 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:43:16.634Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=1
+2018-04-05T15:43:16.654Z - info: Rendering request 1 finished in 10336 ms requestId=1
+2018-04-05T15:43:17.707Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-04-05T15:43:17.709Z - info: Rendering anonymous template { recipe:phantom-pdf,engine:handlebars} requestId=2
+2018-04-05T15:43:17.710Z - debug: Data item not defined for this template. requestId=2
+2018-04-05T15:43:17.718Z - debug: Rendering engine handlebars requestId=2
+2018-04-05T15:43:18.744Z - debug: Compiled template not found in the cache, compiling timestamp=Thu Apr 05 2018 12:43:18 GMT-0300 (Hora oficial do Brasil), requestId=2
+2018-04-05T15:43:18.745Z - debug: Executing recipe phantom-pdf requestId=2
+2018-04-05T15:43:24.972Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Thu Apr 05 2018 12:43:24 GMT-0300 (Hora oficial do Brasil), requestId=2
+2018-04-05T15:43:24.973Z - debug: Request file:///C%3A%5CUsers%5CPerretto%5CAppData%5CLocal%5CTemp%5Cjsreport%5C100a2ab0-38e8-11e8-b4ac-d7617e19cd66html.html timestamp=Thu Apr 05 2018 12:43:24 GMT-0300 (Hora oficial do Brasil), requestId=2
+2018-04-05T15:43:24.975Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=2
+2018-04-05T15:43:24.977Z - info: Rendering request 2 finished in 7271 ms requestId=2
+2018-04-05T15:55:31.475Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T15:55:31.483Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T15:55:31.491Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T15:55:31.544Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T15:55:35.732Z - info: Found 30 extensions
+2018-04-05T15:55:35.848Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T15:55:35.876Z - debug: Discovered 30 extensions
+2018-04-05T15:55:35.879Z - info: Using extension jsrender
+2018-04-05T15:55:35.886Z - info: Using extension fop-pdf
+2018-04-05T15:55:36.199Z - info: Using extension handlebars
+2018-04-05T15:55:36.218Z - info: Using extension templates
+2018-04-05T15:55:36.253Z - info: Using extension html-to-xlsx
+2018-04-05T15:55:36.929Z - info: Using extension data
+2018-04-05T15:55:37.183Z - info: Using extension phantom-pdf
+2018-04-05T15:55:37.697Z - info: Using extension text
+2018-04-05T15:55:37.734Z - info: Using extension assets
+2018-04-05T15:55:37.837Z - info: Using extension scripts
+2018-04-05T15:55:38.107Z - info: Using extension xlsx
+2018-04-05T15:55:39.988Z - info: Creating memory store
+2018-04-05T15:55:40.091Z - info: reporter initialized
+2018-04-05T15:55:40.106Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T15:55:40.128Z - info: Rendering anonymous template { recipe:phantom-pdf,engine:handlebars} requestId=1
+2018-04-05T15:55:40.143Z - debug: Data item not defined for this template. requestId=1
+2018-04-05T15:55:40.177Z - debug: Rendering engine handlebars requestId=1
+2018-04-05T15:55:41.211Z - debug: Compiled template not found in the cache, compiling timestamp=Thu Apr 05 2018 12:55:41 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:55:41.213Z - debug: Executing recipe phantom-pdf requestId=1
+2018-04-05T15:55:52.601Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Thu Apr 05 2018 12:55:52 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:55:52.602Z - debug: Request file:///C%3A%5CUsers%5CPerretto%5CAppData%5CLocal%5CTemp%5Cjsreport%5Cca966730-38e9-11e8-bf90-231d5109cd5ahtml.html timestamp=Thu Apr 05 2018 12:55:52 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T15:55:52.606Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=1
+2018-04-05T15:55:52.612Z - info: Rendering request 1 finished in 12513 ms requestId=1
+2018-04-05T16:22:39.123Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:22:39.132Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:22:39.207Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:22:39.459Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:22:50.840Z - info: Found 30 extensions
+2018-04-05T16:22:51.107Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:22:51.116Z - debug: Discovered 30 extensions
+2018-04-05T16:22:51.122Z - info: Using extension jsrender
+2018-04-05T16:22:51.144Z - info: Using extension fop-pdf
+2018-04-05T16:22:52.298Z - info: Using extension handlebars
+2018-04-05T16:22:52.366Z - info: Using extension templates
+2018-04-05T16:22:52.529Z - info: Using extension html-to-xlsx
+2018-04-05T16:22:56.212Z - info: Using extension data
+2018-04-05T16:22:57.434Z - info: Using extension phantom-pdf
+2018-04-05T16:22:59.000Z - info: Using extension text
+2018-04-05T16:22:59.013Z - info: Using extension assets
+2018-04-05T16:22:59.478Z - info: Using extension scripts
+2018-04-05T16:23:00.418Z - info: Using extension xlsx
+2018-04-05T16:23:10.439Z - info: Creating memory store
+2018-04-05T16:23:10.514Z - info: reporter initialized
+2018-04-05T16:23:10.521Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:23:10.524Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:23:10.551Z - debug: Inline data specified. requestId=1
+2018-04-05T16:23:10.591Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:24:38.152Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-04-05T16:24:38.154Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=2
+2018-04-05T16:24:38.156Z - debug: Inline data specified. requestId=2
+2018-04-05T16:24:38.163Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=2
+2018-04-05T16:26:00.955Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:26:00.957Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:26:00.964Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:26:00.988Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:26:04.085Z - info: Found 30 extensions
+2018-04-05T16:26:04.168Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:26:04.182Z - debug: Discovered 30 extensions
+2018-04-05T16:26:04.184Z - info: Using extension jsrender
+2018-04-05T16:26:04.188Z - info: Using extension fop-pdf
+2018-04-05T16:26:04.343Z - info: Using extension handlebars
+2018-04-05T16:26:04.350Z - info: Using extension templates
+2018-04-05T16:26:04.366Z - info: Using extension html-to-xlsx
+2018-04-05T16:26:04.804Z - info: Using extension data
+2018-04-05T16:26:04.953Z - info: Using extension phantom-pdf
+2018-04-05T16:26:05.219Z - info: Using extension text
+2018-04-05T16:26:05.220Z - info: Using extension assets
+2018-04-05T16:26:05.285Z - info: Using extension scripts
+2018-04-05T16:26:05.433Z - info: Using extension xlsx
+2018-04-05T16:26:06.788Z - info: Creating memory store
+2018-04-05T16:26:06.854Z - info: reporter initialized
+2018-04-05T16:26:06.857Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:26:06.858Z - info: Rendering anonymous template { recipe:phantom-pdf,engine:handlebars} requestId=1
+2018-04-05T16:26:06.859Z - debug: Data item not defined for this template. requestId=1
+2018-04-05T16:26:06.877Z - debug: Rendering engine handlebars requestId=1
+2018-04-05T16:26:09.164Z - debug: Compiled template not found in the cache, compiling timestamp=Thu Apr 05 2018 13:26:09 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:26:09.169Z - debug: Executing recipe phantom-pdf requestId=1
+2018-04-05T16:26:15.921Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Thu Apr 05 2018 13:26:15 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:26:15.943Z - debug: Request file:///C%3A%5CUsers%5CPerretto%5CAppData%5CLocal%5CTemp%5Cjsreport%5C0c225a70-38ee-11e8-97a3-d960e76f382ahtml.html timestamp=Thu Apr 05 2018 13:26:15 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:26:15.947Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=1
+2018-04-05T16:26:15.949Z - info: Rendering request 1 finished in 9093 ms requestId=1
+2018-04-05T16:26:26.489Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-04-05T16:26:26.490Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=2
+2018-04-05T16:26:26.490Z - debug: Inline data specified. requestId=2
+2018-04-05T16:26:26.497Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=2
+2018-04-05T16:27:41.596Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:27:41.597Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:27:41.605Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:27:41.620Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:27:44.082Z - info: Found 30 extensions
+2018-04-05T16:27:44.124Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:27:44.155Z - debug: Discovered 30 extensions
+2018-04-05T16:27:44.161Z - info: Using extension jsrender
+2018-04-05T16:27:44.187Z - info: Using extension fop-pdf
+2018-04-05T16:27:44.371Z - info: Using extension handlebars
+2018-04-05T16:27:44.377Z - info: Using extension templates
+2018-04-05T16:27:44.399Z - info: Using extension html-to-xlsx
+2018-04-05T16:27:44.815Z - info: Using extension data
+2018-04-05T16:27:44.959Z - info: Using extension phantom-pdf
+2018-04-05T16:27:45.188Z - info: Using extension text
+2018-04-05T16:27:45.190Z - info: Using extension assets
+2018-04-05T16:27:45.243Z - info: Using extension scripts
+2018-04-05T16:27:45.362Z - info: Using extension xlsx
+2018-04-05T16:27:46.401Z - info: Creating memory store
+2018-04-05T16:27:46.459Z - info: reporter initialized
+2018-04-05T16:27:46.461Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:27:46.464Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:27:46.465Z - debug: Inline data specified. requestId=1
+2018-04-05T16:27:46.483Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:29:18.916Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:29:18.920Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:29:18.950Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:29:18.977Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:29:21.307Z - info: Found 30 extensions
+2018-04-05T16:29:21.348Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:29:21.364Z - debug: Discovered 30 extensions
+2018-04-05T16:29:21.366Z - info: Using extension jsrender
+2018-04-05T16:29:21.371Z - info: Using extension fop-pdf
+2018-04-05T16:29:21.506Z - info: Using extension handlebars
+2018-04-05T16:29:21.509Z - info: Using extension templates
+2018-04-05T16:29:21.520Z - info: Using extension html-to-xlsx
+2018-04-05T16:29:21.861Z - info: Using extension data
+2018-04-05T16:29:21.984Z - info: Using extension phantom-pdf
+2018-04-05T16:29:22.268Z - info: Using extension text
+2018-04-05T16:29:22.280Z - info: Using extension assets
+2018-04-05T16:29:22.351Z - info: Using extension scripts
+2018-04-05T16:29:22.585Z - info: Using extension xlsx
+2018-04-05T16:29:23.583Z - info: Creating memory store
+2018-04-05T16:29:23.655Z - info: reporter initialized
+2018-04-05T16:29:23.660Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:29:23.661Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:29:23.662Z - debug: Inline data specified. requestId=1
+2018-04-05T16:29:23.683Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:30:29.627Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:30:29.629Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:30:29.635Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:30:29.656Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:30:32.119Z - info: Found 30 extensions
+2018-04-05T16:30:32.170Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:30:32.187Z - debug: Discovered 30 extensions
+2018-04-05T16:30:32.189Z - info: Using extension jsrender
+2018-04-05T16:30:32.191Z - info: Using extension fop-pdf
+2018-04-05T16:30:32.325Z - info: Using extension handlebars
+2018-04-05T16:30:32.329Z - info: Using extension templates
+2018-04-05T16:30:32.342Z - info: Using extension html-to-xlsx
+2018-04-05T16:30:32.712Z - info: Using extension data
+2018-04-05T16:30:32.828Z - info: Using extension phantom-pdf
+2018-04-05T16:30:33.107Z - info: Using extension text
+2018-04-05T16:30:33.129Z - info: Using extension assets
+2018-04-05T16:30:33.180Z - info: Using extension scripts
+2018-04-05T16:30:33.286Z - info: Using extension xlsx
+2018-04-05T16:30:34.358Z - info: Creating memory store
+2018-04-05T16:30:34.417Z - info: reporter initialized
+2018-04-05T16:30:34.441Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:30:34.442Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:30:34.443Z - debug: Data item not defined for this template. requestId=1
+2018-04-05T16:30:34.480Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:31:17.040Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:31:17.062Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:31:17.072Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:31:17.094Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:31:19.382Z - info: Found 30 extensions
+2018-04-05T16:31:19.434Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:31:19.443Z - debug: Discovered 30 extensions
+2018-04-05T16:31:19.445Z - info: Using extension jsrender
+2018-04-05T16:31:19.447Z - info: Using extension fop-pdf
+2018-04-05T16:31:19.592Z - info: Using extension handlebars
+2018-04-05T16:31:19.599Z - info: Using extension templates
+2018-04-05T16:31:19.626Z - info: Using extension html-to-xlsx
+2018-04-05T16:31:20.072Z - info: Using extension data
+2018-04-05T16:31:20.233Z - info: Using extension phantom-pdf
+2018-04-05T16:31:20.654Z - info: Using extension text
+2018-04-05T16:31:20.683Z - info: Using extension assets
+2018-04-05T16:31:20.765Z - info: Using extension scripts
+2018-04-05T16:31:20.924Z - info: Using extension xlsx
+2018-04-05T16:31:21.926Z - info: Creating memory store
+2018-04-05T16:31:21.970Z - info: reporter initialized
+2018-04-05T16:31:21.973Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:31:21.978Z - info: Rendering anonymous template { recipe:phantom-pdf,engine:handlebars} requestId=1
+2018-04-05T16:31:22.002Z - debug: Data item not defined for this template. requestId=1
+2018-04-05T16:31:22.032Z - debug: Rendering engine handlebars requestId=1
+2018-04-05T16:31:22.510Z - debug: Compiled template not found in the cache, compiling timestamp=Thu Apr 05 2018 13:31:22 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:31:22.513Z - debug: Executing recipe phantom-pdf requestId=1
+2018-04-05T16:31:28.785Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Thu Apr 05 2018 13:31:28 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:31:28.785Z - debug: Request file:///C%3A%5CUsers%5CPerretto%5CAppData%5CLocal%5CTemp%5Cjsreport%5Cc6e6da70-38ee-11e8-8921-45fc9f204f79html.html timestamp=Thu Apr 05 2018 13:31:28 GMT-0300 (Hora oficial do Brasil), requestId=1
+2018-04-05T16:31:28.788Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=1
+2018-04-05T16:31:28.789Z - info: Rendering request 1 finished in 6818 ms requestId=1
+2018-04-05T16:43:48.912Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:43:48.916Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:43:48.937Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:43:48.980Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:43:51.947Z - info: Found 32 extensions
+2018-04-05T16:43:51.995Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:43:56.743Z - debug: Discovered 32 extensions
+2018-04-05T16:43:56.747Z - info: Using extension jsrender
+2018-04-05T16:43:56.748Z - info: Using extension fop-pdf
+2018-04-05T16:43:56.749Z - info: Using extension handlebars
+2018-04-05T16:43:56.750Z - info: Using extension jsrender
+2018-04-05T16:43:56.752Z - info: Using extension templates
+2018-04-05T16:43:56.753Z - info: Using extension text
+2018-04-05T16:43:56.754Z - info: Using extension phantom-pdf
+2018-04-05T16:43:56.760Z - info: Using extension data
+2018-04-05T16:43:56.762Z - info: Using extension phantom-pdf
+2018-04-05T16:43:57.017Z - info: Using extension html-to-xlsx
+2018-04-05T16:43:57.017Z - info: Using extension scripts
+2018-04-05T16:43:57.018Z - info: Using extension assets
+2018-04-05T16:43:57.019Z - info: Using extension xlsx
+2018-04-05T16:43:57.136Z - info: Creating memory store
+2018-04-05T16:43:57.184Z - info: reporter initialized
+2018-04-05T16:43:57.186Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:43:57.187Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:43:57.189Z - debug: Inline data specified. requestId=1
+2018-04-05T16:43:57.207Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:44:59.664Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:44:59.665Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:44:59.671Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:45:02.379Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:45:05.465Z - info: Found 32 extensions
+2018-04-05T16:45:05.515Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:45:05.548Z - debug: Discovered 32 extensions
+2018-04-05T16:45:05.550Z - info: Using extension jsrender
+2018-04-05T16:45:05.558Z - info: Using extension fop-pdf
+2018-04-05T16:45:05.560Z - info: Using extension handlebars
+2018-04-05T16:45:05.561Z - info: Using extension jsrender
+2018-04-05T16:45:05.563Z - info: Using extension templates
+2018-04-05T16:45:05.564Z - info: Using extension text
+2018-04-05T16:45:05.565Z - info: Using extension phantom-pdf
+2018-04-05T16:45:05.568Z - info: Using extension data
+2018-04-05T16:45:05.569Z - info: Using extension phantom-pdf
+2018-04-05T16:45:05.828Z - info: Using extension html-to-xlsx
+2018-04-05T16:45:05.830Z - info: Using extension scripts
+2018-04-05T16:45:05.844Z - info: Using extension assets
+2018-04-05T16:45:05.876Z - info: Using extension xlsx
+2018-04-05T16:45:06.003Z - info: Creating memory store
+2018-04-05T16:45:06.060Z - info: reporter initialized
+2018-04-05T16:45:06.063Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:45:06.065Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:45:06.066Z - debug: Inline data specified. requestId=1
+2018-04-05T16:45:06.079Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-05T16:46:15.904Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-04-05T16:46:15.905Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-05T16:46:15.908Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-05T16:46:16.004Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\jsreport\node_modules\
+2018-04-05T16:46:18.908Z - info: Found 32 extensions
+2018-04-05T16:46:18.932Z - debug: Writing extension locations cache to C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json
+2018-04-05T16:46:23.987Z - debug: Discovered 32 extensions
+2018-04-05T16:46:23.989Z - info: Using extension jsrender
+2018-04-05T16:46:23.991Z - info: Using extension fop-pdf
+2018-04-05T16:46:23.991Z - info: Using extension handlebars
+2018-04-05T16:46:23.992Z - info: Using extension jsrender
+2018-04-05T16:46:23.995Z - info: Using extension templates
+2018-04-05T16:46:23.999Z - info: Using extension text
+2018-04-05T16:46:24.000Z - info: Using extension phantom-pdf
+2018-04-05T16:46:24.006Z - info: Using extension data
+2018-04-05T16:46:24.010Z - info: Using extension phantom-pdf
+2018-04-05T16:46:24.278Z - info: Using extension html-to-xlsx
+2018-04-05T16:46:24.301Z - info: Using extension scripts
+2018-04-05T16:46:24.306Z - info: Using extension assets
+2018-04-05T16:46:24.307Z - info: Using extension xlsx
+2018-04-05T16:46:24.443Z - info: Creating memory store
+2018-04-05T16:46:24.510Z - info: reporter initialized
+2018-04-05T16:46:24.513Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-05T16:46:24.520Z - info: Rendering anonymous template { recipe:html,engine:undefined} requestId=1
+2018-04-05T16:46:24.547Z - debug: Inline data specified. requestId=1
+2018-04-05T16:46:24.571Z - error: Error when processing render request Error during rendering report: Engine must be specified Error: Error during rendering report: Engine must be specified
+    at invokeRender (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:67:11)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-core\lib\render\render.js:147:12
+    at tryCatcher (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\util.js:16:23)
+    at Promise._settlePromiseFromHandler (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:512:31)
+    at Promise._settlePromise (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:569:18)
+    at Promise._settlePromise0 (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:614:10)
+    at Promise._settlePromises (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\promise.js:693:18)
+    at Async._drainQueue (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:133:16)
+    at Async._drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:143:10)
+    at Immediate.Async.drainQueues (D:\ERPCloud\backend\node_modules\jsreport\node_modules\bluebird\js\release\async.js:17:14)
+    at runCallback (timers.js:672:20)
+    at tryOnImmediate (timers.js:645:5)
+    at processImmediate [as _immediateCallback] (timers.js:617:5) requestId=1
+2018-04-06T12:59:01.983Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-04-06T12:59:01.989Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-06T12:59:02.011Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-06T12:59:02.032Z - info: Extensions location cache C:\Users\Perretto\AppData\Local\Temp\jsreport\core\locations.json contains older information, crawling
+2018-04-06T12:59:11.197Z - info: Found 30 extensions
+2018-04-06T12:59:11.273Z - info: Using extension jsrender
+2018-04-06T12:59:11.279Z - info: Using extension cli
+2018-04-06T12:59:11.281Z - info: Using extension debug
+2018-04-06T12:59:11.285Z - info: Using extension express
+2018-04-06T12:59:11.730Z - info: Using extension fop-pdf
+2018-04-06T12:59:11.876Z - info: Using extension handlebars
+2018-04-06T12:59:11.883Z - info: Using extension import-export
+2018-04-06T12:59:12.790Z - info: Using extension templates
+2018-04-06T12:59:12.809Z - info: Using extension tags
+2018-04-06T12:59:12.854Z - info: Using extension html-to-xlsx
+2018-04-06T12:59:13.257Z - info: Using extension authorization
+2018-04-06T12:59:13.387Z - info: Using extension base
+2018-04-06T12:59:13.391Z - info: Using extension fs-store
+2018-04-06T12:59:16.237Z - info: Using extension browser-client
+2018-04-06T12:59:16.243Z - info: Using extension phantom-pdf
+2018-04-06T12:59:16.478Z - info: Using extension images
+2018-04-06T12:59:16.612Z - info: Using extension child-templates
+2018-04-06T12:59:16.631Z - info: Using extension licensing
+2018-04-06T12:59:17.281Z - info: Using extension text
+2018-04-06T12:59:17.285Z - info: Using extension reports
+2018-04-06T12:59:17.418Z - info: Using extension resources
+2018-04-06T12:59:17.557Z - info: Using extension data
+2018-04-06T12:59:17.735Z - info: Using extension studio
+2018-04-06T12:59:18.003Z - info: Using extension scripts
+2018-04-06T12:59:18.136Z - info: Using extension scheduling
+2018-04-06T12:59:18.248Z - info: Using extension assets
+2018-04-06T12:59:18.279Z - info: Using extension xlsx
+2018-04-06T12:59:19.077Z - info: Using extension sample-template
+2018-04-06T12:59:19.203Z - info: Using extension public-templates
+2018-04-06T12:59:19.355Z - info: Initializing fs storage at D:\ERPCloud\backend\data
+2018-04-06T12:59:19.577Z - info: Creating default express app.
+2018-04-06T12:59:19.837Z - info: jsreport server successfully started on http port: 5488
+2018-04-06T12:59:20.019Z - info: Verifying license key free
+2018-04-06T12:59:20.021Z - info: Using free license
+2018-04-06T12:59:20.675Z - info: reporter initialized
+2018-04-06T13:00:22.571Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-06T13:00:22.586Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=1
+2018-04-06T13:00:31.341Z - info: Rendering request 1 finished in 8771 ms requestId=1
+2018-04-06T13:01:23.674Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-04-06T13:01:23.680Z - info: Rendering template {shortid:HJH11D83ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=2
+2018-04-06T13:01:24.494Z - error: Error when processing render request Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12) requestId=2
+2018-04-06T13:01:24.499Z - error: Error during processing request: http://localhost:5488/api/report/Orders details: Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12)
+2018-04-06T13:01:35.259Z - info: Starting rendering request 3 (user: null) requestId=3
+2018-04-06T13:01:35.262Z - info: Rendering template {shortid:r18kyD83ce, recipe:xlsx, engine:handlebars, preview:true} requestId=3
+2018-04-06T13:01:37.960Z - info: Rendering request 3 finished in 2709 ms requestId=3
+2018-04-06T13:03:26.041Z - info: Starting rendering request 4 (user: null) requestId=4
+2018-04-06T13:03:26.044Z - info: Rendering template {shortid:HJH11D83ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=4
+2018-04-06T13:03:26.627Z - error: Error when processing render request Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12) requestId=4
+2018-04-06T13:03:26.629Z - error: Error during processing request: http://localhost:5488/api/report/Orders details: Error during rendering report: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44
+    throw new Error('Unsupported module in scripts: ' + moduleName + '. To enable require on particular module, you need to update the configuration as ' +
+    ^
+
+Error: Unsupported module in scripts: http. To enable require on particular module, you need to update the configuration as {"scripts": { "allowedModules": ["http"] } } ... Alternatively you can also set "*" to allowedModules to enable everything
+    at _require (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:44:11)
+    at evalmachine.<anonymous>:2:12
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+    at module.exports (D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-scripts\lib\scriptEvalChild.js:123:6)
+    at process.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport-core\node_modules\script-manager\lib\worker-processes.js:48:36)
+    at emitTwo (events.js:106:13)
+    at process.emit (events.js:191:7)
+    at process.nextTick (internal/child_process.js:787:12)
+2018-04-06T13:03:42.695Z - info: Starting rendering request 5 (user: null) requestId=5
+2018-04-06T13:03:42.698Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=5
+2018-04-06T13:03:48.619Z - info: Rendering request 5 finished in 5924 ms requestId=5
+2018-04-06T13:08:53.197Z - info: Starting rendering request 6 (user: null) requestId=6
+2018-04-06T13:08:53.207Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=6
+2018-04-06T13:08:59.682Z - info: Rendering request 6 finished in 6488 ms requestId=6
+2018-04-06T13:10:00.737Z - info: Starting rendering request 7 (user: null) requestId=7
+2018-04-06T13:10:00.740Z - info: Rendering template {shortid:r18kyD83ce, recipe:xlsx, engine:handlebars, preview:true} requestId=7
+2018-04-06T13:10:03.893Z - info: Rendering request 7 finished in 3158 ms requestId=7
+2018-04-06T13:22:18.390Z - info: Starting rendering request 8 (user: null) requestId=8
+2018-04-06T13:22:18.394Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=8
+2018-04-06T13:22:24.613Z - info: Rendering request 8 finished in 6225 ms requestId=8
+2018-04-06T13:24:22.286Z - info: Starting rendering request 9 (user: null) requestId=9
+2018-04-06T13:24:22.290Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=9
+2018-04-06T13:24:28.385Z - info: Rendering request 9 finished in 6100 ms requestId=9
+2018-04-06T13:24:39.733Z - info: Starting rendering request 10 (user: null) requestId=10
+2018-04-06T13:24:39.736Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=10
+2018-04-06T13:24:45.431Z - info: Rendering request 10 finished in 5698 ms requestId=10
+2018-04-06T13:24:52.312Z - info: Starting rendering request 11 (user: null) requestId=11
+2018-04-06T13:24:52.316Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:false} requestId=11
+2018-04-06T13:24:58.283Z - info: Rendering request 11 finished in 5974 ms requestId=11
+2018-04-06T13:25:27.139Z - info: Starting rendering request 12 (user: null) requestId=12
+2018-04-06T13:25:27.141Z - info: Rendering template {shortid:r18kyD83ce, recipe:xlsx, engine:handlebars, preview:true} requestId=12
+2018-04-06T13:25:29.987Z - info: Rendering request 12 finished in 2849 ms requestId=12
+2018-04-06T13:25:50.254Z - info: Starting rendering request 13 (user: null) requestId=13
+2018-04-06T13:25:50.256Z - info: Rendering template {shortid:rkJTnK2ce, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=13
+2018-04-06T13:25:56.298Z - info: Rendering request 13 finished in 6052 ms requestId=13
+2018-04-06T14:10:59.374Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-04-06T14:10:59.379Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-04-06T14:10:59.401Z - info: Searching for available extensions in D:\ERPCloud\backend\
+2018-04-06T14:10:59.414Z - info: Extensions location cache contains up to date information, skipping crawling in D:\ERPCloud\backend\node_modules\
+2018-04-06T14:10:59.483Z - info: Found 30 extensions
+2018-04-06T14:10:59.571Z - info: Using extension jsrender
+2018-04-06T14:10:59.575Z - info: Using extension cli
+2018-04-06T14:10:59.583Z - info: Using extension debug
+2018-04-06T14:10:59.590Z - info: Using extension express
+2018-04-06T14:11:00.126Z - info: Using extension fop-pdf
+2018-04-06T14:11:00.307Z - info: Using extension handlebars
+2018-04-06T14:11:00.318Z - info: Using extension import-export
+2018-04-06T14:11:01.527Z - info: Using extension templates
+2018-04-06T14:11:01.554Z - info: Using extension tags
+2018-04-06T14:11:01.590Z - info: Using extension html-to-xlsx
+2018-04-06T14:11:02.321Z - info: Using extension authorization
+2018-04-06T14:11:02.631Z - info: Using extension base
+2018-04-06T14:11:02.634Z - info: Using extension fs-store
+2018-04-06T14:11:05.900Z - info: Using extension browser-client
+2018-04-06T14:11:05.905Z - info: Using extension phantom-pdf
+2018-04-06T14:11:06.182Z - info: Using extension images
+2018-04-06T14:11:06.331Z - info: Using extension child-templates
+2018-04-06T14:11:06.360Z - info: Using extension licensing
+2018-04-06T14:11:06.976Z - info: Using extension text
+2018-04-06T14:11:06.982Z - info: Using extension reports
+2018-04-06T14:11:07.124Z - info: Using extension resources
+2018-04-06T14:11:07.312Z - info: Using extension data
+2018-04-06T14:11:07.465Z - info: Using extension studio
+2018-04-06T14:11:07.762Z - info: Using extension scripts
+2018-04-06T14:11:07.913Z - info: Using extension scheduling
+2018-04-06T14:11:08.018Z - info: Using extension assets
+2018-04-06T14:11:08.057Z - info: Using extension xlsx
+2018-04-06T14:11:09.080Z - info: Using extension sample-template
+2018-04-06T14:11:09.230Z - info: Using extension public-templates
+2018-04-06T14:11:09.387Z - info: Initializing fs storage at D:\ERPCloud\backend\data
+2018-04-06T14:11:09.836Z - info: Creating default express app.
+2018-04-06T14:11:10.216Z - info: jsreport server successfully started on http port: 5488
+2018-04-06T14:11:10.427Z - info: Verifying license key free
+2018-04-06T14:11:10.432Z - info: Using free license
+2018-04-06T14:11:10.441Z - info: reporter initialized
+2018-04-06T14:12:07.419Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-04-06T14:12:07.427Z - info: Rendering template {shortid:Bk74eZBjz, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=1
+2018-04-06T14:12:08.798Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=1
+2018-04-06T14:12:08.801Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:12:13.689Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-04-06T14:12:13.694Z - info: Rendering template {shortid:Bk74eZBjz, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=2
+2018-04-06T14:12:15.282Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=2
+2018-04-06T14:12:15.284Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:12:47.486Z - info: Starting rendering request 3 (user: null) requestId=3
+2018-04-06T14:12:47.489Z - info: Rendering template {shortid:Bk74eZBjz, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=3
+2018-04-06T14:12:48.852Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=3
+2018-04-06T14:12:48.854Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:15:10.760Z - info: Starting rendering request 4 (user: null) requestId=4
+2018-04-06T14:15:10.764Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=4
+2018-04-06T14:15:13.496Z - info: Rendering request 4 finished in 2738 ms requestId=4
+2018-04-06T14:18:03.783Z - info: Starting rendering request 5 (user: null) requestId=5
+2018-04-06T14:18:03.785Z - info: Rendering template {shortid:Bk74eZBjz, recipe:html, engine:handlebars, preview:true} requestId=5
+2018-04-06T14:18:05.073Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=5
+2018-04-06T14:18:05.075Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:20:54.960Z - info: Starting rendering request 6 (user: null) requestId=6
+2018-04-06T14:20:54.990Z - info: Rendering template {shortid:Bk74eZBjz, recipe:html, engine:handlebars, preview:true} requestId=6
+2018-04-06T14:20:56.264Z - error: Error when processing render request Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=6
+2018-04-06T14:20:56.265Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Missing helper: "xlsxAdd" D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19
+      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+      ^
+
+Error: Missing helper: "xlsxAdd"
+    at Object.<anonymous> (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2018-04-06T14:21:14.637Z - info: Starting rendering request 7 (user: null) requestId=7
+2018-04-06T14:21:14.640Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=7
+2018-04-06T14:21:18.782Z - info: Rendering request 7 finished in 4150 ms requestId=7
+2018-04-06T14:21:36.460Z - info: Starting rendering request 8 (user: null) requestId=8
+2018-04-06T14:21:36.491Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=8
+2018-04-06T14:21:40.838Z - info: Rendering request 8 finished in 4392 ms requestId=8
+2018-04-06T14:21:41.729Z - info: Starting rendering request 9 (user: null) requestId=9
+2018-04-06T14:21:41.731Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=9
+2018-04-06T14:21:45.437Z - info: Rendering request 9 finished in 3708 ms requestId=9
+2018-04-06T14:22:52.503Z - info: Starting rendering request 10 (user: null) requestId=10
+2018-04-06T14:22:52.506Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=10
+2018-04-06T14:22:56.024Z - info: Rendering request 10 finished in 3525 ms requestId=10
+2018-04-06T14:23:16.941Z - info: Starting rendering request 11 (user: null) requestId=11
+2018-04-06T14:23:16.945Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=11
+2018-04-06T14:23:19.185Z - error: Error when processing render request Error during rendering report: Cannot convert undefined or null to object evalmachine.<anonymous>:366
+    return result[Object.keys(result)[0]]
+                         ^
+
+TypeError: Cannot convert undefined or null to object
+    at xml2jsonUnwrap (evalmachine.<anonymous>:366:26)
+    at Object.add (evalmachine.<anonymous>:182:23)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=11
+2018-04-06T14:23:19.188Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot convert undefined or null to object evalmachine.<anonymous>:366
+    return result[Object.keys(result)[0]]
+                         ^
+
+TypeError: Cannot convert undefined or null to object
+    at xml2jsonUnwrap (evalmachine.<anonymous>:366:26)
+    at Object.add (evalmachine.<anonymous>:182:23)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:23:50.916Z - info: Starting rendering request 12 (user: null) requestId=12
+2018-04-06T14:23:50.934Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=12
+2018-04-06T14:23:54.689Z - info: Rendering request 12 finished in 3780 ms requestId=12
+2018-04-06T14:24:16.761Z - info: Starting rendering request 13 (user: null) requestId=13
+2018-04-06T14:24:16.763Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=13
+2018-04-06T14:24:21.127Z - info: Rendering request 13 finished in 4377 ms requestId=13
+2018-04-06T14:24:46.821Z - info: Starting rendering request 14 (user: null) requestId=14
+2018-04-06T14:24:46.824Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=14
+2018-04-06T14:24:50.800Z - info: Rendering request 14 finished in 3988 ms requestId=14
+2018-04-06T14:25:41.298Z - info: Starting rendering request 15 (user: null) requestId=15
+2018-04-06T14:25:41.301Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=15
+2018-04-06T14:25:45.122Z - info: Rendering request 15 finished in 3834 ms requestId=15
+2018-04-06T14:36:15.123Z - info: Starting rendering request 16 (user: null) requestId=16
+2018-04-06T14:36:15.139Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=16
+2018-04-06T14:36:17.678Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=16
+2018-04-06T14:36:17.681Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:36:38.581Z - info: Starting rendering request 17 (user: null) requestId=17
+2018-04-06T14:36:38.583Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=17
+2018-04-06T14:36:41.014Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=17
+2018-04-06T14:36:41.019Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:36:56.093Z - info: Starting rendering request 18 (user: null) requestId=18
+2018-04-06T14:36:56.096Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=18
+2018-04-06T14:36:59.008Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=18
+2018-04-06T14:36:59.018Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:37:31.106Z - info: Starting rendering request 19 (user: null) requestId=19
+2018-04-06T14:37:31.108Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=19
+2018-04-06T14:37:33.756Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=19
+2018-04-06T14:37:33.758Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:37:39.637Z - info: Starting rendering request 20 (user: null) requestId=20
+2018-04-06T14:37:39.640Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=20
+2018-04-06T14:37:43.519Z - info: Rendering request 20 finished in 3888 ms requestId=20
+2018-04-06T14:38:19.739Z - info: Starting rendering request 21 (user: null) requestId=21
+2018-04-06T14:38:19.744Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=21
+2018-04-06T14:38:23.467Z - info: Rendering request 21 finished in 3732 ms requestId=21
+2018-04-06T14:38:40.161Z - info: Starting rendering request 22 (user: null) requestId=22
+2018-04-06T14:38:40.163Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=22
+2018-04-06T14:38:42.496Z - error: Error when processing render request Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=22
+2018-04-06T14:38:42.498Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:38:45.321Z - info: Starting rendering request 23 (user: null) requestId=23
+2018-04-06T14:38:45.325Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=23
+2018-04-06T14:38:48.213Z - error: Error when processing render request Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29) requestId=23
+2018-04-06T14:38:48.215Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: path.replace is not a function evalmachine.<anonymous>:196
+    var paths = path.replace(/\[/g, '.').replace(/\]/g, '').replace(/'/g, '').split('.')
+                     ^
+
+TypeError: path.replace is not a function
+    at safeGet (evalmachine.<anonymous>:196:22)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+2018-04-06T14:38:57.447Z - info: Starting rendering request 24 (user: null) requestId=24
+2018-04-06T14:38:57.522Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=24
+2018-04-06T14:39:01.289Z - info: Rendering request 24 finished in 3862 ms requestId=24
+2018-04-06T14:40:28.904Z - info: Starting rendering request 25 (user: null) requestId=25
+2018-04-06T14:40:28.907Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=25
+2018-04-06T14:40:31.757Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=25
+2018-04-06T14:40:31.759Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:40:34.697Z - info: Starting rendering request 26 (user: null) requestId=26
+2018-04-06T14:40:34.701Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=26
+2018-04-06T14:40:37.573Z - error: Error when processing render request Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15) requestId=26
+2018-04-06T14:40:37.576Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'xl/worksheets/sheet1.xml' of undefined evalmachine.<anonymous>:176
+    var obj = this.ctx.root.$xlsxTemplate[filePath]
+                                         ^
+
+TypeError: Cannot read property 'xl/worksheets/sheet1.xml' of undefined
+    at Array.add (evalmachine.<anonymous>:176:42)
+    at Array.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+2018-04-06T14:41:11.142Z - info: Starting rendering request 27 (user: null) requestId=27
+2018-04-06T14:41:11.145Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=27
+2018-04-06T14:41:15.434Z - info: Rendering request 27 finished in 4296 ms requestId=27
+2018-04-06T14:45:07.115Z - info: Starting rendering request 28 (user: null) requestId=28
+2018-04-06T14:45:07.130Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=28
+2018-04-06T14:45:11.099Z - info: Rendering request 28 finished in 4045 ms requestId=28
+2018-04-06T16:20:42.373Z - info: Starting rendering request 29 (user: null) requestId=29
+2018-04-06T16:20:42.391Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=29
+2018-04-06T16:20:45.665Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=29
+2018-04-06T16:20:45.670Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:21:11.119Z - info: Starting rendering request 30 (user: null) requestId=30
+2018-04-06T16:21:11.124Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=30
+2018-04-06T16:21:15.433Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=30
+2018-04-06T16:21:15.437Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:21:21.072Z - info: Starting rendering request 31 (user: null) requestId=31
+2018-04-06T16:21:21.076Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=31
+2018-04-06T16:21:23.378Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=31
+2018-04-06T16:21:23.383Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:22:45.515Z - info: Starting rendering request 32 (user: null) requestId=32
+2018-04-06T16:22:45.521Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=32
+2018-04-06T16:22:47.980Z - error: Error when processing render request Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41 requestId=32
+2018-04-06T16:22:47.984Z - error: Error during processing request: http://localhost:5488/api/report/excel details: Error during rendering report: Cannot read property 'worksheet' of undefined undefined:3
+obj["worksheet"] = obj["worksheet"] || {}
+                      ^
+
+TypeError: Cannot read property 'worksheet' of undefined
+    at eval (eval at safeGet (evalmachine.<anonymous>:207:7), <anonymous>:3:23)
+    at safeGet (evalmachine.<anonymous>:207:84)
+    at Object.add (evalmachine.<anonymous>:177:22)
+    at Object.<anonymous> (evalmachine.<anonymous>:406:17)
+    at Object.eval (eval at createFunctionContext (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:5:79)
+    at main (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (D:\ERPCloud\backend\node_modules\jsreport\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at D:\ERPCloud\backend\node_modules\jsreport\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+2018-04-06T16:23:18.781Z - info: Starting rendering request 33 (user: null) requestId=33
+2018-04-06T16:23:18.785Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=33
+2018-04-06T16:23:23.717Z - info: Rendering request 33 finished in 4966 ms requestId=33
+2018-04-06T16:28:16.974Z - info: Starting rendering request 34 (user: null) requestId=34
+2018-04-06T16:28:16.988Z - info: Rendering template {shortid:Bk74eZBjz, recipe:xlsx, engine:handlebars, preview:true} requestId=34
+2018-04-06T16:28:21.281Z - info: Rendering request 34 finished in 4309 ms requestId=34
