@@ -283,104 +283,104 @@ router.route('/findid2/:id/:layoutid').get(function(req, res) {
         db.close();
 
         
-    sql.close()
+        sql.close()
 
-    // connect to your database
-    sql.connect(config, function (err) {    
-        if (err) console.log(err);
-        
-        var id = req.param('id');
+        // connect to your database
+        sql.connect(config, function (err) {    
+            if (err) console.log(err);
+            
+            var id = req.param('id');
 
-        // create Request object
-        var request = new sql.Request();
-        if (id == "*") {
-            select = select.substr(0,select.lastIndexOf("WHERE"));
-        }else{
-            select = select.replace("{{id}}", id)
-        }
+            // create Request object
+            var request = new sql.Request();
+            if (id == "*") {
+                select = select.substr(0,select.lastIndexOf("WHERE"));
+            }else{
+                select = select.replace("{{id}}", id)
+            }
 
 
-         // query to the database and get the records
-        request.query(select, function (err, recordset) {            
-            if (err) console.log(err)
-            var retorno = [];
-            var retornoFinal = {};
-            var arraydataJSON = [];
-            var tableorder = [];
-            var table;
-            var field;
-            if (recordset) {
-                if (recordset.recordsets) {
-                    if (recordset.recordsets.length > 0) {
-                        var array = recordset.recordsets[0];
-                        
-                        var arrayindex = [];
-                        row = null;
-                        var j = 0;
-                        for (let i = 0; i < array.length; i++) {
-                            var arraytable = [];
+            // query to the database and get the records
+            request.query(select, function (err, recordset) {            
+                if (err) console.log(err)
+                var retorno = [];
+                var retornoFinal = {};
+                var arraydataJSON = [];
+                var tableorder = [];
+                var table;
+                var field;
+                if (recordset) {
+                    if (recordset.recordsets) {
+                        if (recordset.recordsets.length > 0) {
+                            var array = recordset.recordsets[0];
                             
-                            var row = null;
-                            for (var key in array[i]) {
-                                var keyvalue = "";
+                            var arrayindex = [];
+                            row = null;
+                            var j = 0;
+                            for (let i = 0; i < array.length; i++) {
+                                var arraytable = [];
                                 
-                                var keyfield = key.split('.')
-                                table = keyfield[0];
-                                field = keyfield[1];
-                                keyvalue = key + ":" + array[i][key];
-    
-                                if (arraytable.indexOf(table) == -1 ) { 
-                                    if(j == 0){
-                                        tableorder.push(table);
+                                var row = null;
+                                for (var key in array[i]) {
+                                    var keyvalue = "";
+                                    
+                                    var keyfield = key.split('.')
+                                    table = keyfield[0];
+                                    field = keyfield[1];
+                                    keyvalue = key + ":" + array[i][key];
+        
+                                    if (arraytable.indexOf(table) == -1 ) { 
+                                        if(j == 0){
+                                            tableorder.push(table);
+                                        }
+        
+                                        if (row) {
+                                            if(arraydataJSON.indexOf(JSON.stringify(row)) == -1){
+                                                var arrayRow = [];
+                                                arrayRow.push(row);
+                                                retorno.push(row)
+                                                arraydataJSON.push(JSON.stringify(row));
+                                            }                                    
+                                        }
+        
+                                        arraytable.push(table);                     
+                                        row = {};
+                                        row[key] = array[i][key];
+                                    }else{
+                                        row[key] = array[i][key];
                                     }
-    
-                                    if (row) {
-                                        if(arraydataJSON.indexOf(JSON.stringify(row)) == -1){
+                                    
+                                    if (key.indexOf("id_") > -1 && key.indexOf("_FK") == -1) {
+                                        if (row[key] != null) {
+                                            row[key] = row[key].toLowerCase();
+                                        }
+                                        
+                                    }
+
+                                    j++
+                                }
+                                if (row) {
+                                    if(arraydataJSON.indexOf(JSON.stringify(row)) == -1){
                                             var arrayRow = [];
                                             arrayRow.push(row);
                                             retorno.push(row)
-                                            arraydataJSON.push(JSON.stringify(row));
-                                        }                                    
-                                    }
-    
-                                    arraytable.push(table);                     
-                                    row = {};
-                                    row[key] = array[i][key];
-                                }else{
-                                    row[key] = array[i][key];
+                                            arraydataJSON.push(JSON.stringify(row));                                
+                                    }                                    
                                 }
-                                
-                                if (key.indexOf("id_") > -1 && key.indexOf("_FK") == -1) {
-                                    if (row[key] != null) {
-                                        row[key] = row[key].toLowerCase();
-                                    }
-                                    
-                                }
-
-                                j++
-                            }
-                            if (row) {
-                                if(arraydataJSON.indexOf(JSON.stringify(row)) == -1){
-                                        var arrayRow = [];
-                                        arrayRow.push(row);
-                                        retorno.push(row)
-                                        arraydataJSON.push(JSON.stringify(row));                                
-                                }                                    
-                            }
-                        }                    
+                            }                    
+                        }
                     }
                 }
-            }
+                
             
-           
 
-            retorno = retorno.sort(compare);
-            //retorno = [];
-            //retorno.push(retornoFinal);
-            // send records as a response
-            res.send(retorno)            
-        });
-    });  
+                retorno = retorno.sort(compare);
+                //retorno = [];
+                //retorno.push(retornoFinal);
+                // send records as a response
+                res.send(retorno)            
+            });
+        });  
       });
     });
   
