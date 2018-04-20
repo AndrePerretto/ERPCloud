@@ -24,6 +24,7 @@ var configEnvironment = {};
 
 var EnterpriseID = "";
 var UserID = "";
+var url = "mongodb://localhost:27017/erpcloud";
 
 router.route('/*').get(function(req, res, next) {
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
@@ -54,7 +55,7 @@ router.route('/*').get(function(req, res, next) {
     select += " password_Aplication AS 'password', ";
     select += " nm_User_Aplication AS 'user' ";
     select += " FROM Enterprise WHERE domainName='" + dados + "' ";
-
+    
     sql.close();
     sql.connect(configEnvironment, function (err) {    
         if (err) console.log(err);
@@ -69,6 +70,7 @@ router.route('/*').get(function(req, res, next) {
                 user = element.user;
                 
                 config = {user: user, password: password, server: server,  database: database};
+                
                 next();
             }
         });
@@ -81,7 +83,7 @@ var jsreport = require('jsreport-core')()
 
 router.route('/report/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    
         
     var nome = req.param('nome');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -138,7 +140,7 @@ router.route('/report/:nome').get(function(req, res) {
 
 router.route('/report3/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
         
     var nome = req.param('nome');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -179,7 +181,7 @@ router.route('/report3/:nome').get(function(req, res) {
 
 router.route('/listall/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
     id = id.toUpperCase();
@@ -207,7 +209,6 @@ router.route('/listall/:id').get(function(req, res) {
             request.query(select, function (err, recordset) {            
                 if (err) console.log(err)
 
-                console.log(select);
                 // send records as a response
                 res.send(recordset)            
             });
@@ -222,7 +223,7 @@ router.route('/listall/:id').get(function(req, res) {
 
 router.route('/findid/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = "d82d11c8-ea16-47c7-be04-10423467f04e"; //req.param('id');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
 
@@ -265,7 +266,7 @@ router.route('/findid/:id').get(function(req, res) {
 
 router.route('/findid2/:id/:layoutid').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/foodtown";
     var id = req.param('id');
     var layoutid = req.param('layoutid');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -279,7 +280,7 @@ router.route('/findid2/:id/:layoutid').get(function(req, res) {
                 select = result[0].finddata;                                
             }
         }
-        
+       
         db.close();
 
         
@@ -299,9 +300,8 @@ router.route('/findid2/:id/:layoutid').get(function(req, res) {
                 select = select.replace("{{id}}", id)
             }
 
-
             // query to the database and get the records
-            request.query(select, function (err, recordset) {            
+            request.query(select, function (err, recordset) {  
                 if (err) console.log(err)
                 var retorno = [];
                 var retornoFinal = {};
@@ -406,7 +406,7 @@ function compare(a,b) {
   }
 router.route('/editGridLine/:id/:filtro').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
     var filtro = req.param('filtro');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -962,7 +962,7 @@ function createUpdate(submit, index){
 
 router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('filter');
     var controlid = req.param('controlid');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -1018,7 +1018,7 @@ router.route('/DeleteData/:containerID/:id').get(function(req, res) {
 
     containerID = containerID.toUpperCase();
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
 
     var deletedata = "";
     
@@ -1073,7 +1073,7 @@ router.route('/DeleteData/:containerID/:id').get(function(req, res) {
 
 router.route('/containergrid/:id/:filtro').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
     var filtro = req.param('filtro');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -1176,7 +1176,7 @@ function callWebAPI(dados,url, callback){
 
 router.route('/layout/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/erpcloud";
+    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
 
     MongoClient.connect(url, function(err, db) {

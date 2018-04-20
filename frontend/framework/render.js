@@ -1629,18 +1629,15 @@ function toogleColapseContainer(selectorContainer,close) {
     }
 }
 
-function getDropdownHTML(LayoutID, tabGenID){
-
-    
-        var parameters = "?LayoutID=" + LayoutID + "&EnterpriseID=" + returnCookie("EnterpriseID") + "&UserID=" + returnCookie("UserID") + "&tabGenID=" + tabGenID;
-
-        $.ajax({
-            url: getGlobalParameters("urlPlataforma") + "/api/publish/getDropdownHTML" + parameters,
-            type: "GET",
-            async: true,
-            success: function (data) {
-
-                for (var key in data) {
+function getDropdownHTML(LayoutID, tabGenID){    
+    var parameters = "?LayoutID=" + LayoutID + "&EnterpriseID=" + returnCookie("EnterpriseID") + "&UserID=" + returnCookie("UserID") + "&tabGenID=" + tabGenID;
+    $.ajax({
+        url: getGlobalParameters("urlPlataforma") + "/api/publish/getDropdownHTML" + parameters,
+        type: "GET",
+        async: true,
+        success: function (data) {
+            for (var key in data) {
+                if(document.getElementById(tabGenID + "_" + key)){
                     var value = data[key];
                     //$("#" + tabGenID + "_" + key).html(value);
                     document.getElementById(tabGenID + "_" + key).innerHTML = value;
@@ -1648,15 +1645,13 @@ function getDropdownHTML(LayoutID, tabGenID){
                     var controlid = $("#" + id).attr("data-controlid");
                     var propertyid = $("#" + id).attr("data-propertyid");
                     EventHideModal(id, controlid, propertyid);
-                }
-
-            },
-            error: function (xhr) {
-                //alert(xhr);
+                }                    
             }
-        });
-    
-        
+        },
+        error: function (xhr) {
+            //alert(xhr);
+        }
+    });   
 }
 
 function EventHideModal(id, controlID, propertyID, parameters) {

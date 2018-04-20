@@ -1363,8 +1363,8 @@ if (typeof jQuery === 'undefined') {
 
                 var $parent = $field.closest(row),
                     $message = $field.data(ns + '.messages'),
-                    $allErrors = $message.find('.' + this.options.err.clazz.split(' ').join('.') + '[data-' + ns + '-validator][data-' + ns + '-for="' + field + '"]'),
-                    $errors = validatorName ? $allErrors.filter('[data-' + ns + '-validator="' + validatorName + '"]') : $allErrors,
+                    $allErrors = $message ? $message.find('.' + this.options.err.clazz.split(' ').join('.') + '[data-' + ns + '-validator][data-' + ns + '-for="' + field + '"]') : $message,
+                    $errors = $allErrors ? $allErrors.filter('[data-' + ns + '-validator="' + validatorName + '"]') : $allErrors,
                     $icon = $field.data(ns + '.icon'),
                     // Support backward
                     container = ('function' === typeof (this.options.fields[field].container || this.options.fields[field].err || this.options.err.container))
@@ -1384,7 +1384,10 @@ if (typeof jQuery === 'undefined') {
                 }
 
                 // Show/hide error elements and feedback icons
-                $errors.attr('data-' + ns + '-result', status);
+                if($errors){
+                    $errors.attr('data-' + ns + '-result', status);
+                }
+                
 
                 switch (status) {
                     case this.STATUS_VALIDATING:

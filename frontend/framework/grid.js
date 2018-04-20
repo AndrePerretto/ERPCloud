@@ -861,3 +861,31 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
     
 
 }
+
+function gridedit(id, source){
+    $("#" + id).tabullet({
+		action: function (mode, data) {
+			console.dir(mode);
+			if (mode === 'save') {
+				source.push(data);
+			}
+			if (mode === 'edit') {
+				for (var i = 0; i < source.length; i++) {
+					if (source[i].id == data.id) {
+						source[i] = data;
+					}
+				}
+			}
+			if(mode == 'delete'){
+				for (var i = 0; i < source.length; i++) {
+					if (source[i].id == data) {
+						source.splice(i,1);
+						break;
+					}
+				}
+            }
+            
+            gridedit(id, source);
+		}
+	});
+}
