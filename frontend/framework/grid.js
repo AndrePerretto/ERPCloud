@@ -863,29 +863,70 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
 }
 
 function gridedit(id, source){
-    $("#" + id).tabullet({
-		action: function (mode, data) {
-			console.dir(mode);
-			if (mode === 'save') {
-				source.push(data);
-			}
-			if (mode === 'edit') {
-				for (var i = 0; i < source.length; i++) {
-					if (source[i].id == data.id) {
-						source[i] = data;
-					}
-				}
-			}
-			if(mode == 'delete'){
-				for (var i = 0; i < source.length; i++) {
-					if (source[i].id == data) {
-						source.splice(i,1);
-						break;
-					}
-				}
+    var tabela = $("#" + id + " th[style!='display:none']");
+		if(!$(tabela).hasClass("jsgrid-header-cell")){
+            if(tabela){
+                if(tabela.length > 0){ 
+                    $("#" + id +" tfoot").html("");
+                    tabela = $("#" + id + " th[style!='display:none']");
+
+                    for (var i = 0; i < tabela.length; i++) {
+                        var fielddata; 
+                        if(i == 0){
+                            fielddata = { type: "control" };
+                        }else{
+                            var text = $(tabela[i]).html();
+                            fielddata =  { name: text, type: "text", width: 150 };                            
+                        }
+                        source.push(fielddata)
+                    }
+                    //source.push({ type: "control" })
+                    $("#" + id).jsGrid({
+                        width: "100%",
+                        height: "300px",                 
+                        pageSize: 7,
+                        inserting: true,
+                        editing: true,
+                        sorting: true,
+                        paging: true,
+                 
+                 
+                        fields: source
+                    });
+                }
             }
             
-            gridedit(id, source);
-		}
-	});
+         
+           
+        }
+		
+	
+    
+
+
+//    $("#" + id).tabullet({
+//		action: function (mode, data) {
+//			console.dir(mode);
+//			if (mode === 'save') {
+//				source.push(data);
+//			}
+//			if (mode === 'edit') {
+//				for (var i = 0; i < source.length; i++) {
+//					if (source[i].id == data.id) {
+//						source[i] = data;
+//					}
+//				}
+//			}
+//			if(mode == 'delete'){
+//				for (var i = 0; i < source.length; i++) {
+//					if (source[i].id == data) {
+//						source.splice(i,1);
+//						break;
+//					}
+//				}
+//            }
+            
+//            gridedit(id, source);
+//		}
+//	});
 }

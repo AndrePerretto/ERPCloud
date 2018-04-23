@@ -534,7 +534,10 @@ function confirm(message, callback, callbackfalse) {
     function (isConfirm) {
         if (isConfirm) {
             //swal("OK!", "Operação realizada com sucesso.", "success");
-            callback();
+            if(callback){
+                callback();
+            }
+           
         } else {
             //swal("Cancelado", "", "error");
             if (callbackfalse)

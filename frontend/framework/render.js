@@ -150,7 +150,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         panel_change_start(tabGenID + " > form > .panel  > .panel-body > div > .panel-nav ");
         $("[data-tabgenlayout='" + tabGenID2 + "']").attr("data-principaltabgen",tabGenID);
         tabGenID = tabGenID2;
-        var wizard = $("[data-guidwizard='" + tabGenID + "']");
+        var wizard = $("[data-guidwizard='" + tabGenID + "'][data-hidden!='true']"); //$("[data-guidwizard='" + tabGenID + "']");
         $("textarea").val("");
         $("[value='undefined']").val("");
         $("[value='null']").val("");
