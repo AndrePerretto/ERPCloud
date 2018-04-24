@@ -517,8 +517,7 @@ function AjaxQuery(parameters) {
     return "";
   }
 
-  
-function confirm(message, callback, callbackfalse) {
+  function confirm(message, callback, callbackfalse) {
     
     swal({
         title: message,
@@ -545,7 +544,7 @@ function confirm(message, callback, callbackfalse) {
         }
     });
 }
-
+  
 
 
 function executeFunctionByName(functionName, context, args) {

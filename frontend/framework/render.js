@@ -1070,12 +1070,15 @@ function fillScreen(data, template, layoutID, fillgrid){
     var idGrid = "";
     var containerID = "";
     var p=data;
+    var rowstring = "";
+    var dataGridRows = [[]];
 
     if (data.recordsets) {
         if (data.recordsets.length > 0) {
             p = data.recordsets[0];
         }
     }
+
 
     for (var i = 0; i < p.length; i++) {        
         for (var key in p[i]) {
@@ -1127,6 +1130,8 @@ function fillScreen(data, template, layoutID, fillgrid){
                                            
                         if (rownull == false) {   
                             row["configuracao"] = "<div  style='white-space: nowrap;'><a type='button' title='editar' id='Edit' name='Edit' class='btn btn-primary btn btn-xs btn-warning ' onclick=editGridLine(this,'" + containerID + "','" + idGrid + "')><i class='fa fa-pencil'></i>  </a>  <a type='button' title='excluir' id='Delete' name='Delete' class='btn btn-primary btn btn-xs btn-danger ' onclick=deleteRowGrid(this,'" + containerID + "','" + idGrid + "','" + layoutID + "')><i class='fa fa-trash-o'></i>  </a></div>";
+                            //rowstring =   "{  ";
+
                             idGrid = "";
                             containerID = "";
                             if(arraydataJSON[index].indexOf(JSON.stringify(row)) < 0){
@@ -1144,9 +1149,11 @@ function fillScreen(data, template, layoutID, fillgrid){
                     row = {};
                     arraytable.push(table)
                     row[idfield] = p[i][key]; 
+                    rowstring = " { \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
 
                     arraydatagrid.push([]);
                     arraydataJSON.push([]);
+                    dataGridRows.push([]);
                     beforeTable = table;
                 }else{                   
 
@@ -1156,8 +1163,15 @@ function fillScreen(data, template, layoutID, fillgrid){
 
                     if(row == null){
                         row = {}
+                        rowstring = "{ ";
+                        rowstring += " \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
+                    }else{
+                        rowstring += " , \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
                     }
                     row[idfield] = p[i][key]; 
+                    
+                    
+                    
                 }     
             }else if(template != "MASTERDETAIL" && template != "GRID"){
                 var value = p[i][key];
@@ -1234,7 +1248,13 @@ function fillScreen(data, template, layoutID, fillgrid){
                 if(arraydataJSON[index].indexOf(JSON.stringify(row)) < 0){
                     arraydatagrid[index].push(row);
                     arraydataJSON[index].push(JSON.stringify(row));
+
+                    rowstring +=   " }  ";
+                    dataGridRows[index].push(JSON.parse(rowstring));
                 }
+
+                
+                rowstring =   "{  ";
                 
             }       
             row = null; 
@@ -1248,7 +1268,9 @@ function fillScreen(data, template, layoutID, fillgrid){
 
     for (var k = 0; k < arraytablegrid.length; k++) {
         arrayT.push($(arraytablegrid[k]).find("th"));
-        $(arraytablegrid[k]).bootstrapTable('destroy');
+        if(!$(arraytablegrid[k]).hasClass("jsgrid-table")){
+            $(arraytablegrid[k]).bootstrapTable('destroy');
+        }
     }
 
 
@@ -1257,17 +1279,69 @@ function fillScreen(data, template, layoutID, fillgrid){
 
         if (arraydatagrid[k]) {
             if (arraydatagrid[k].length > 0) {
-                $(arraytablegrid[k]).bootstrapTable('destroy').bootstrapTable({
-                    data: arraydatagrid[k]
-                });
+               
+                
+                    var tabela =  $(arraytablegrid[k]).parents("table").find("th");
+                    if($(arraytablegrid[k]).hasClass("jsgrid-table")){
+                    var table = [];
+                    var field = [];
+                    var controlid = [];
+                    var source = [];
+                    for (var i = 0; i < tabela.length; i++) {
+                        var fielddata; 
+                        if(i == 0){
+                            fielddata = {  type: "control" };
+                        }else{
+                            var valor = $(tabela[i]).attr("data-controlid");
+						    var text = $(tabela[i]).html();
+                            fielddata =  { name: valor, title: text, type: "text", width: 150  };                            
+                        }
+                        var stable = $(tabela[i]).attr("data-table");
+                        table.push(stable);
+                        var sfield = $(tabela[i]).attr("data-fielddata");
+                        field.push(sfield);
+                        controlid.push(valor);
+
+                        source.push(fielddata)
+                    }
+                    //$(arraytablegrid[k]).parents("table").jsGrid("destroy");
+                    //$(arraytablegrid[k]).html("");
+                    $(arraytablegrid[k]).parents("table").jsGrid({
+                        width: "100%",
+                        height: "300px",                 
+                        pageSize: 7,
+                        inserting: true,
+                        editing: true,
+                        sorting: true,
+                        paging: true,
+                        
+                        fields: source,
+                        data: dataGridRows[k]
+                    });
+
+                    for (let index = 0; index < table.length; index++) {
+                        const element = tabela[index];
+                        if(table[index] != undefined){
+                            $(element).attr("data-table", table[index]);
+                            $(element).attr("data-fielddata", field[index]);
+                            $(element).attr("data-controlid", controlid[index]);
+                            $(element).attr("data-field", controlid[index]);
+                        }
+                    }
+                
+                }else{
+                    $(arraytablegrid[k]).bootstrapTable('destroy').bootstrapTable({
+                        data: arraydatagrid[k]
+                     });
         
-                for (var i = 0; i < tableGrid.length; i++) {
-                    var x = tableGrid[i].attributes;
-            
-                    if (x) {
-                        if (x.length > 0) {
-                            for (var j = 0; j < x.length; j++) {
-                                $("[data-field='" + $(tableGrid[i]).attr("data-field") + "']").attr(x[j].name, x[j].value);
+                    for (var i = 0; i < tableGrid.length; i++) {
+                        var x = tableGrid[i].attributes;
+                
+                        if (x) {
+                            if (x.length > 0) {
+                                for (var j = 0; j < x.length; j++) {
+                                    $("[data-field='" + $(tableGrid[i]).attr("data-field") + "']").attr(x[j].name, x[j].value);
+                                }
                             }
                         }
                     }

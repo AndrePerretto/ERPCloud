@@ -233,12 +233,8 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
 
 
             row = {};
-
             row["configuracao"] = defaultcolumn;
-
             for (var i2 = 0; i2 < controls.length; i2++) {
-
-
                 isVisible = "";
                 isCentered = "";
                 if (controls[i2].visibleGrid == "false" || controls[i2].visibleGrid == false || controls[i2].visibleGrid == null) {
@@ -280,6 +276,7 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
                      "<span class=\"cellData\" data-spanid='" + controls[i2].controlID + "_" + valueID + "_span'" + "onClick='showMessage()'" + ">" + dadoCelula + "<span>" +
                     "</td>";
 
+
                     dadoCelula = "<div " +
                     "id='" + controls[i2].controlID + "_" + valueID + "' " +
                     "data-controlid='" + controls[i2].controlID + "' " +
@@ -301,7 +298,6 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
                 }
 
             }
-
 
 
             var acao = "";
@@ -636,6 +632,8 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
                         data: data
                     });
 
+                   
+
                     for (var i = 0; i < tableGrid.length; i++) {
                         //var x = document.getElementById(tableGrid[i].id).attributes;
                         var x = tableGrid[i].attributes;
@@ -863,6 +861,10 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
 }
 
 function gridedit(id, source){
+    var table = [];
+    var field = [];
+    var controlid = [];
+
     var tabela = $("#" + id + " th[style!='display:none']");
 		if(!$(tabela).hasClass("jsgrid-header-cell")){
             if(tabela){
@@ -873,13 +875,21 @@ function gridedit(id, source){
                     for (var i = 0; i < tabela.length; i++) {
                         var fielddata; 
                         if(i == 0){
-                            fielddata = { type: "control" };
+                            fielddata = {  type: "control" };
                         }else{
-                            var text = $(tabela[i]).html();
-                            fielddata =  { name: text, type: "text", width: 150 };                            
+                            var valor = $(tabela[i]).attr("data-controlid");
+						    var text = $(tabela[i]).html();
+                            fielddata =  { name: valor, title: text, type: "text", width: 150  };                            
                         }
+                        var stable = $(tabela[i]).attr("data-table");
+                        table.push(stable);
+                        var sfield = $(tabela[i]).attr("data-fielddata");
+                        field.push(sfield);
+                        controlid.push(valor);
+
                         source.push(fielddata)
                     }
+                    jsGrid.locale("pt-br");
                     //source.push({ type: "control" })
                     $("#" + id).jsGrid({
                         width: "100%",
@@ -890,9 +900,19 @@ function gridedit(id, source){
                         sorting: true,
                         paging: true,
                  
-                 
                         fields: source
                     });
+
+                    var tablegrid = $("#" + id + " th")
+                    for (let index = 0; index < tablegrid.length; index++) {
+                        const element = tablegrid[index];
+                        if(table[index] != "undefined"){
+                            $(element).attr("data-table", table[index]);
+                            $(element).attr("data-fielddata", field[index]);
+                            $(element).attr("data-controlid", controlid[index]);
+                            $(element).attr("data-field", controlid[index]);
+                        }
+                    }
                 }
             }
             
