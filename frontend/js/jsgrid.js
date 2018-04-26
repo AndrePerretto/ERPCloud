@@ -1207,6 +1207,12 @@
             this._insertRow.replaceWith(insertRow);
             this._insertRow = insertRow;
             this.refresh();
+
+            $("[type='checkbox']").iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue',
+                increaseArea: '20%' // optional
+            });
         },
 
         editItem: function(item) {
@@ -1214,6 +1220,11 @@
             if($row.length) {
                 this._editRow($row);
             }
+            $("[type='checkbox']").iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue',
+                increaseArea: '20%' // optional
+            });
         },
 
         rowByItem: function(item) {
@@ -2005,7 +2016,11 @@
         },
 
         _createTextBox: function() {
-            return $("<input>").attr("type", "text")
+            //return  $("#" + this.iditem);
+            var id = this.iditem;
+            var onchange = $("#" + this.iditem).attr("onchange")
+
+            return $("<input>").attr("type", "text").attr("id", id).attr("onchange",onchange)
                 .prop("readonly", !!this.readOnly);
         }
     });
@@ -2186,7 +2201,7 @@
         },
 
         _createSelect: function() {
-            var $result = $("<select>"),
+            var $result = $("<select selectid='" + this.selectid + "'>"),
                 valueField = this.valueField,
                 textField = this.textField,
                 selectedIndex = this.selectedIndex;
@@ -2429,6 +2444,12 @@
 
             var updateButtonState = $.proxy(function() {
                 $button.toggleClass(this.modeOnButtonClass, isOn);
+
+                $("[type='checkbox']").iCheck({
+                    checkboxClass: 'icheckbox_flat-blue',
+                    radioClass: 'iradio_flat-blue',
+                    increaseArea: '20%' // optional
+                });
             }, this);
 
             var $button = this._createGridButton(this.modeButtonClass + " " + cssClass, "", function(grid) {

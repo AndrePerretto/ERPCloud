@@ -861,92 +861,154 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
 }
 
 function gridedit(id, source){
+
     var table = [];
     var field = [];
     var controlid = [];
+    var controlType = [];
+    var aIditem = [];
 
     var tabela = $("#" + id + " th[style!='display:none']");
-		if(!$(tabela).hasClass("jsgrid-header-cell")){
-            if(tabela){
-                if(tabela.length > 0){ 
-                    $("#" + id +" tfoot").html("");
-                    tabela = $("#" + id + " th[style!='display:none']");
+    if(!$(tabela).hasClass("jsgrid-header-cell")){
+        if(tabela){
+            if(tabela.length > 0){ 
+                $("#" + id +" tfoot").html("");
+                tabela = $("#" + id + " th[style!='display:none']");
 
-                    for (var i = 0; i < tabela.length; i++) {
-                        var fielddata; 
-                        if(i == 0){
-                            fielddata = {  type: "control" };
+                for (var i = 0; i < tabela.length; i++) {
+                    var fielddata; 
+                    var stable = $(tabela[i]).attr("data-table");
+                    table.push(stable);
+                    var sfield = $(tabela[i]).attr("data-fielddata");
+                    field.push(sfield);
+                    controlid.push(valor);
+                    var controlT = $(tabela[i]).attr("data-controltype");
+                    controlType.push(controlT);
+                    var selectid = $(tabela[i]).attr("data-id");
+                    var iditem = $(tabela[i]).attr("data-id");
+                    aIditem.push(iditem);
+
+                    if(selectid){
+                        if(selectid.indexOf('_') > 0){
+                            selectid = selectid.substr(selectid.indexOf('_'),selectid.length);
+                        }                         
+
+                    }
+                    if(i == 0){
+                        fielddata = {  type: "control" };
+                    }else{
+                        var valor = $(tabela[i]).attr("data-controlid");
+                        var text = $(tabela[i]).html();
+                        var type = "text";
+
+
+                        switch (controlT) {
+                            case "TEXT":
+                                type = "text";
+                                break;
+                            case "CHECKBOX":
+                                type = "checkbox";
+                                break;
+                            case "DATE":
+                                type = "text";
+                                break;
+                            case "TIME":
+                                type = "text";
+                                break;
+                            case "DROPDOWN":
+                                type = "select";
+                                break;
+                            case "HIDDEN":
+                                type = "text";
+                                break;
+                            case "PASSWORD":
+                                type = "text";
+                                break;
+                            case "NUMBER":
+                                type = "number";
+                                break;
+                            case "EMAIL":
+                                type = "text";
+                                break;
+                            case "TELEFONE":
+                                type = "text";
+                                break;
+                            case "DROPDOWNDSG":
+                                type = "select";
+                                break;
+                            case "DATETIME":
+                                type = "text";
+                                break;
+                            case "AUTOCOMPLETE":
+                                type = "text";
+                                break;
+                            case "TEXTAREA":
+                                type = "textarea";
+                                break;
+                            case "TEXTVALUE":
+                                type = "text";
+                                break;
+                            case "DATECHECK":
+                                type = "text";
+                                break;
+                            case "TIMECHECK":
+                                type = "text";
+                                break;
+                            case "TEXTPERC":
+                                type = "text";
+                                break;
+                            case "LABEL":
+                                type = "text";
+                                break;
+                            case "TEXTCURRENCY":
+                                type = "text";
+                                break;
+                            default:
+                                break;
+                        }
+
+
+                        if(type == "select"){
+                            fielddata =  { iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                            items: [],
+                            valueField: "Id",
+                            textField: "Name", width: 150  };  
                         }else{
-                            var valor = $(tabela[i]).attr("data-controlid");
-						    var text = $(tabela[i]).html();
-                            fielddata =  { name: valor, title: text, type: "text", width: 150  };                            
+                            fielddata =  { iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
                         }
-                        var stable = $(tabela[i]).attr("data-table");
-                        table.push(stable);
-                        var sfield = $(tabela[i]).attr("data-fielddata");
-                        field.push(sfield);
-                        controlid.push(valor);
-
-                        source.push(fielddata)
+                                                    
                     }
-                    jsGrid.locale("pt-br");
-                    //source.push({ type: "control" })
-                    $("#" + id).jsGrid({
-                        width: "100%",
-                        height: "300px",                 
-                        pageSize: 7,
-                        inserting: true,
-                        editing: true,
-                        sorting: true,
-                        paging: true,
-                 
-                        fields: source
-                    });
+                    
 
-                    var tablegrid = $("#" + id + " th")
-                    for (let index = 0; index < tablegrid.length; index++) {
-                        const element = tablegrid[index];
-                        if(table[index] != "undefined"){
-                            $(element).attr("data-table", table[index]);
-                            $(element).attr("data-fielddata", field[index]);
-                            $(element).attr("data-controlid", controlid[index]);
-                            $(element).attr("data-field", controlid[index]);
-                        }
-                    }
+                    source.push(fielddata)
                 }
+                jsGrid.locale("pt-br");
+                //source.push({ type: "control" })
+                $("#" + id).jsGrid({
+                    width: "100%",
+                    height: "300px",                 
+                    pageSize: 7,
+                    inserting: true,
+                    editing: true,
+                    sorting: true,
+                    paging: true,
+                
+                    fields: source
+                });
+
+                var tablegrid = $("#" + id + " th")
+                for (let index = 0; index < tablegrid.length; index++) {
+                    const element = tablegrid[index];
+                    if(table[index] != undefined){
+                        $(element).attr("data-table", table[index]);
+                        $(element).attr("data-fielddata", field[index]);
+                        $(element).attr("data-controlid", controlid[index]);
+                        $(element).attr("data-field", controlid[index]);
+                        $(element).attr("data-controltype", controlType[index]);
+                        $(element).attr("data-iditem", aIditem[index]);                            
+                    }
+                }     
             }
-            
-         
-           
         }
-		
-	
-    
-
-
-//    $("#" + id).tabullet({
-//		action: function (mode, data) {
-//			console.dir(mode);
-//			if (mode === 'save') {
-//				source.push(data);
-//			}
-//			if (mode === 'edit') {
-//				for (var i = 0; i < source.length; i++) {
-//					if (source[i].id == data.id) {
-//						source[i] = data;
-//					}
-//				}
-//			}
-//			if(mode == 'delete'){
-//				for (var i = 0; i < source.length; i++) {
-//					if (source[i].id == data) {
-//						source.splice(i,1);
-//						break;
-//					}
-//				}
-//            }
-            
-//            gridedit(id, source);
-//		}
-//	});
+    }
 }

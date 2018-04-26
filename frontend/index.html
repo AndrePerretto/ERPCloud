@@ -712,11 +712,21 @@
 				$(window).keydown(function (event) {
                     if (event.keyCode == 13) {
                         event.preventDefault();
+                        if($(".jsgrid-mode-on-button").length == 0){
+                            $(".jsgrid-filter-row").remove();
+                            $(".jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button").click()
+                            $(".jsgrid-cell input[type='text']").first().focus()
+                        }else{
+                            $(".jsgrid-filter-row").remove();
+                            $(".jsgrid-button.jsgrid-insert-button").click();
+                            $(".jsgrid-cell input[type='text']").first().focus()
+                        }                        
+                        
                         return false;
                     }
 				});
 
-				console.log("");
+
 				$("#notificationNumber").change(function (event) {
 					event.preventDefault();
 					$("#notification").css("display", "block");

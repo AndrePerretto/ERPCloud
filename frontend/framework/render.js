@@ -1279,34 +1279,109 @@ function fillScreen(data, template, layoutID, fillgrid){
 
         if (arraydatagrid[k]) {
             if (arraydatagrid[k].length > 0) {
-               
-                
-                    var tabela =  $(arraytablegrid[k]).parents("table").find("th");
-                    if($(arraytablegrid[k]).hasClass("jsgrid-table")){
+                var tabela =  $(arraytablegrid[k]).parents("table").find("th");
+                if($(arraytablegrid[k]).hasClass("jsgrid-table")){
                     var table = [];
                     var field = [];
                     var controlid = [];
                     var source = [];
+                    var controlType = [];
                     for (var i = 0; i < tabela.length; i++) {
                         var fielddata; 
-                        if(i == 0){
-                            fielddata = {  type: "control" };
-                        }else{
-                            var valor = $(tabela[i]).attr("data-controlid");
-						    var text = $(tabela[i]).html();
-                            fielddata =  { name: valor, title: text, type: "text", width: 150  };                            
-                        }
                         var stable = $(tabela[i]).attr("data-table");
                         table.push(stable);
                         var sfield = $(tabela[i]).attr("data-fielddata");
                         field.push(sfield);
                         controlid.push(valor);
+                        var controlT = $(tabela[i]).attr("data-controltype");
+                        controlType.push(controlT);
+                        
+                        if(i == 0){
+                            fielddata = {  type: "control" };
+                        }else{
+                            var valor = $(tabela[i]).attr("data-controlid");
+                            var text = $(tabela[i]).html();
+                            var type = "text";
+
+
+                            switch (controlT) {
+                                case "TEXT":
+                                    type = "text";
+                                    break;
+                                case "CHECKBOX":
+                                    type = "checkbox";
+                                    break;
+                                case "DATE":
+                                    type = "text";
+                                    break;
+                                case "TIME":
+                                    type = "text";
+                                    break;
+                                case "DROPDOWN":
+                                    type = "select";
+                                    break;
+                                case "HIDDEN":
+                                    type = "text";
+                                    break;
+                                case "PASSWORD":
+                                    type = "text";
+                                    break;
+                                case "NUMBER":
+                                    type = "number";
+                                    break;
+                                case "EMAIL":
+                                    type = "text";
+                                    break;
+                                case "TELEFONE":
+                                    type = "text";
+                                    break;
+                                case "DROPDOWNDSG":
+                                    type = "select";
+                                    break;
+                                case "DATETIME":
+                                    type = "text";
+                                    break;
+                                case "AUTOCOMPLETE":
+                                    type = "text";
+                                    break;
+                                case "TEXTAREA":
+                                    type = "textarea";
+                                    break;
+                                case "TEXTVALUE":
+                                    type = "text";
+                                    break;
+                                case "DATECHECK":
+                                    type = "text";
+                                    break;
+                                case "TIMECHECK":
+                                    type = "text";
+                                    break;
+                                case "TEXTPERC":
+                                    type = "text";
+                                    break;
+                                case "LABEL":
+                                    type = "text";
+                                    break;
+                                case "TEXTCURRENCY":
+                                    type = "text";
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            fielddata =  { name: valor, title: text, type: type, width: 150  };                            
+                        }
 
                         source.push(fielddata)
                     }
-                    //$(arraytablegrid[k]).parents("table").jsGrid("destroy");
+                    //$(arraytablegrid[k]).jsGrid("destroy");
                     //$(arraytablegrid[k]).html("");
-                    $(arraytablegrid[k]).parents("table").jsGrid({
+
+                    var idgrid = $(arraytablegrid[k]).parents("table").attr("id");
+                    tabela = $("#" + idgrid + " th");
+
+                    $("#" + idgrid).jsGrid("destroy");
+                    $("#" + idgrid).jsGrid({
                         width: "100%",
                         height: "300px",                 
                         pageSize: 7,
@@ -1319,6 +1394,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                         data: dataGridRows[k]
                     });
 
+                    
                     for (let index = 0; index < table.length; index++) {
                         const element = tabela[index];
                         if(table[index] != undefined){
@@ -1326,6 +1402,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                             $(element).attr("data-fielddata", field[index]);
                             $(element).attr("data-controlid", controlid[index]);
                             $(element).attr("data-field", controlid[index]);
+                            $(element).attr("data-controltype", controlType[index]);
                         }
                     }
                 
@@ -1348,7 +1425,8 @@ function fillScreen(data, template, layoutID, fillgrid){
                 }
             }
         }
-    }    
+    }  
+    
 }
 
 
@@ -1719,7 +1797,23 @@ function getDropdownHTML(LayoutID, tabGenID){
                     var controlid = $("#" + id).attr("data-controlid");
                     var propertyid = $("#" + id).attr("data-propertyid");
                     EventHideModal(id, controlid, propertyid);
-                }                    
+                }    
+                
+                if($("[selectid='" + "_" + key + "']").length > 0){
+                    var value = data[key];
+                    //document.getElementById("_" + key).innerHTML = value;
+                    var sel = $("[selectid='" + "_" + key + "']")
+                    for (let index = 0; index < sel.length; index++) {
+                        const element = sel[index];
+                        $(element).append(value);
+                        $(element).attr("data-selectvalue", value);
+                    }
+                    
+                    //var id = document.getElementById("_" + key).id;
+                    //var controlid = $("#" + id).attr("data-controlid");
+                    //var propertyid = $("#" + id).attr("data-propertyid");
+                    //EventHideModal(id, controlid, propertyid);
+                }
             }
         },
         error: function (xhr) {

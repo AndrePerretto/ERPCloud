@@ -632,3 +632,33 @@ function getAjaxParameter(url, dados, callback) {
 
     return retorno;
 }
+
+
+function wizardeventclick(containerID, tela, containerIDPrincipal){
+    tela = tela.replace("_","");
+    
+    $("#" + tela + "_btnsair").remove()
+    $("#" + containerIDPrincipal + "_" + tela).hide();
+    var btn = "<a onclick= eventout('" + containerID + "_" + tela + "','" + tela + "','" + containerIDPrincipal + "')  id='" + tela +  "_btnsair' ";
+    btn += "style='left:46%;position:absolute;' class='btn btn-default btn-outline' role='button'>";
+    btn += "Sair</a>";	
+    $("#" + tela + " .wizard-buttons").last().append(btn); 
+    
+    var wiz = $(".wizard-pane [tabgenid='" + tela + "'].panel")
+    for (let index = 0; index < wiz.length; index++) {
+        const element = wiz[index];
+        $(element).show();
+    }
+
+}
+
+function eventout(containerid, tela, containerIDPrincipal){
+    $("#" + containerIDPrincipal + "_" + tela).show();
+
+    var wiz = $(".wizard-pane [tabgenid='" + tela + "'].panel")
+    for (let index = 0; index < wiz.length; index++) {
+        const element = wiz[index];
+        $(element).hide();
+    }
+   
+}
