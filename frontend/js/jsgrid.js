@@ -1213,6 +1213,16 @@
                 radioClass: 'iradio_flat-blue',
                 increaseArea: '20%' // optional
             });
+
+            var inputRow = $(insertRow + " input");
+            for (let index = 0; index < inputRow.length; index++) {
+                const element = inputRow[index];
+                var mask = $(element).attr("data-mask");
+                if (mask != undefined) {
+                    $(element).mask(mask);
+                }
+                
+            }
         },
 
         editItem: function(item) {
