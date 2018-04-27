@@ -967,19 +967,16 @@ function gridedit(id, source){
                                 break;
                         }
 
-
                         if(type == "select"){
                             fielddata =  { iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
                             items: [],
                             valueField: "Id",
                             textField: "Name", width: 150  };  
                         }else{
-                            fielddata =  { iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
-                        }
-                                                    
+                            fielddata =  { controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
+                        }                                                    
                     }
                     
-
                     source.push(fielddata)
                 }
                 jsGrid.locale("pt-br");
@@ -1007,8 +1004,59 @@ function gridedit(id, source){
                         $(element).attr("data-controltype", controlType[index]);
                         $(element).attr("data-iditem", aIditem[index]);                            
                     }
-                }     
+                }   
+                
+                $(".jsgrid-filter-row").remove();
+                $(".jsgrid-cell input[type='text']").first().focus()
             }
         }
+    }
+}
+
+
+//Função temporaria, será transportada para o metadados
+function AfterSelectItemGrid(element) {
+    var $dropUnidadeMedida = $("[selectid='_CoItensVenda_ddlunidademedida']");
+    var idProduto = $(element).attr("data-valuegrid");
+    var text = "";
+    var valor = "";
+    var Dados = "";
+    Dados = Dados + "EnterpriseID=" + returnCookie("EnterpriseID");
+    Dados = Dados + "&Class=ClassVenda&Function=BuscarDadosProduto&ValueParameters[0]=" + idProduto;
+    var parameters = new Object();
+    //parameters.url = getGlobalParameters("urlPlataforma") + "/api/compiler/CsharpCompiler";
+    parameters.url = "http://homologa.empresariocloud.com.br/api/compiler/CsharpCompiler";
+    parameters.dados = Dados;
+    parameters.async = false;
+    parameters.type = "GET";
+    
+    var result = AjaxParameter(parameters);
+    if (result) {
+        if(result.property){
+            if(result.property.length > 0){
+                for (var i = 0; i < result.property[0].value.length; i++) {
+                    valor = result.property[0].value[i];
+                    text = result.property[1].value[i];
+                    $dropUnidadeMedida.val(valor);         
+                }
+            }
+
+            var id = $(element).attr("id");
+            var a_id = id.split("_");
+            if(result.property[2].value.length > 0){
+                if (a_id.length > 0) {
+                    a_id[0] = a_id[0].replace("_", "");
+                    $("[data-idgrid='" + a_id[0] + "_CoItensVenda_txtvalorunitario']").val(result.property[2].value[0]);
+                }               
+            }
+
+            if (a_id.length > 0) {
+                a_id[0] = a_id[0].replace("_", "");
+
+                $("#" + a_id[0] + "_CoItensVenda_txtquantidade").val("1");
+            }
+
+            CalculaTotaisVenda();
+        }        
     }
 }

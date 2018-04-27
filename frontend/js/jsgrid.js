@@ -2019,8 +2019,27 @@
             //return  $("#" + this.iditem);
             var id = this.iditem;
             var onchange = $("#" + this.iditem).attr("onchange")
+            var controlType = this.controlType;
+            var classe = "gridjs ";
+            var focus = "";
+            var onblur = "";
+            var mask = "";
+            
+            if (controlType == "AUTOCOMPLETE") {
+                onblur = $("#" + this.iditem).attr("onblur");
+                focus = $("#" + this.iditem + "_autocomplete").attr("onfocus");
+                onchange = $("#" + this.iditem + "_autocomplete").attr("onchange");
+                classe += " autocomplete";
+                onchange = "AfterSelectItemGrid(this)";
+            }else{
+                onblur = $("#" + this.iditem).attr("onblur");
+                focus = $("#" + this.iditem).attr("onfocus");
+                onchange = $("#" + this.iditem).attr("onchange");
+            }
 
-            return $("<input>").attr("type", "text").attr("id", id).attr("onchange",onchange)
+            mask = $("#" + this.iditem).attr("data-mask"); 
+
+            return $("<input>").attr("data-mask", mask).attr("onblur", onblur).attr("data-idgrid", id).attr("onfocus", focus).attr("class", classe).attr("type", "text").attr("id", id).attr("onchange",onchange)
                 .prop("readonly", !!this.readOnly);
         }
     });

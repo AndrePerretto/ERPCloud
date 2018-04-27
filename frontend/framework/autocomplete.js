@@ -94,7 +94,11 @@ function bindAutocomplete(controlID, nameLayout, LayoutID, TitleMenu, PropertyID
                     }
                 }
                 loaderImage(containerID + "_panel", false);
-                $("#" + id).val(ui.item.id).trigger("change");
+                if($(this).hasClass("gridjs")){
+                    $("#" + id).attr("data-valuegrid", ui.item.id);
+                }else{
+                    $("#" + id).val(ui.item.id).trigger("change");
+                }
             }
         });
     
