@@ -1286,6 +1286,8 @@ function fillScreen(data, template, layoutID, fillgrid){
                     var controlid = [];
                     var source = [];
                     var controlType = [];
+                    var aIditem = [];
+
                     for (var i = 0; i < tabela.length; i++) {
                         var fielddata; 
                         var stable = $(tabela[i]).attr("data-table");
@@ -1295,7 +1297,15 @@ function fillScreen(data, template, layoutID, fillgrid){
                         controlid.push(valor);
                         var controlT = $(tabela[i]).attr("data-controltype");
                         controlType.push(controlT);
+                        var selectid = $(tabela[i]).attr("data-id");
+                        var iditem = $(tabela[i]).attr("data-id");
+                        aIditem.push(iditem);
                         
+                        if(selectid){
+                            if(selectid.indexOf('_') > 0){
+                                selectid = selectid.substr(selectid.indexOf('_'),selectid.length);
+                            } 
+                        }
                         if(i == 0){
                             fielddata = {  type: "control" };
                         }else{
@@ -1369,7 +1379,28 @@ function fillScreen(data, template, layoutID, fillgrid){
                                     break;
                             }
 
-                            fielddata =  { name: valor, title: text, type: type, width: 150  };                            
+                            if(type == "select"){
+                                var idtable = $($(tabela).parents("table[id]")).attr("id");
+                                var items = [];
+                                
+                                if ($("#" + idtable).data("JSGrid")) {
+                                    if ($("#" + idtable).data("JSGrid").fields) {
+                                        if ($("#" + idtable).data("JSGrid").fields.length > 0) {
+                                            if ($("#" + idtable).data("JSGrid").fields[i].items) {
+                                                items = $("#" + idtable).data("JSGrid").fields[i].items;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+
+                                fielddata =  { datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                                items: items,
+                                valueField: "Id",
+                                textField: "Name", width: 150  };  
+                            }else{
+                                fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
+                            }                           
                         }
 
                         source.push(fielddata)
@@ -1380,7 +1411,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                     var idgrid = $(arraytablegrid[k]).parents("table").attr("id");
                     tabela = $("#" + idgrid + " th");
 
-                    $("#" + idgrid).jsGrid("destroy");
+                    //$("#" + idgrid).jsGrid("destroy");
                     $("#" + idgrid).jsGrid({
                         width: "100%",
                         height: "300px",                 
@@ -1403,6 +1434,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                             $(element).attr("data-controlid", controlid[index]);
                             $(element).attr("data-field", controlid[index]);
                             $(element).attr("data-controltype", controlType[index]);
+                            $(element).attr("data-iditem", aIditem[index]);            
                         }
                     }
                 
@@ -1425,10 +1457,8 @@ function fillScreen(data, template, layoutID, fillgrid){
                 }
             }
         }
-    }  
-    
+    }      
 }
-
 
 function fillScreenOLD(data, template, layoutID){
     var arraytable = [];
@@ -1618,9 +1648,6 @@ function fillScreenOLD(data, template, layoutID){
     }    
 }
 
-
-
-
 function fillContainer(data){
     var arraytable = [];
     var arraydatagrid = [[]];
@@ -1699,8 +1726,6 @@ function fillContainer(data){
     }     
 }
 
-
-
 function editGridLine(button, containerID, ID) {
     var arrayContainerID = [];
     arrayContainerID = containerID.split('_')
@@ -1716,8 +1741,6 @@ function editGridLine(button, containerID, ID) {
         loaderImage(form, false);
     }})
 }
-
-
   
 function atualizaAba2(formID, layoutID, tabGenID, forcingTemplate, layoutType, urlRenderLayout, urlRenderLayoutData, titleMenu) {
     $("#controls-tabs li a[href='#" + tabGenID + "'] .tabControls").replaceWith("<img src='images/loader.gif' height='15px' />");
@@ -1731,8 +1754,6 @@ function atualizaAba2(formID, layoutID, tabGenID, forcingTemplate, layoutType, u
             });
     }
 }
-
-
 
 function OpenFormSearch(tabGenID) {
 
@@ -1757,7 +1778,6 @@ function OpenFormSearch(tabGenID) {
     toogleColapseContainer(target, false)
     return false;
 }
-
 
 function toogleColapseContainer(selectorContainer,close) {
     var $elements = $(selectorContainer).children(".panel-body");
@@ -1879,7 +1899,6 @@ function fillButtonGrid(id, tabgen){
     return retorno;
 }
 
-
 function RefreshDropDown(id, controlID, propertyID, parameters) {
     var dados = "controlID=" + controlID + "&propertyID=" + propertyID + "&enterpriseID=" + returnCookie("EnterpriseID");
     var url = getGlobalParameters("urlPlataforma") + "/api/render/RefreshDropDown";
@@ -1975,10 +1994,6 @@ function FormOpeningDSG(id, typeOpeningLayout, nameLayout, layoutID, titleMenu, 
     });
 
 }
-
-
-
-
 
 function OpenAbaDSG(nameLayout, layoutID, titleMenu, enterpriseID) {
     var title = titleMenu.replace("%20", " ");

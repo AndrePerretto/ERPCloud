@@ -487,7 +487,30 @@
             var $result = $("<tr>").addClass(this.headerRowClass);
 
             this._eachField(function(field, index) {
-                var $th = this._prepareCell("<th>", field, "headercss", this.headerCellClass)
+                var customFields = "";
+                if (field.datatable) {
+                    customFields += " data-table='" + field.datatable + "' ";
+                }
+
+                if (field.datafield) {
+                    customFields += " data-fielddata='" + field.datafield + "' ";
+                }
+
+                if (field.name) {
+                    customFields += " data-controlid='" + field.name + "' ";
+                    customFields += " data-field='" + field.name + "' ";
+                }
+
+                if (field.controlType) {
+                    customFields += " data-controltype='" + field.controlType + "' ";
+                }
+                
+                if (field.iditem) {
+                    customFields += " data-id='" + field.iditem + "' ";
+                }
+                
+
+                var $th = this._prepareCell("<th " + customFields + ">", field, "headercss", this.headerCellClass)
                     .append(this.renderTemplate(field.headerTemplate, field))
                     .appendTo($result);
 
@@ -711,8 +734,11 @@
                             if (field.insertControl.length > 0) {
                                 var idtable = $(field.insertControl).parents("table[id]").attr("id");
                                 indice =  $("#" + idtable).data("JSGrid").data.map(function(e) { return e; }).indexOf(item);
-
-                                valueAutocomplete = field.data[indice].id;
+                                if (field.data) {
+                                    if (field.data.length > 0) {
+                                        valueAutocomplete = field.data[indice].id;
+                                    }
+                                }                                
                             }
                         }
                     }
@@ -1537,12 +1563,11 @@
                 }
 
                 for (let index = 0; index < fields.length; index++) {
-                    const element = fields[index];
                     if ($("#" + idtable).data("JSGrid").fields[index].data) {
                         $("#" + idtable).data("JSGrid").fields[index].data.splice(deletingItemIndex, 1);
                     }                    
                 }
-                
+
                 this._loadStrategy.finishDelete(deletingItem, deletingItemIndex);
 
                 this._callEventHandler(this.onItemDeleted, {

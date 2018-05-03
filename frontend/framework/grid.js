@@ -881,6 +881,7 @@ function gridedit(id, source){
                     table.push(stable);
                     var sfield = $(tabela[i]).attr("data-fielddata");
                     field.push(sfield);
+                    var valor = $(tabela[i]).attr("data-controlid");
                     controlid.push(valor);
                     var controlT = $(tabela[i]).attr("data-controltype");
                     controlType.push(controlT);
@@ -891,13 +892,12 @@ function gridedit(id, source){
                     if(selectid){
                         if(selectid.indexOf('_') > 0){
                             selectid = selectid.substr(selectid.indexOf('_'),selectid.length);
-                        }                         
-
+                        } 
                     }
                     if(i == 0){
                         fielddata = {  type: "control" };
                     }else{
-                        var valor = $(tabela[i]).attr("data-controlid");
+                        
                         var text = $(tabela[i]).html();
                         var type = "text";
 
