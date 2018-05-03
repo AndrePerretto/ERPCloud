@@ -5,7 +5,7 @@
  */
 
 (function(window, $, undefined) {
-
+    var indice = 0;
     var JSGRID = "JSGrid",
         JSGRID_DATA_KEY = JSGRID,
         JSGRID_ROW_DATA_KEY = "JSGridItem",
@@ -392,6 +392,23 @@
             this._validation = this._createValidation();
 
             this.refresh();
+
+
+            var inputRow = $($(this)[0]._insertRow).find("input");
+            for (let index = 0; index < inputRow.length; index++) {
+                const element = inputRow[index];
+                var mask = $(element).attr("data-mask");
+                var controltype = $(element).attr("data-controltype");
+                if (mask != undefined) {
+                    if(controltype == "TEXTVALUE" || controltype == "NUMBER"){
+                        $(element).mask(mask, { reverse: true });
+                    }else{
+                        $(element).mask(mask);
+                    }
+                    
+                }
+                
+            }
         },
 
         _createLoadIndicator: function() {
@@ -514,7 +531,7 @@
             var $result = $("<tr>").addClass(this.insertRowClass);
 
             this._eachField(function(field) {
-                this._prepareCell("<td>", field, "insertcss")
+                this._prepareCell("<td >", field, "insertcss")
                     .append(this.renderTemplate(field.insertTemplate, field))
                     .appendTo($result);
             });
@@ -656,7 +673,9 @@
         },
 
         _renderCells: function($row, item) {
-            this._eachField(function(field) {
+            
+
+            this._eachField(function(field) {                
                 $row.append(this._createCell(item, field));
             });
             return this;
@@ -665,13 +684,51 @@
         _createCell: function(item, field) {
             var $result;
             var fieldValue = this._getItemFieldValue(item, field);
-
+            var valueAutocomplete = "";
             var args = { value: fieldValue, item : item };
+            
             if($.isFunction(field.cellRenderer)) {
                 $result = this.renderTemplate(field.cellRenderer, field, args);
             } else {
-                $result = $("<td>").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
+                var customFields = "";
+
+                if (field.iditem) {                    
+                    customFields += " data-grididitem='" + field.iditem + "' ";
+                }
+
+                if (field.datatable) {                    
+                    customFields += " data-griddatatable='" + field.datatable + "' ";
+                }
+
+                if (field.datafield) {                    
+                    customFields += " data-griddatafield='" + field.datafield + "' ";
+                }
+                
+
+                if (field.controlType) {
+                    if (field.controlType == "AUTOCOMPLETE") {
+                        if (field.insertControl) {
+                            if (field.insertControl.length > 0) {
+                                var idtable = $(field.insertControl).parents("table[id]").attr("id");
+                                indice =  $("#" + idtable).data("JSGrid").data.map(function(e) { return e; }).indexOf(item);
+
+                                valueAutocomplete = field.data[indice].id;
+                            }
+                        }
+                    }
+                }
+
+                if (valueAutocomplete) {                    
+                    customFields += " data-gridvalue='" + valueAutocomplete + "' ";
+                }else{
+                    if (fieldValue != undefined) {
+                        customFields += " data-gridvalue='" + fieldValue + "' ";
+                    }
+                }
+
+                $result = $("<td " + customFields + " >").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
             }
+
 
             return this._prepareCell($result, field);
         },
@@ -1146,6 +1203,30 @@
             this._eachField(function(field) {
                 if(field.inserting) {
                     this._setItemFieldValue(result, field, field.insertValue());
+
+                    if (field.items) {
+                        if (field.items.length > 0) {
+                            result[field.name] = $(field.insertControl).val();
+                        }
+                    }
+
+                    if (field.controlType == "AUTOCOMPLETE") {
+                        
+                        if (field.insertControl) {
+                            if (field.insertControl.length > 0) {
+                                if ($(field.insertControl).attr("data-valuegrid")) {
+                                    var objdata = {};
+                                    if (!field.data) {
+                                        field.data = [];
+                                    }
+                                    objdata.name = field.name;
+                                    objdata.id = field.idautocomplete
+                                    field.data.push(objdata);
+                                }                                
+                            }
+                        }                        
+                    }
+                    
                 }
             });
             return result;
@@ -1214,12 +1295,18 @@
                 increaseArea: '20%' // optional
             });
 
-            var inputRow = $(insertRow + " input");
+            var inputRow = $($(this)[0]._insertRow).find("input");
             for (let index = 0; index < inputRow.length; index++) {
                 const element = inputRow[index];
                 var mask = $(element).attr("data-mask");
+                var controltype = $(element).attr("data-controltype");
                 if (mask != undefined) {
-                    $(element).mask(mask);
+                    if(controltype == "TEXTVALUE" || controltype == "NUMBER"){
+                        $(element).mask(mask, { reverse: true });
+                    }else{
+                        $(element).mask(mask);
+                    }
+                    
                 }
                 
             }
@@ -1235,6 +1322,22 @@
                 radioClass: 'iradio_flat-blue',
                 increaseArea: '20%' // optional
             });
+
+            var inputRow = $($(this)[0]._insertRow).find("input");
+            for (let index = 0; index < inputRow.length; index++) {
+                const element = inputRow[index];
+                var mask = $(element).attr("data-mask");
+                var controltype = $(element).attr("data-controltype");
+                if (mask != undefined) {
+                    if(controltype == "TEXTVALUE" || controltype == "NUMBER"){
+                        $(element).mask(mask, { reverse: true });
+                    }else{
+                        $(element).mask(mask);
+                    }
+                    
+                }
+                
+            }
         },
 
         rowByItem: function(item) {
@@ -1359,6 +1462,12 @@
             this._eachField(function(field) {
                 if(field.editing) {
                     this._setItemFieldValue(result, field, field.editValue());
+
+                    if (field.items) {
+                        if (field.items.length > 0) {
+                            result[field.name] = $(field.editControl).val();
+                        }
+                    }
                 }
             });
             return result;
@@ -1420,6 +1529,20 @@
             });
 
             return this._controllerCall("deleteItem", deletingItem, args.cancel, function() {
+                var idtable = $($row).parents("table[id]").attr("id");
+                var fields = [];
+                
+                if ($("#" + idtable).data("JSGrid").fields) {
+                    fields = $("#" + idtable).data("JSGrid").fields;
+                }
+
+                for (let index = 0; index < fields.length; index++) {
+                    const element = fields[index];
+                    if ($("#" + idtable).data("JSGrid").fields[index].data) {
+                        $("#" + idtable).data("JSGrid").fields[index].data.splice(deletingItemIndex, 1);
+                    }                    
+                }
+                
                 this._loadStrategy.finishDelete(deletingItem, deletingItemIndex);
 
                 this._callEventHandler(this.onItemDeleted, {
@@ -1427,6 +1550,9 @@
                     item: deletingItem,
                     itemIndex: deletingItemIndex
                 });
+
+                
+
             });
         }
     };
@@ -2034,22 +2160,32 @@
             var focus = "";
             var onblur = "";
             var mask = "";
-            
-            if (controlType == "AUTOCOMPLETE") {
-                onblur = $("#" + this.iditem).attr("onblur");
-                focus = $("#" + this.iditem + "_autocomplete").attr("onfocus");
-                onchange = $("#" + this.iditem + "_autocomplete").attr("onchange");
-                classe += " autocomplete";
-                onchange = "AfterSelectItemGrid(this)";
-            }else{
-                onblur = $("#" + this.iditem).attr("onblur");
-                focus = $("#" + this.iditem).attr("onfocus");
-                onchange = $("#" + this.iditem).attr("onchange");
+            var style = "";
+
+            switch (controlType) {
+                case "AUTOCOMPLETE":
+                    onblur = $("#" + this.iditem).attr("onblur");
+                    focus = $("#" + this.iditem + "_autocomplete").attr("onfocus");
+                    onchange = $("#" + this.iditem + "_autocomplete").attr("onchange");
+                    classe += " autocomplete";
+                    onchange = "AfterSelectItemGrid(this)";
+                    break;   
+                case "TEXTVALUE":
+                    onblur = $("#" + this.iditem).attr("onblur");
+                    focus = $("#" + this.iditem).attr("onfocus");
+                    onchange = $("#" + this.iditem).attr("onchange");
+                    style = "text-align:right";
+
+                default:
+                    onblur = $("#" + this.iditem).attr("onblur");
+                    focus = $("#" + this.iditem).attr("onfocus");
+                    onchange = $("#" + this.iditem).attr("onchange");
+                    break;
             }
 
             mask = $("#" + this.iditem).attr("data-mask"); 
 
-            return $("<input>").attr("data-mask", mask).attr("onblur", onblur).attr("data-idgrid", id).attr("onfocus", focus).attr("class", classe).attr("type", "text").attr("id", id).attr("onchange",onchange)
+            return $("<input>").attr("style", style).attr("data-controltype", controlType).attr("data-mask", mask).attr("onblur", onblur).attr("data-idgrid", id).attr("onfocus", focus).attr("class", classe).attr("type", "text").attr("id", id).attr("onchange",onchange)
                 .prop("readonly", !!this.readOnly);
         }
     });
@@ -2479,6 +2615,10 @@
                     radioClass: 'iradio_flat-blue',
                     increaseArea: '20%' // optional
                 });
+
+            
+                
+
             }, this);
 
             var $button = this._createGridButton(this.modeButtonClass + " " + cssClass, "", function(grid) {

@@ -96,6 +96,12 @@ function bindAutocomplete(controlID, nameLayout, LayoutID, TitleMenu, PropertyID
                 loaderImage(containerID + "_panel", false);
                 if($(this).hasClass("gridjs")){
                     $("#" + id).attr("data-valuegrid", ui.item.id);
+
+                    var idtable = $($(this).parents("table[id]")).attr("id");
+                    var objArray = $("#" + idtable).data("JSGrid").fields;
+                    var indexArray =  objArray.map(function(e) { return e.iditem; }).indexOf($(this).attr("id"));
+                    $("#" + idtable).data("JSGrid").fields[indexArray].idautocomplete =  ui.item.id;
+
                 }else{
                     $("#" + id).val(ui.item.id).trigger("change");
                 }

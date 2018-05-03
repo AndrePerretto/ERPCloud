@@ -1803,10 +1803,39 @@ function getDropdownHTML(LayoutID, tabGenID){
                     var value = data[key];
                     //document.getElementById("_" + key).innerHTML = value;
                     var sel = $("[selectid='" + "_" + key + "']")
+
+                    var itensDrop = [];
+
                     for (let index = 0; index < sel.length; index++) {
                         const element = sel[index];
                         $(element).append(value);
-                        $(element).attr("data-selectvalue", value);
+                        $(element).attr("data-selectvalue", value);  
+                        var objelement = $(element);
+                        
+                        if (objelement.length > 0) {
+                            if (objelement[0].length > 0) {
+                                for (let j = 0; j < objelement[0].length; j++) {
+                                    var valueoption = $($(objelement)[0][j]).val();
+                                    var nameoption = ""
+                                    if($($(objelement)[0][j]).length > 0){
+                                        nameoption = $($(objelement)[0][j])[0].innerHTML;
+                                    }
+                                    var objoption = {};
+                                    objoption.Id = valueoption;
+                                    objoption.Name = nameoption;
+                                    itensDrop.push(objoption);
+                                }
+                            }                            
+                        }                      
+                        
+                    }
+
+                    if (itensDrop.length > 0) {
+                        var idtable = $($(sel).parents("table[id]")).attr("id");
+
+                        var objArray = $("#" + idtable).data("JSGrid").fields;
+                        var indexArray =  objArray.map(function(e) { return e.iditem; }).indexOf(tabGenID + "_" + key);
+                        $("#" + idtable).data("JSGrid").fields[indexArray].items = itensDrop;
                     }
                     
                     //var id = document.getElementById("_" + key).id;

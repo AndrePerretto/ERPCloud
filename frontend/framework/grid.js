@@ -901,7 +901,6 @@ function gridedit(id, source){
                         var text = $(tabela[i]).html();
                         var type = "text";
 
-
                         switch (controlT) {
                             case "TEXT":
                                 type = "text";
@@ -968,12 +967,12 @@ function gridedit(id, source){
                         }
 
                         if(type == "select"){
-                            fielddata =  { iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                            fielddata =  { datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
                             items: [],
                             valueField: "Id",
                             textField: "Name", width: 150  };  
                         }else{
-                            fielddata =  { controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
+                            fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
                         }                                                    
                     }
                     
