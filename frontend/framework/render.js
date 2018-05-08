@@ -836,43 +836,36 @@ function sharpGridEditor(containerID) {
 }
 
 
-function openLayout(button, tabGenID) {
-          
-    
-        var formID = $(button).attr("data-tabgenlayout");
-        ClearForm(formID, true);
-        var $tabNav = $(button).parents("form .panel.panel-nav");
-        toogleColapseContainer($tabNav, true)
-        $($tabNav).hide()
-        $("#" + formID).show();
-    
-        var form = $(button).attr("data-formid");
-    
-        //ClearForm(form, true);
-    
-        var formTelaIDNavigation = $(button);
-    
-        if (formTelaIDNavigation) {
-            if (formTelaIDNavigation.length > 0) {
-                formID = $(formTelaIDNavigation[0]).attr("data-tabgenlayout");
-                
-                var onload = $("[tabgenid='" + formID + "']");
-                if (onload) {
-                    if (onload.length > 0) {
-                        for (var i = 0; i < onload.length; i++) {
-                            var onloadName = $(onload[i]).attr("containeronload");
-                            eval(onloadName);
-                        }
+function openLayout(button, tabGenID) {    
+    var formID = $(button).attr("data-tabgenlayout");
+    ClearForm(formID, true);
+    var $tabNav = $(button).parents("form .panel.panel-nav");
+    toogleColapseContainer($tabNav, true)
+    $($tabNav).hide()
+    $("#" + formID).show();
+
+    var form = $(button).attr("data-formid");
+
+    //ClearForm(form, true);
+
+    var formTelaIDNavigation = $(button);
+
+    if (formTelaIDNavigation) {
+        if (formTelaIDNavigation.length > 0) {
+            formID = $(formTelaIDNavigation[0]).attr("data-tabgenlayout");
+            
+            var onload = $("[tabgenid='" + formID + "']");
+            if (onload) {
+                if (onload.length > 0) {
+                    for (var i = 0; i < onload.length; i++) {
+                        var onloadName = $(onload[i]).attr("containeronload");
+                        eval(onloadName);
                     }
                 }
             }
         }
-
-        //$("[data-field='id_empresa']").val(returnCookie("EnterpriseID"));
-       
-
-        
-   
+    }
+    //$("[data-field='id_empresa']").val(returnCookie("EnterpriseID"));   
 }
 
 
@@ -885,8 +878,7 @@ function openLayout(button, tabGenID) {
                     if (result.recordsets[0].length > 0) {  
                         
                         var htm = "";                 
-                        var data = [];
-                       
+                        var data = [];                       
                         
                         result.recordsets[0].forEach(function(element) {
 
@@ -894,8 +886,7 @@ function openLayout(button, tabGenID) {
                                 element.sn_pessoafisica = '<i class="fa fa-check"></i>';
                             }else{
                                 element.sn_pessoafisica = '<i class="fa fa-times"></i>';
-                            }
-                            
+                            }                            
                                
                             var row = {};
 
@@ -1394,7 +1385,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                                 }
                                 
 
-                                fielddata =  { datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                                fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
                                 items: items,
                                 valueField: "Id",
                                 textField: "Name", width: 150  };  
@@ -1458,6 +1449,13 @@ function fillScreen(data, template, layoutID, fillgrid){
             }
         }
     }      
+
+    $("[type='checkbox']").iCheck({
+        checkboxClass: 'icheckbox_flat-blue',
+        radioClass: 'iradio_flat-blue',
+        increaseArea: '20%' // optional
+    });
+
 }
 
 function fillScreenOLD(data, template, layoutID){

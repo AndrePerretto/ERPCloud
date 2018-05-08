@@ -430,8 +430,15 @@ function ClearForm(formId, clearTable) {
                                 for (var j = rowCount; j >= 0; j--) {
                                     var row = table.rows[0];
                                     if (typeof row != 'undefined') {
-                                        table.deleteRow(0);
+                                        if(!$(table).parents().hasClass("jsgrid-table")){
+                                            table.deleteRow(0);
+                                        }
                                     }
+                                }
+
+                                if($(table).parents().hasClass("jsgrid-table")){
+                                    var source = [];
+                                    gridedit($(table).parents("table[id]").attr("id"), source, true);
                                 }
                             }
                         }

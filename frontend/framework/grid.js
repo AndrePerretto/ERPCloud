@@ -860,7 +860,7 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
 
 }
 
-function gridedit(id, source){
+function gridedit(id, source, force){
 
     var table = [];
     var field = [];
@@ -869,7 +869,7 @@ function gridedit(id, source){
     var aIditem = [];
 
     var tabela = $("#" + id + " th[style!='display:none']");
-    if(!$(tabela).hasClass("jsgrid-header-cell")){
+    if(!$(tabela).hasClass("jsgrid-header-cell") || force){
         if(tabela){
             if(tabela.length > 0){ 
                 $("#" + id +" tfoot").html("");
@@ -967,8 +967,21 @@ function gridedit(id, source){
                         }
 
                         if(type == "select"){
+                            var idtable = $($(tabela).parents("table[id]")).attr("id");
+                            var items = [];
+                            
+                            if ($("#" + idtable).data("JSGrid")) {
+                                if ($("#" + idtable).data("JSGrid").fields) {
+                                    if ($("#" + idtable).data("JSGrid").fields.length > 0) {
+                                        if ($("#" + idtable).data("JSGrid").fields[i].items) {
+                                            items = $("#" + idtable).data("JSGrid").fields[i].items;
+                                        }
+                                    }
+                                }
+                            }
+
                             fielddata =  { datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
-                            items: [],
+                            items: items,
                             valueField: "Id",
                             textField: "Name", width: 150  };  
                         }else{
@@ -988,7 +1001,7 @@ function gridedit(id, source){
                     editing: true,
                     sorting: true,
                     paging: true,
-                
+                    data: [],
                     fields: source
                 });
 
@@ -1052,7 +1065,7 @@ function AfterSelectItemGrid(element) {
             if (a_id.length > 0) {
                 a_id[0] = a_id[0].replace("_", "");
 
-                $("#" + a_id[0] + "_CoItensVenda_txtquantidade").val("1");
+                //$("#" + a_id[0] + "_CoItensVenda_txtquantidade").val("1");
             }
 
             CalculaTotaisVenda();
