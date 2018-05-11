@@ -752,6 +752,10 @@
                     }
                 }
 
+                if (field.name) {
+                    customFields += " data-gridcontrolid='" + field.name + "' ";
+                }
+
                 $result = $("<td " + customFields + " >").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
             }
 

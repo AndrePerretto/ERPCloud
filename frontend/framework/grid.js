@@ -1072,3 +1072,10 @@ function AfterSelectItemGrid(element) {
         }        
     }
 }
+
+function indexArrayJS(arr, procurar) {
+    var chave = procurar[0];
+    var valor = procurar[1];
+    var pos = arr.map(function(e) { return e.controlID; });
+    return pos.indexOf(valor);
+}
