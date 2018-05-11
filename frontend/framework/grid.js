@@ -867,13 +867,25 @@ function gridedit(id, source, force){
     var controlid = [];
     var controlType = [];
     var aIditem = [];
+    var tabela = new Array();
 
-    var tabela = $("#" + id + " th[style!='display:none']");
+    
+
+    $("#" + id +" tfoot").html("");
+
+   // for (let index = 0; index < $("#" + id + " th[style!='display:none']").length; index++) {
+   //     tabela.push($("#" + id + " th[style!='display:none']")[index]);
+        
+   // }
+    tabela = $("#" + id + " th[style!='display:none']");
+    
+
+
     if(!$(tabela).hasClass("jsgrid-header-cell") || force){
         if(tabela){
             if(tabela.length > 0){ 
-                $("#" + id +" tfoot").html("");
-                tabela = $("#" + id + " th[style!='display:none']");
+               
+                //tabela = $("#" + id + " th[style!='display:none']");
 
                 for (var i = 0; i < tabela.length; i++) {
                     var fielddata; 
@@ -895,7 +907,13 @@ function gridedit(id, source, force){
                         } 
                     }
                     if(i == 0){
-                        fielddata = {  type: "control" };
+                        var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
+                        if (idPK.length > 0) {
+                            var idtable = $(idPK).attr("data-table");
+                            fielddata = { datatable: idtable, type: "control" };
+                        }else{
+                            fielddata = {  type: "control" };
+                        }
                     }else{
                         
                         var text = $(tabela[i]).html();
