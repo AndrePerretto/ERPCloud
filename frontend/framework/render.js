@@ -1291,14 +1291,32 @@ function fillScreen(data, template, layoutID, fillgrid){
                         var selectid = $(tabela[i]).attr("data-id");
                         var iditem = $(tabela[i]).attr("data-id");
                         aIditem.push(iditem);
-                        
+                        var derivedFrom = $(tabela[i]).attr("data-derivedfrom");
+                        var nativedatatype = $(tabela[i]).attr("data-nativedatatype");
+                        var type = "text";
+                        var text = "";
+
                         if(selectid){
                             if(selectid.indexOf('_') > 0){
                                 selectid = selectid.substr(selectid.indexOf('_'),selectid.length);
                             } 
                         }
                         if(i == 0){
-                            fielddata = {  type: "control" };
+                            var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
+                            if (idPK.length > 0) {
+                                stable = $(idPK).attr("data-table");
+                                sfield = $(idPK).attr("data-field");
+                                controlT = "HIDDEN";
+                                iditem = $(idPK).attr("id")
+                                valor = $(idPK).attr("data-controlid"); 
+                                nativedatatype = $(idPK).attr("data-nativedatatype");
+                                //text = "";
+                                type = "control";
+                                fielddata =  { nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type  }; 
+                        
+                            }else{
+                                fielddata = {  type: "control" };
+                            }
                         }else{
                             var valor = $(tabela[i]).attr("data-controlid");
                             var text = $(tabela[i]).html();
@@ -1385,12 +1403,12 @@ function fillScreen(data, template, layoutID, fillgrid){
                                 }
                                 
 
-                                fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                                fielddata =  {nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
                                 items: items,
                                 valueField: "Id",
                                 textField: "Name", width: 150  };  
                             }else{
-                                fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
+                                fielddata =  { nativedatatype: nativedatatype, derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
                             }                           
                         }
 

@@ -868,6 +868,7 @@ function gridedit(id, source, force){
     var controlType = [];
     var aIditem = [];
     var tabela = new Array();
+    var derivedFrom = [];
 
     
 
@@ -900,6 +901,10 @@ function gridedit(id, source, force){
                     var selectid = $(tabela[i]).attr("data-id");
                     var iditem = $(tabela[i]).attr("data-id");
                     aIditem.push(iditem);
+                    var derivedFrom = $(tabela[i]).attr("data-derivedfrom");
+                    var nativedatatype = $(tabela[i]).attr("data-nativedatatype");
+                    var type = "text";
+                    var text = "";
 
                     if(selectid){
                         if(selectid.indexOf('_') > 0){
@@ -909,15 +914,23 @@ function gridedit(id, source, force){
                     if(i == 0){
                         var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
                         if (idPK.length > 0) {
-                            var idtable = $(idPK).attr("data-table");
-                            fielddata = { datatable: idtable, type: "control" };
+                            stable = $(idPK).attr("data-table");
+                            sfield = $(idPK).attr("data-field");
+                            controlT = "HIDDEN";
+                            iditem = $(idPK).attr("id")
+                            valor = $(idPK).attr("data-controlid"); 
+                            nativedatatype = $(idPK).attr("data-nativedatatype");
+                            //text = "";
+                            type = "control";
+                            fielddata =  { nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type  }; 
+                      
                         }else{
                             fielddata = {  type: "control" };
                         }
                     }else{
                         
-                        var text = $(tabela[i]).html();
-                        var type = "text";
+                        text = $(tabela[i]).html();
+                        type = "text";
 
                         switch (controlT) {
                             case "TEXT":
@@ -998,12 +1011,12 @@ function gridedit(id, source, force){
                                 }
                             }
 
-                            fielddata =  { datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
+                            fielddata =  {nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, iditem: iditem, selectid: selectid, name: valor, title: text, type: type,
                             items: items,
                             valueField: "Id",
                             textField: "Name", width: 150  };  
                         }else{
-                            fielddata =  { datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
+                            fielddata =  { nativedatatype: nativedatatype, derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type, width: 150  }; 
                         }                                                    
                     }
                     
@@ -1032,7 +1045,7 @@ function gridedit(id, source, force){
                         $(element).attr("data-controlid", controlid[index]);
                         $(element).attr("data-field", controlid[index]);
                         $(element).attr("data-controltype", controlType[index]);
-                        $(element).attr("data-iditem", aIditem[index]);                            
+                        $(element).attr("data-iditem", aIditem[index]);                          
                     }
                 }   
                 

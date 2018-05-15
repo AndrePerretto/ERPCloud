@@ -509,6 +509,14 @@
                     customFields += " data-id='" + field.iditem + "' ";
                 }
                 
+                if (field.derivedfrom) {
+                    customFields += " data-derivedfrom='" + field.derivedfrom + "' ";
+                }
+
+                if (field.nativedatatype) {
+                    customFields += " data-nativedatatype='" + field.nativedatatype + "' ";
+                }
+                
 
                 var $th = this._prepareCell("<th " + customFields + ">", field, "headercss", this.headerCellClass)
                     .append(this.renderTemplate(field.headerTemplate, field))
@@ -756,6 +764,14 @@
                     customFields += " data-gridcontrolid='" + field.name + "' ";
                 }
 
+                if (field.nativedatatype) {
+                    customFields += " data-nativedatatype='" + field.nativedatatype + "' ";
+                }
+                
+                if ($("[data-grididitem=" + field.iditem + "]").attr("data-gridvalue")) {
+                    customFields += " data-gridvalue='" + $("[data-grididitem=" + field.iditem + "]").attr("data-gridvalue") + "'";
+                }
+                
                 $result = $("<td " + customFields + " >").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
             }
 
