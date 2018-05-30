@@ -1309,8 +1309,6 @@ function fillScreen(data, template, layoutID, fillgrid){
                         }
                         if(i == 0){
                             var id = container + "_grid";
-
-
                             if(id){
                                 var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
                                 if (idPK.length > 0) {
