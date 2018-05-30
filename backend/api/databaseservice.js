@@ -122,7 +122,7 @@ router.route('/report/:nome').get(function(req, res) {
                             engine: 'jsrender', //'handlebars', 'jsrender',
                             recipe: 'phantom-pdf' //'xlsx' 'phantom-pdf'
                          },
-                         data:  recordset.recordset
+                         data:  recordset
                      }).then(function(out) {
                         out.stream.pipe(res);
                     });
@@ -172,7 +172,7 @@ router.route('/report3/:nome').get(function(req, res) {
             request.query(select, function (err, recordset) {            
                 if (err) console.log(err)    
                 // send records as a response
-                res.send(recordset.recordset)            
+                res.send(recordset)            
             });
         }); 
         });
@@ -1606,6 +1606,26 @@ code = ""
     result.push(obj);
 
     res.send(result);
+});
+
+
+
+router.route('/listreport/:id').get(function(req, res) {
+    var MongoClient = require('mongodb').MongoClient;
+    //var url = "mongodb://localhost:27017/erpcloud";
+    var id = req.param('id');
+    id = id.toUpperCase();
+
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      db.collection("reports").find({"containerID": id}, { _id: false }).toArray(function(err, result) {
+        if (err) throw err;
+        
+        db.close();
+        res.send(result)  
+      });
+    });
+
 });
 
     

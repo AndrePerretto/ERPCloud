@@ -156,6 +156,11 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         $("[value='null']").val("");
         //gridButtons = fillButtonGrid("194536c8-48b0-43de-b464-cb9b5da4683e_" + tabGenID + "_table", tabGenID);
         
+        //Adicionar relatório
+        if($("#" + tabGenID + "_relatorios").length == 0){
+            $("#" + tabGenID + "_toolbar a").last().before("<a onclick= reportScreen('" + layoutID + "') id='" + tabGenID + "_relatorios' title='relatórios' class='btn btn-icon btn-info btn-round'><i class='fa fa-list'></i></a>");
+        }
+        
         for (var i = 0; i < wizard.length; i++) {
             if ($("#" + wizard[i].id).attr("data-guidwizard")) {
                 if ($("#" + wizard[i].id).html().indexOf("<form") < 0) {
@@ -518,7 +523,6 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
     }});
     return tabGenID;
 }
-
 
 
 function sharpGrid(containerID) {
@@ -1063,6 +1067,7 @@ function fillScreen(data, template, layoutID, fillgrid){
     var p=data;
     var rowstring = "";
     var dataGridRows = [[]];
+    var container = "";
 
     if (data.recordsets) {
         if (data.recordsets.length > 0) {
@@ -1235,6 +1240,7 @@ function fillScreen(data, template, layoutID, fillgrid){
                 containerID = containerID.toLowerCase();
                 row["configuracao"] = "<div  style='white-space: nowrap;'><a type='button' title='editar' id='Edit' name='Edit' class='btn btn-primary btn btn-xs btn-warning ' onclick=editGridLine(this,'" + containerID + "','" + idGrid + "','" + layoutID + "')><i class='fa fa-pencil'></i>  </a>  <a type='button' title='excluir' id='Delete' name='Delete' class='btn btn-primary btn btn-xs btn-danger ' onclick=deleteRowGrid(this,'" + containerID + "','" + idGrid + "','" + layoutID + "')><i class='fa fa-trash-o'></i>  </a></div>";
                 idGrid = "";
+                container = containerID;
                 containerID = "";
                 if(arraydataJSON[index].indexOf(JSON.stringify(row)) < 0){
                     arraydatagrid[index].push(row);
@@ -1302,21 +1308,29 @@ function fillScreen(data, template, layoutID, fillgrid){
                             } 
                         }
                         if(i == 0){
-                            var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
-                            if (idPK.length > 0) {
-                                stable = $(idPK).attr("data-table");
-                                sfield = $(idPK).attr("data-field");
-                                controlT = "HIDDEN";
-                                iditem = $(idPK).attr("id")
-                                valor = $(idPK).attr("data-controlid"); 
-                                nativedatatype = $(idPK).attr("data-nativedatatype");
-                                //text = "";
-                                type = "control";
-                                fielddata =  { nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type  }; 
-                        
+                            var id = container + "_grid";
+
+
+                            if(id){
+                                var idPK = $("#" + id.replace("grid","panel") + " [data-field='id'][name*='_PK']");
+                                if (idPK.length > 0) {
+                                    stable = $(idPK).attr("data-table");
+                                    sfield = $(idPK).attr("data-field");
+                                    controlT = "HIDDEN";
+                                    iditem = $(idPK).attr("id")
+                                    valor = $(idPK).attr("data-controlid"); 
+                                    nativedatatype = $(idPK).attr("data-nativedatatype");
+                                    //text = "";
+                                    type = "control";
+                                    fielddata =  { nativedatatype: nativedatatype,  derivedfrom: derivedFrom, datafield: sfield, datatable: stable, controlType: controlT, iditem: iditem, name: valor, title: text, type: type  }; 
+                            
+                                }else{
+                                    fielddata = {  type: "control" };
+                                }
                             }else{
                                 fielddata = {  type: "control" };
                             }
+                           
                         }else{
                             var valor = $(tabela[i]).attr("data-controlid");
                             var text = $(tabela[i]).html();
@@ -2027,3 +2041,43 @@ function OpenAbaDSG(nameLayout, layoutID, titleMenu, enterpriseID) {
 }
 
  
+function reportScreen(id){
+    var parameters = id
+    $.ajax({
+        url: getGlobalParameters("urlPlataform") + "/api/listreport/" + parameters,
+        type: "GET",
+        async: true,
+        success: function (data) {
+            var html = "";
+            for (let index = 0; index < data.length; index++) {
+                const element = data[index];
+                html += "<h5 onclick= openReport('" + element.nome + "') >" + element.titulo + "</h5>";
+            }
+
+            $("#alertaModal").html("<div  id='alertaModal_panel' class='panel' style='margin-bottom: 0px!important;' ><div class='panel-body'></div></div>");
+            $("#mensagem").html("<h1>Relatórios</h1></br>");
+            $('#alertaModalShow').modal();
+            //função efetua o close do Modal para que os dados de um modal não carregue em outro.
+            $('#alertaModalShow').on('hidden.bs.modal', function (e) { $("#alertaModal_panel").remove(); })
+            
+            $("#mensagem").append(html);
+        }            
+   });
+    
+
+    //formID = "alertaModal";
+
+    //var tab = "<li layoutid='" + layoutID + "_" + tabGenID + "' class='active'><a href='#" + tabGenID + "' data-toggle='tab' title='" + EnterpriseName + "'>" + titleMenu + "&nbsp&nbsp<img src='images/loader.gif' height='15px' /></a></li>";
+    //$("#" + formID).append(tab);
+    //$("#" + formID).append("<div class='tab-pane fade in  controls-recipient active' id='" + tabGenID + "'>");
+
+
+
+
+    //window.open("http://localhost:3002/api/report/vendas",'_blank');
+
+}
+
+function openReport(name){
+    window.open(getGlobalParameters("urlPlataform") + "/api/report/" + name,'_blank');
+}
