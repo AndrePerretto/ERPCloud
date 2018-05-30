@@ -1035,7 +1035,7 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID, fillgri
                     }
                 }
 
-
+                CalculaTotaisVenda();
                 //        var onload = $("[tabgenid='" + formID + "']");
                 //        if (onload) {
                 //            if (onload.length > 0) {

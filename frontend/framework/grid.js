@@ -712,7 +712,7 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
     $vl_qt_itens.val(($('[data-field="vl_qt_itens"]').length));
     mudaTotalGrid(containerID);
     //reinicalizaContadores(containerID);
-
+    
     $(".dropdown-toggle").dropdown();
 }
 
