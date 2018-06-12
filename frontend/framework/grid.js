@@ -1098,7 +1098,7 @@ function AfterSelectItemGrid(element) {
 
                 //$("#" + a_id[0] + "_CoItensVenda_txtquantidade").val("1");
             }
-
+            
             CalculaTotaisVenda();
         }        
     }
