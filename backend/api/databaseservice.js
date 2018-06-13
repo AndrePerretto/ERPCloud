@@ -83,8 +83,7 @@ var jsreport = require('jsreport-core')()
 
 router.route('/report/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    
-        
+           
     var nome = req.param('nome');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
     var html = "";
