@@ -81,12 +81,16 @@ var http = require('http');
 //var jsreport = require('jsreport');
 var jsreport = require('jsreport-core')()
 
-router.route('/report/:nome').get(function(req, res) {
+router.route('/report/:nome/:parametros').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-           
+
+    var parametros = req.param('parametros');
     var nome = req.param('nome');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
     var html = "";
+    var engine = "";
+    var recipe = "";
+
     //nome = nome.toUpperCase();
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
@@ -96,7 +100,19 @@ router.route('/report/:nome').get(function(req, res) {
         if (result) {
             if (result.length > 0) {
                 select = result[0].select;  
-                html = result[0].html;         
+                html = result[0].html;  
+                engine = result[0].engine;
+                recipe = result[0].recipe;
+
+                var arrayParam = parametros.split(",")
+                if(select.indexOf("{{0}}") > -1){
+                    for (let i = 0; i < arrayParam.length; i++) {
+                        select = select.replace("{{" + i + "}}", arrayParam[i])
+                    }
+                    
+                    console.log(select);
+                }
+
             }
         }
         
@@ -114,14 +130,15 @@ router.route('/report/:nome').get(function(req, res) {
             request.query(select, function (err, recordset) {            
                 if (err) console.log(err)
                 
-                jsreport.init().then(function () {     
+                jsreport.init().then(function () {   
+                    console.log(recordset.recordsets);  
                     return jsreport.render({
                         template: {
                             content: html,
-                            engine: 'jsrender', //'handlebars', 'jsrender',
-                            recipe: 'phantom-pdf' //'xlsx' 'phantom-pdf'
+                            engine: engine, //'handlebars', 'jsrender',
+                            recipe: recipe //'xlsx' 'phantom-pdf'
                          },
-                         data:  recordset
+                         data:  recordset.recordsets[0]
                      }).then(function(out) {
                         out.stream.pipe(res);
                     });
