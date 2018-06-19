@@ -1035,7 +1035,11 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID, fillgri
                     }
                 }
 
-                CalculaTotaisVenda();
+                if(LayoutID.toLowerCase == "ee5b8618-b239-49ca-86a9-6975134c8713"){
+                    CalculaTotaisVenda();
+                }
+                
+
                 //        var onload = $("[tabgenid='" + formID + "']");
                 //        if (onload) {
                 //            if (onload.length > 0) {

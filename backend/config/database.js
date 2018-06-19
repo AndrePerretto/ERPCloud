@@ -1,2 +1,3 @@
 const mongoose = require('mongoose')
-module.exports = mongoose.connect('mongodb://localhost/erpcloud')
+const base = "erpcloud" //erpcloudfoodtown
+module.exports = mongoose.connect('mongodb://localhost/' + base)

@@ -24,7 +24,8 @@ var configEnvironment = {};
 
 var EnterpriseID = "";
 var UserID = "";
-var url = "mongodb://localhost:27017/erpcloud";
+var base = "erpcloud"; //erpcloudfoodtown
+var url = "mongodb://localhost:27017/" + base;
 
 router.route('/*').get(function(req, res, next) {
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
@@ -38,7 +39,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "intelecta";
+        dados = "intelecta"; //"foodtown";
         configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
