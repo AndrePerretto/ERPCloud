@@ -531,7 +531,7 @@ function AjaxQuery(parameters) {
         text: "",
         type: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#e4eaeb",
+        confirmButtonColor: "#07960e",
         confirmButtonText: "Sim",
         cancelButtonText: "Não",
         closeOnConfirm: true,

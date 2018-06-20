@@ -418,6 +418,9 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             var wizard = $("#" +tabGenID + ">.panel").wizard(options).data('wizard');
             
 
+            $(".step-desc").css("cursor","pointer")
+
+            $("input").attr('autocomplete', 'off');
         }
 
 
@@ -927,6 +930,12 @@ function openLayout(button, tabGenID) {
                                             } 
                                         }                                        
                                     }else{
+                                        
+                                        if(element[key] === true && element[key] !== 1){
+                                            element[key] = "SIM";
+                                        }else if(element[key] === false && element[key] !== null && element[key] !== "" && element[key] !== 0){
+                                            element[key] = "NÃO";
+                                        }
                                         row[keyfield] = element[key];
                                     }
                                 }
@@ -1168,6 +1177,15 @@ function fillScreen(data, template, layoutID, fillgrid){
                     }else{
                         rowstring += " , \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
                     }
+
+                    
+                    
+                    if(p[i][key] === true && p[i][key] !== 1){
+                        p[i][key] = "SIM";
+                    }else if(p[i][key] === false && p[i][key] !== null && p[i][key] !== "" && p[i][key] !== 0){
+                        p[i][key] = "NÃO";
+                    }
+
                     row[idfield] = p[i][key]; 
                     
                     
