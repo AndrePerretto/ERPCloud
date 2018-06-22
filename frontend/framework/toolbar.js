@@ -39,7 +39,9 @@ function onDelete(formID, id, metadataContainerID, layoutID, instanceTela) {
                             ClearForm(formID, true);
 
                             //editGridLine("", metadataContainerID, id)
-
+                            if(layoutID.toLowerCase == "ee5b8618-b239-49ca-86a9-6975134c8713"){
+                                CalculaTotaisVenda();
+                            }
                         }else{
                             notification({
                                 messageText: result.message, messageTitle: "Ops", fix: false, type: "warning", icon: "thumbs-down"

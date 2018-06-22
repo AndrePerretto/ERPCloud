@@ -1093,6 +1093,14 @@ function AfterSelectItemGrid(element) {
                 }               
             }
 
+            if(result.property[3].value.length > 0){
+                if (a_id.length > 0) {
+                    a_id[0] = a_id[0].replace("_", "");
+                    $("[data-idgrid='" + a_id[0] + "_CoItensVenda_txtitensid']").attr("data-tipoproduto", result.property[3].value[0]);
+                }               
+            }
+
+
             if (a_id.length > 0) {
                 a_id[0] = a_id[0].replace("_", "");
 

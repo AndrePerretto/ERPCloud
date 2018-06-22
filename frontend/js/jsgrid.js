@@ -745,6 +745,13 @@
                                 if (field.data) {
                                     if (field.data.length > 0) {
                                         valueAutocomplete = field.data[indice].id;
+                                        
+                                        if(!field.data[indice].typeproduct){
+                                            field.data[indice].typeproduct = $("[id=" + field.iditem + "]").attr("data-tipoproduto");
+                                        }
+                                        
+                                        customFields += " data-tipoproduto='" + field.data[indice].typeproduct + "' ";
+                                        
                                     }
                                 }                                
                             }
@@ -771,6 +778,8 @@
                 if ($("[data-grididitem=" + field.iditem + "]").attr("data-gridvalue")) {
                     customFields += " data-gridvalue='" + $("[data-grididitem=" + field.iditem + "]").attr("data-gridvalue") + "'";
                 }
+                
+                
                 
                 $result = $("<td " + customFields + " >").append(this.renderTemplate(field.itemTemplate || fieldValue, field, args));
             }
@@ -1554,7 +1563,17 @@
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    return thi._deleteRow($row);
+                    var deleteRow = thi._deleteRow($row);
+                    var idcont = $(thi._body).parent('table').attr('id');
+                    if(idcont){
+                        if(idcont.indexOf("857a1f6d-887b-4a08-b5b3-646ea4457c04") > -1){
+                            CalculaTotaisVenda();
+                        }
+                    }
+                    
+
+
+                    return deleteRow;
                    
                 } else {
                     return;
