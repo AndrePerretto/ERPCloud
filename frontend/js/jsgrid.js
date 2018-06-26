@@ -744,14 +744,18 @@
                                 indice =  $("#" + idtable).data("JSGrid").data.map(function(e) { return e; }).indexOf(item);
                                 if (field.data) {
                                     if (field.data.length > 0) {
-                                        valueAutocomplete = field.data[indice].id;
                                         
-                                        if(!field.data[indice].typeproduct){
-                                            field.data[indice].typeproduct = $("[id=" + field.iditem + "]").attr("data-tipoproduto");
-                                        }
-                                        
-                                        customFields += " data-tipoproduto='" + field.data[indice].typeproduct + "' ";
-                                        
+                                        if(field.data.length > indice){
+                                            if(field.data[indice].id){
+                                                valueAutocomplete = field.data[indice].id;
+                                                
+                                                if(!field.data[indice].typeproduct){
+                                                    field.data[indice].typeproduct = $("[id=" + field.iditem + "]").attr("data-tipoproduto");
+                                                }
+                                                
+                                                customFields += " data-tipoproduto='" + field.data[indice].typeproduct + "' ";
+                                            }
+                                        }   
                                     }
                                 }                                
                             }
