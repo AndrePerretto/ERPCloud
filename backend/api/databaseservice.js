@@ -82,7 +82,73 @@ var http = require('http');
 //var jsreport = require('jsreport');
 var jsreport = require('jsreport-core')()
 
-router.route('/report/:nome/:parametros').get(function(req, res) {
+router.route('/report/:nome').get(function(req, res) {
+    var MongoClient = require('mongodb').MongoClient;
+
+    var nome = req.param('nome');
+    var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
+    var html = "";
+    var engine = "";
+    var recipe = "";
+
+    //nome = nome.toUpperCase();
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      
+      db.collection("reports").find({"nome": nome}, { _id: false }).toArray(function(err, result) {
+        if (err) throw err;
+        if (result) {
+            if (result.length > 0) {
+                select = result[0].select;  
+                html = result[0].html;  
+                engine = result[0].engine;
+                recipe = result[0].recipe;
+
+
+            }
+        }
+        
+        db.close();
+        sql.close()
+
+        // connect to your database
+        sql.connect(config, function (err) {    
+            if (err) console.log(err);
+    
+            // create Request object
+            var request = new sql.Request();       
+    
+            // query to the database and get the records
+            request.query(select, function (err, recordset) {            
+                if (err) console.log(err)
+                
+                jsreport.init().then(function () {   
+                    console.log(recordset.recordsets);  
+                    return jsreport.render({
+                        template: {
+                            content: html,
+                            engine: engine, //'handlebars', 'jsrender',
+                            recipe: recipe //'xlsx' 'phantom-pdf'
+                         },
+                         data:  recordset.recordsets[0]
+                     }).then(function(out) {
+                        out.stream.pipe(res);
+                    });
+                 }).catch(function(e) {
+                   console.log(e)
+                 })
+    
+                // send records as a response
+                //res.send(recordset.recordset)            
+            });
+        }); 
+      });
+    });    
+})
+
+
+
+router.route('/reportparam/:nome/:parametros').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
 
     var parametros = req.param('parametros');
@@ -154,6 +220,9 @@ router.route('/report/:nome/:parametros').get(function(req, res) {
       });
     });    
 })
+
+
+
 
 router.route('/report3/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
