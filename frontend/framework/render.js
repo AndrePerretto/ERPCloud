@@ -877,7 +877,9 @@ function openLayout(button, tabGenID) {
 
 
     function clickSearch(tabGenID, layoutName, layoutID, load, listartodos){
-        $.ajax({url: returnCookie("urlPlataform") + "/api/listall/" + layoutID, success: function(result){	
+        var UserID = returnCookie("UserID");
+
+        $.ajax({url: returnCookie("urlPlataform") + "/api/listall/" + layoutID + "/" + UserID, success: function(result){	
             var id = "table_" + tabGenID + "_table";
             var linehtml = "";
             if (result.recordsets) {
@@ -978,6 +980,16 @@ function openLayout(button, tabGenID) {
 
                     }
                 }
+            }else{
+                data = [];
+                $(".pull-right.search").html("");
+                $("#" + id + " table").bootstrapTable('destroy').bootstrapTable({
+                    data: data
+                });
+                loaderImage(tabGenID + "_sharpGrid",false)
+                notification({
+                    messageText: result.message, messageTitle: "Ops", fix: false, type: "warning", icon: "thumbs-down"
+                });
             }
         }});
     }

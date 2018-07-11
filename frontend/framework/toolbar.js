@@ -22,11 +22,11 @@ function onDelete(formID, id, metadataContainerID, layoutID, instanceTela) {
     if (objectJSON) {
         if (objectJSON.length > 0) {
             var id = objectJSON[0].id;
-
+            var UserID = returnCookie("UserID");
             $.ajax({
                 contentType: "application/json",
                 accepts: "application/json",
-                url: url + "/" + metadataContainerID + "/" + id + "/", 
+                url: url + "/" + layoutID  + "/"  + metadataContainerID + "/" + UserID + "/" +  id + "/", 
                 type: "GET",
                 success: function(result){                    
                     if (result.status) {
@@ -395,6 +395,7 @@ function SerializeFields(param){
                     }
         
                     Arraytable.push(arrayObjs[i].table)
+                    json += '"layoutID": "' + layoutID + '", '
                     json += '"EnterpriseID": "' + returnCookie("EnterpriseID") + '", '
                     json += '"UserID": "' + returnCookie("UserID") + '", '
                     json += '        "TABLE": "' + arrayObjs[i].table + '"'

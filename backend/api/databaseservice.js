@@ -265,45 +265,56 @@ router.route('/report3/:nome').get(function(req, res) {
     });
 })
 
-router.route('/listall/:id').get(function(req, res) {
-    var MongoClient = require('mongodb').MongoClient;
+router.route('/listall/:id/:userID').get(function(req, res) {
     //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
-    var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
-    id = id.toUpperCase();
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-      db.collection("layouts").find({"layoutID": id}, { _id: false }).toArray(function(err, result) {
-        if (err) throw err;
-        if (result) {
-            if (result.length > 0) {
-                select = result[0].listall;
-            }
-        }
+    var userID = req.param('userID');
+    var objret = {};
+    userPermission("consultar", id, userID, function(permission){
         
-        db.close();
+        if(permission == false){            
+            objret.status = "error";
+            objret.message = "Sem permissão para consultar";
+            res.send(objret);
+        }else{
+            var MongoClient = require('mongodb').MongoClient;
+            var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
+            id = id.toUpperCase();
+            MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            db.collection("layouts").find({"layoutID": id}, { _id: false }).toArray(function(err, result) {
+                if (err) throw err;
+                if (result) {
+                    if (result.length > 0) {
+                        select = result[0].listall;
+                    }
+                }
+                
+                db.close();
 
-        sql.close()
-        // connect to your database
-        sql.connect(config, function (err) {    
-            if (err) console.log(err);
+                sql.close()
+                // connect to your database
+                sql.connect(config, function (err) {    
+                    if (err) console.log(err);
 
-            // create Request object
-            var request = new sql.Request();       
+                    // create Request object
+                    var request = new sql.Request();       
 
-            // query to the database and get the records
-            request.query(select, function (err, recordset) {            
-                if (err) console.log(err)
+                    // query to the database and get the records
+                    request.query(select, function (err, recordset) {            
+                        if (err) console.log(err)
 
-                console.log(config)
-                // send records as a response
-                res.send(recordset)            
+                        console.log(config)
+                        // send records as a response
+                        res.send(recordset)            
+                    });
+                });    
+
             });
-        });    
-
-      });
-    });
-
+            });
+            
+        }
+    })    
     
 
 });
@@ -609,9 +620,10 @@ router.route('/save').post(function(req, res) {
     var countfor = 0;
     var arrayretorno = [];
     var retorno = "["
-
+    
     var ind = -1;
-
+    var layoutID = "";
+      
     incremento(submit, function(resultado, submit){
         sql.close()
         sql.connect(config).then(function() {
@@ -640,109 +652,132 @@ router.route('/save').post(function(req, res) {
                     if (submit.length > 0) {
                         EnterpriseID = submit[ind]["EnterpriseID"];
                         UserID = submit[ind]["UserID"];
-            
+                        layoutID = submit[ind]["layoutID"];
+
                         delete submit[ind]['EnterpriseID'];
                         delete submit[ind]['UserID'];
+                        delete submit[ind]["layoutID"];
                     }
                 }
 
                 if (booleanBefore) {      
                     
                     if (submit[ind]["id"] == "" || !submit[ind]["id"]) {
-                        
-                        var numberincrement;
-                        var updateincrement = ""
+                        userPermission("incluir", layoutID, UserID, function(permission){
         
-                        if(resultado){
-                            if (resultado.length > 0) {
-                                if (resultado[ind] != null) {
-                                    if(resultado[ind].nr_incremento){ 
-                                        if (resultado[ind].nm_campo) {
-                                            submit[ind][resultado[ind].nm_campo + "_INCREMENT"] = parseInt(resultado[ind].nr_incremento) + 1
-                                            numberincrement = parseInt(resultado[ind].nr_incremento) + 1 
-                                            updateincrement = "UPDATE incremento SET nr_incremento=" + numberincrement + " WHERE nm_tabela='" + submit[ind]["TABLE"] + "' AND nm_campo='" + resultado[ind].nm_campo + "'"
+                            if(permission == false){
+                                objret = {};
+                                objret.status = "error";
+                                objret.message = "Sem permissão para incluir";
+                                res.send(objret);
+                            }else{
+                                
+                                var numberincrement;
+                                var updateincrement = ""
+                
+                                if(resultado){
+                                    if (resultado.length > 0) {
+                                        if (resultado[ind] != null) {
+                                            if(resultado[ind].nr_incremento){ 
+                                                if (resultado[ind].nm_campo) {
+                                                    submit[ind][resultado[ind].nm_campo + "_INCREMENT"] = parseInt(resultado[ind].nr_incremento) + 1
+                                                    numberincrement = parseInt(resultado[ind].nr_incremento) + 1 
+                                                    updateincrement = "UPDATE incremento SET nr_incremento=" + numberincrement + " WHERE nm_tabela='" + submit[ind]["TABLE"] + "' AND nm_campo='" + resultado[ind].nm_campo + "'"
+                                                }
+                                            }
+                                        }                        
+                                    }                    
+                                }
+                                
+                                insertOrUpdate = createInsert(submit, ind, guid)
+                                insertOrUpdate += updateincrement;                
+                                    request = new sql.Request();
+                                    request.query(insertOrUpdate).then(function(recordset) {
+                                        if (countfor > 0) {
+                                            retorno += ",";
                                         }
-                                    }
-                                }                        
-                            }                    
-                        }
-                        
-                        insertOrUpdate = createInsert(submit, ind, guid)
-                        insertOrUpdate += updateincrement;                
-                            request = new sql.Request();
-                            request.query(insertOrUpdate).then(function(recordset) {
-                                if (countfor > 0) {
-                                    retorno += ",";
-                                }
-        
-                                if (resultado[countfor]) {
-                                    retorno += '{ "status": "success", "id": "' + guid + '", "increment": "' + numberincrement + '", "incrementfield": "' + submit[countfor]["TABLE"] + "." + resultado[countfor].nm_campo.replace("_INCREMENT","") + '"}'
-                                }else{
-                                    retorno += '{ "status": "success", "id": "' + guid + '" }'
-                                }
+                
+                                        if (resultado[countfor]) {
+                                            retorno += '{ "status": "success", "id": "' + guid + '", "increment": "' + numberincrement + '", "incrementfield": "' + submit[countfor]["TABLE"] + "." + resultado[countfor].nm_campo.replace("_INCREMENT","") + '"}'
+                                        }else{
+                                            retorno += '{ "status": "success", "id": "' + guid + '" }'
+                                        }
+                                        
+                                        submit[countfor]["EnterpriseID"] = EnterpriseID;
+                                        submit[countfor]["UserID"] = UserID;
+                                        submit[countfor]["id"] = guid;
+                                        afterSave(submit[countfor])
+                
+                                        countfor +=1;
+                                        if (submit.length == (countfor)) {
+                                            retorno += "]"
+                                            var obj = JSON.parse(retorno)
+                                            res.send(obj)
+                                        }
+                                        
+                                    }).catch(function(err) {
+                                        console.log('Request error: ' + err);
+                                        if (countfor > 0) {
+                                            retorno += ",";
+                                        }
+                                        retorno += '{ "status": "error", "message": "' + err + '" }'
+                                        
+                                        countfor +=1;
+                                        if (submit.length == countfor) {
+                                            retorno += "]"
+                                            var obj = JSON.parse(retorno)
+                                            res.send(obj)
+                                        }
+                                    });
                                 
-                                submit[countfor]["EnterpriseID"] = EnterpriseID;
-                                submit[countfor]["UserID"] = UserID;
-                                submit[countfor]["id"] = guid;
-                                afterSave(submit[countfor])
-        
-                                countfor +=1;
-                                if (submit.length == (countfor)) {
-                                    retorno += "]"
-                                    var obj = JSON.parse(retorno)
-                                    res.send(obj)
                                 }
-                                
-                            }).catch(function(err) {
-                                console.log('Request error: ' + err);
-                                if (countfor > 0) {
-                                    retorno += ",";
-                                }
-                                retorno += '{ "status": "error", "message": "' + err + '" }'
-                                
-                                countfor +=1;
-                                if (submit.length == countfor) {
-                                    retorno += "]"
-                                    var obj = JSON.parse(retorno)
-                                    res.send(obj)
-                                }
-                            });
-                        
+                        })
                         
                     }else{
-                        guid = submit[ind]["id"];
-                        insertOrUpdate = createUpdate(submit, ind)             
-                        
-                        
-                        request = new sql.Request();
-                        request.query(insertOrUpdate).then(function(recordset) {
-                            if (countfor > 0) {
-                                retorno += ",";
-                            }
-                            retorno += '{ "status": "success", "id": "' + guid + '" }'  
-                            
+                        userPermission("alterar", layoutID, UserID, function(permission){
+        
+                            if(permission == false){
+                                objret = {};
+                                objret.status = "error";
+                                objret.message = "Sem permissão para incluir";
+                                res.send(objret);
+                            }else{
+                                guid = submit[ind]["id"];
+                                insertOrUpdate = createUpdate(submit, ind)             
+                                
+                                
+                                request = new sql.Request();
+                                request.query(insertOrUpdate).then(function(recordset) {
+                                    if (countfor > 0) {
+                                        retorno += ",";
+                                    }
+                                    retorno += '{ "status": "success", "id": "' + guid + '" }'  
+                                    
 
-                            submit[countfor]["EnterpriseID"] = EnterpriseID;
-                            submit[countfor]["UserID"] = UserID;
-                            
-                            afterSave(submit[countfor])
-                            countfor +=1;
-                            if (submit.length == countfor) {
-                                retorno += "]"
-                                var obj = JSON.parse(retorno)
-                                res.send(obj)
-                            }
-                        }).catch(function(err) {
-                            console.log('Request error: ' + err);
-                            if (countfor > 0) {
-                                retorno += ",";
-                            }
-                            retorno += '{ "status": "error", "message": "' + err + '" }'
-                            countfor +=1;
-                            if (submit.length == countfor) { 
-                                retorno += "]"
-                                var obj = JSON.parse(retorno)
-                                res.send(obj)
+                                    submit[countfor]["EnterpriseID"] = EnterpriseID;
+                                    submit[countfor]["UserID"] = UserID;
+                                    
+                                    afterSave(submit[countfor])
+                                    countfor +=1;
+                                    if (submit.length == countfor) {
+                                        retorno += "]"
+                                        var obj = JSON.parse(retorno)
+                                        res.send(obj)
+                                    }
+                                }).catch(function(err) {
+                                    console.log('Request error: ' + err);
+                                    if (countfor > 0) {
+                                        retorno += ",";
+                                    }
+                                    retorno += '{ "status": "error", "message": "' + err + '" }'
+                                    countfor +=1;
+                                    if (submit.length == countfor) { 
+                                        retorno += "]"
+                                        var obj = JSON.parse(retorno)
+                                        res.send(obj)
+                                    }
+                                })
+                                
                             }
                         })
                     }
@@ -774,8 +809,8 @@ router.route('/save').post(function(req, res) {
                 res.send(obj)
             }
         }
-    }); 
-})
+    });     
+    })
 })
 
 function beforeSave(submit, callback){
@@ -1099,62 +1134,74 @@ router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
      //}
 });
 
-router.route('/DeleteData/:containerID/:id').get(function(req, res) {
+router.route('/DeleteData/:layoutID/:containerID/:userID/:id').get(function(req, res) {
     var id = req.param('id');
     var containerID = req.param('containerID');
+    var layoutID = req.param('layoutID');
+    var userID = req.param('userID');
 
     containerID = containerID.toUpperCase();
-    var MongoClient = require('mongodb').MongoClient;
-    //var url = "mongodb://localhost:27017/erpcloud";
 
-    var deletedata = "";
-    
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-      db.collection("containers").find({"containerID": containerID}, { _id: false }).toArray(function(err, result) {
-        if (err) throw err;
-        if (result) {            
-            if (result.length > 0) {
-                deletedata = result[0].deletedata;              
-
-        if (deletedata) {            
-            deletedata = deletedata.split("{{id}}").join(id)
-        } 
+    userPermission("excluir", layoutID, userID, function(permission){
         
-        
-        if (deletedata == "") {
-            var ret = '{ "status": "err", "message": "Script para deletar não foi inserido no banco"}'
-            var obje = JSON.parse(ret)
-            res.send(obje)
+        if(permission == false){
+            objret = {};
+            objret.status = "error";
+            objret.message = "Sem permissão para excluir";
+            res.send(objret);
         }
 
-        sql.close()
+        var MongoClient = require('mongodb').MongoClient;
+        //var url = "mongodb://localhost:27017/erpcloud";
+
+        var deletedata = "";
         
-        sql.connect(config).then(function() {
-                request = new sql.Request();
-                request.query(deletedata).then(function(recordset) {
-                    var retorno = '{ "status": "success", "id": "' + id + '" }'
-                    var obj = JSON.parse(retorno)
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            db.collection("containers").find({"containerID": containerID}, { _id: false }).toArray(function(err, result) {
+            if (err) throw err;
+            if (result) {            
+                if (result.length > 0) {
+                    deletedata = result[0].deletedata;              
+
+                    if (deletedata) {            
+                        deletedata = deletedata.split("{{id}}").join(id)
+                    } 
+            
+            
+                    if (deletedata == "") {
+                        var ret = '{ "status": "err", "message": "Script para deletar não foi inserido no banco"}'
+                        var obje = JSON.parse(ret)
+                        res.send(obje)
+                    }
+
+                sql.close()
+                
+                sql.connect(config).then(function() {
+                        request = new sql.Request();
+                        request.query(deletedata).then(function(recordset) {
+                            var retorno = '{ "status": "success", "id": "' + id + '" }'
+                            var obj = JSON.parse(retorno)
+                            res.send(obj)
+                        }).catch(function(err) {                    
+                            //var retorno = "{ 'status': 'error', 'message': '" + err + "'}"
+                            res.send(err)
+                        });
+                }).catch(function(err) {
+                    if (err) {
+                    console.log('SQL Connection Error: ' + err);
+                    var obj = JSON.parse(err)
                     res.send(obj)
-                }).catch(function(err) {                    
-                    //var retorno = "{ 'status': 'error', 'message': '" + err + "'}"
-                    res.send(err)
+                    }
                 });
-        }).catch(function(err) {
-            if (err) {
-            console.log('SQL Connection Error: ' + err);
-            var obj = JSON.parse(err)
-            res.send(obj)
+            
             }
+        }
+
+        db.close();
+        }); 
         });
-        
-    }
-    }
-
-    db.close();
-    });
-    });
-
+    })
 });
 
 
@@ -1715,7 +1762,54 @@ router.route('/listreport/:id').get(function(req, res) {
 
 });
 
+function userPermission(type, layoutID, userID, callback){
+    var sqlstring = "SELECT sn_incluir as 'incluir', sn_alterar as 'alterar', sn_consultar as 'consultar', sn_excluir as 'excluir' ";
+    sqlstring += " FROM usuarios_permissoes WHERE id_usuario = '" + userID + "' AND baseObjectID='" + layoutID + "'";
+    
+    var retorno = false;
+    sql.close()
 
+    sql.connect(config, function (err) {    
+        if (err) console.log(err);
+
+        var request = new sql.Request();    
+        
+        request.query(sqlstring, function (err, recordset) {            
+            if (err) console.log(err)    
+            if (recordset) {
+                if (recordset.recordset.length > 0) {                    
+                    switch(type) {
+                        case "incluir":
+                            if(recordset.recordset[0].incluir == true){
+                                retorno = true;
+                            }
+                            break;
+                        case "alterar":
+                            if(recordset.recordset[0].alterar == true){
+                                retorno = true;
+                            }
+                            break;
+                        case "consultar":
+                            if(recordset.recordset[0].consultar == true){
+                                retorno = true;
+                            }
+                            break;
+                        case "excluir":
+                            if(recordset.recordset[0].excluir == true){
+                                retorno = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }    
+            
+            callback(retorno);            
+        });
+    }); 
+
+}
 
 router.route('/menucustom/:idusuario').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
