@@ -8,6 +8,7 @@ const general = require('./general')
 const ObjectID = require('mongodb').ObjectID
 const router = express.Router()
 server.use('/api', router)
+
 // config for your database
 var config = {};
 //var config = {user: 'sa', password: 'IntSql2015@', server: '52.89.63.119',  database: 'eCloud-homologa'};
@@ -29,7 +30,6 @@ var url = "mongodb://localhost:27017/" + base;
 
 router.route('/*').get(function(req, res, next) {
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
-    
     var parts = full.split('.');
     var dados = "";
     if (parts.length > 3) {
@@ -295,6 +295,7 @@ router.route('/listall/:id').get(function(req, res) {
             request.query(select, function (err, recordset) {            
                 if (err) console.log(err)
 
+                console.log(config)
                 // send records as a response
                 res.send(recordset)            
             });
@@ -1714,6 +1715,73 @@ router.route('/listreport/:id').get(function(req, res) {
 
 });
 
+
+
+router.route('/menucustom/:idusuario').get(function(req, res) {
+    var MongoClient = require('mongodb').MongoClient;
+    var idusuario = req.param('idusuario');
+    idusuario = idusuario.toUpperCase();
+
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      db.collection("menus").find({id: 4}, { _id: false }).toArray(function(err, result) {
+        if (err) throw err;
+
+        const cheerio = require('cheerio')
+        const $ = cheerio.load(result[0].html)
+
+        var sqlstring = "SELECT baseObjectID , sn_alterar, sn_consultar, sn_excluir, sn_incluir FROM usuarios_permissoes WHERE id_usuario = '" + idusuario + "' AND (sn_alterar=1 OR sn_consultar=1 OR sn_excluir=1 OR sn_incluir=1) "
+       
+        sql.close()
+
+        // connect to your database
+        sql.connect(config, function (err) {    
+            if (err) console.log(err);
+
+            // create Request object
+            var request = new sql.Request();       
+            var menu = $("li[id]")
+            
+            // query to the database and get the records
+            request.query(sqlstring, function (err, recordset) {            
+                if (err) console.log(err)    
+                if (recordset) {
+                    if (recordset.recordset.length > 0) {
+                        
+                        for (let j = 0; j < menu.length; j++) {
+                            var itemmenu = 0;
+                            var itemHTML = $(menu[j]).attr("id").toLowerCase()
+                            for (let i = 0; i < recordset.recordset.length; i++) {
+                                var itemBD = recordset.recordset[i].baseObjectID.toLowerCase();
+
+                                if(itemBD==itemHTML){
+                                    itemmenu = i;
+                                    break;
+                                }
+                            } 
+
+                            if(itemmenu == 0){
+                                $("#" + itemHTML).remove()                                
+                            }
+                        }                
+                    }
+                }
+        
+                result[0].html = $.html();
+
+                db.close();
+                res.send(result)             
+            });
+        }); 
+
+
+
+
+         
+      });
+    });
+
+});
     
 module.exports = database
 

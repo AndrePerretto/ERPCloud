@@ -680,7 +680,7 @@
 				var url = "http://" + window.location.hostname + ":3002";
                 createCookie("urlPlataform", url, 99);
 
-                $.ajax({url: returnCookie("urlPlataform") + "/api/menu", success: function(result){	
+                $.ajax({url: returnCookie("urlPlataform") + "/api/menucustom/" + returnCookie("UserID"), success: function(result){	
 					
 						$("#menu1").replaceWith(result[0].html);						
                         call_navigation();
