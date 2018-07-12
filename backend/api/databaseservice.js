@@ -29,6 +29,7 @@ var base = "erpcloud"; //erpcloudfoodtown
 var url = "mongodb://localhost:27017/" + base;
 
 router.route('/*').get(function(req, res, next) {
+
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
     var parts = full.split('.');
     var dados = "";
@@ -77,6 +78,57 @@ router.route('/*').get(function(req, res, next) {
         });
     });    
 });
+
+
+
+function conectionsLink(full, callback){
+    if(String(full).indexOf("localhost") > -1){
+        serverWindows = "http://localhost:2444";
+        dados = "intelecta"; //"foodtown";
+        configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+    }else{
+        var parts = String(full).split('.');
+        var dados = "";
+        if (parts.length > 3) {
+            dados = parts[0];
+        }
+        dados = dados.replace("http://","");
+        serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
+        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
+    }
+
+    var database = ""; //"eCloud-homologa";
+    var server = ""; //"127.0.0.1";
+    var password = ""; //"1234567890";
+    var user = ""; //"sa";
+
+    var select = "SELECT nm_DatabaseName_Aplication AS 'database',  ";
+    select += " nm_ServerIP_Aplication AS 'server', ";
+    select += " password_Aplication AS 'password', ";
+    select += " nm_User_Aplication AS 'user' ";
+    select += " FROM Enterprise WHERE domainName='" + dados + "' ";
+    
+    sql.close();
+    sql.connect(configEnvironment, function (err) {    
+        if (err) console.log(err);
+        var request = new sql.Request();
+        request.query(select, function (err, recordset) {            
+            if (err) console.log(err)
+            if(recordset.recordsets[0].length > 0){
+                const element = recordset.recordsets[0][0];
+                database = element.database;
+                server = element.server;
+                password = element.password;
+                user = element.user;
+                
+                config = {user: user, password: password, server: server,  database: database};
+                
+                callback(true);
+            }
+        });
+    }); 
+    
+}
 
 var http = require('http');
 //var jsreport = require('jsreport');
@@ -606,7 +658,12 @@ router.route('/save').post(function(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
     res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+    var full = req.host; 
+    conectionsLink(full,function(conectado){
 
+    if(conectado){
+
+        
     var update = "";
     var retorno = "0"
     var setrecord;
@@ -623,11 +680,32 @@ router.route('/save').post(function(req, res) {
     
     var ind = -1;
     var layoutID = "";
-      
+    var tipo = "";
+    UserID = submit[0]["UserID"];
+    layoutID = submit[0]["layoutID"];
+
+    if (submit[0]["id"] == "" || !submit[0]["id"]) {
+        tipo = "incluir"
+    }else{
+        tipo = "alterar"
+    }
+
+    userPermission(tipo, layoutID, UserID, function(permission){
+        
+        if(permission == false){
+            var array = [];
+            objret = {};
+            objret.status = "error";
+            objret.message = "Sem permissão para " + tipo;
+            array.push(objret)
+            res.send(array);
+        }else{
+
     incremento(submit, function(resultado, submit){
         sql.close()
         sql.connect(config).then(function() {
         for (var index = 0; index < submit.length; index++) {
+            
             beforeSave(submit[index], function(retornoBefore){
                 ind += 1;
                 var booleanBefore = true;
@@ -663,15 +741,7 @@ router.route('/save').post(function(req, res) {
                 if (booleanBefore) {      
                     
                     if (submit[ind]["id"] == "" || !submit[ind]["id"]) {
-                        userPermission("incluir", layoutID, UserID, function(permission){
-        
-                            if(permission == false){
-                                objret = {};
-                                objret.status = "error";
-                                objret.message = "Sem permissão para incluir";
-                                res.send(objret);
-                            }else{
-                                
+                                                      
                                 var numberincrement;
                                 var updateincrement = ""
                 
@@ -691,61 +761,48 @@ router.route('/save').post(function(req, res) {
                                 
                                 insertOrUpdate = createInsert(submit, ind, guid)
                                 insertOrUpdate += updateincrement;                
-                                    request = new sql.Request();
-                                    request.query(insertOrUpdate).then(function(recordset) {
-                                        if (countfor > 0) {
-                                            retorno += ",";
-                                        }
-                
-                                        if (resultado[countfor]) {
-                                            retorno += '{ "status": "success", "id": "' + guid + '", "increment": "' + numberincrement + '", "incrementfield": "' + submit[countfor]["TABLE"] + "." + resultado[countfor].nm_campo.replace("_INCREMENT","") + '"}'
-                                        }else{
-                                            retorno += '{ "status": "success", "id": "' + guid + '" }'
-                                        }
-                                        
-                                        submit[countfor]["EnterpriseID"] = EnterpriseID;
-                                        submit[countfor]["UserID"] = UserID;
-                                        submit[countfor]["id"] = guid;
-                                        afterSave(submit[countfor])
-                
-                                        countfor +=1;
-                                        if (submit.length == (countfor)) {
-                                            retorno += "]"
-                                            var obj = JSON.parse(retorno)
-                                            res.send(obj)
-                                        }
-                                        
-                                    }).catch(function(err) {
-                                        console.log('Request error: ' + err);
-                                        if (countfor > 0) {
-                                            retorno += ",";
-                                        }
-                                        retorno += '{ "status": "error", "message": "' + err + '" }'
-                                        
-                                        countfor +=1;
-                                        if (submit.length == countfor) {
-                                            retorno += "]"
-                                            var obj = JSON.parse(retorno)
-                                            res.send(obj)
-                                        }
-                                    });
-                                
-                                }
-                        })
-                        
+                                request = new sql.Request();
+                                request.query(insertOrUpdate).then(function(recordset) {
+                                    if (countfor > 0) {
+                                        retorno += ",";
+                                    }
+            
+                                    if (resultado[countfor]) {
+                                        retorno += '{ "status": "success", "id": "' + guid + '", "increment": "' + numberincrement + '", "incrementfield": "' + submit[countfor]["TABLE"] + "." + resultado[countfor].nm_campo.replace("_INCREMENT","") + '"}'
+                                    }else{
+                                        retorno += '{ "status": "success", "id": "' + guid + '" }'
+                                    }
+                                    
+                                    submit[countfor]["EnterpriseID"] = EnterpriseID;
+                                    submit[countfor]["UserID"] = UserID;
+                                    submit[countfor]["id"] = guid;
+                                    afterSave(submit[countfor])
+            
+                                    countfor +=1;
+                                    if (submit.length == (countfor)) {
+                                        retorno += "]"
+                                        var obj = JSON.parse(retorno)
+                                        res.send(obj)
+                                    }
+                                    
+                                }).catch(function(err) {
+                                    console.log('Request error: ' + err);
+                                    if (countfor > 0) {
+                                        retorno += ",";
+                                    }
+                                    retorno += '{ "status": "error", "message": "' + err + '" }'
+                                    
+                                    countfor +=1;
+                                    if (submit.length == countfor) {
+                                        retorno += "]"
+                                        var obj = JSON.parse(retorno)
+                                        res.send(obj)
+                                    }
+                                });
                     }else{
-                        userPermission("alterar", layoutID, UserID, function(permission){
-        
-                            if(permission == false){
-                                objret = {};
-                                objret.status = "error";
-                                objret.message = "Sem permissão para incluir";
-                                res.send(objret);
-                            }else{
+                        
                                 guid = submit[ind]["id"];
-                                insertOrUpdate = createUpdate(submit, ind)             
-                                
-                                
+                                insertOrUpdate = createUpdate(submit, ind) 
                                 request = new sql.Request();
                                 request.query(insertOrUpdate).then(function(recordset) {
                                     if (countfor > 0) {
@@ -759,7 +816,7 @@ router.route('/save').post(function(req, res) {
                                     
                                     afterSave(submit[countfor])
                                     countfor +=1;
-                                    if (submit.length == countfor) {
+                                    if (submit.length == countfor && permission == true) {
                                         retorno += "]"
                                         var obj = JSON.parse(retorno)
                                         res.send(obj)
@@ -771,22 +828,20 @@ router.route('/save').post(function(req, res) {
                                     }
                                     retorno += '{ "status": "error", "message": "' + err + '" }'
                                     countfor +=1;
-                                    if (submit.length == countfor) { 
+                                    if (submit.length == countfor && permission == true) { 
                                         retorno += "]"
                                         var obj = JSON.parse(retorno)
                                         res.send(obj)
                                     }
                                 })
                                 
-                            }
-                        })
                     }
                 }else{
                     if (countfor > 0) {
                         retorno += ",";
-                    }
+                    }                    
                     countfor +=1;
-                    if (submit.length == countfor) { 
+                    if (submit.length == countfor && permission == true) { 
                         retorno += "]"
                         var obj = JSON.parse(retorno)
                         res.send(obj)
@@ -803,14 +858,18 @@ router.route('/save').post(function(req, res) {
             retorno += '{ "status": "error", "message": "' + err + '" }'
             
             countfor +=1;
-            if (submit.length == countfor) {
+            if (submit.length == countfor && permission == true) {
                 retorno += "]"
                 var obj = JSON.parse(retorno)
                 res.send(obj)
             }
         }
     });     
-    })
+    })    
+}
+})
+}
+})
 })
 
 function beforeSave(submit, callback){
@@ -1763,51 +1822,72 @@ router.route('/listreport/:id').get(function(req, res) {
 });
 
 function userPermission(type, layoutID, userID, callback){
-    var sqlstring = "SELECT sn_incluir as 'incluir', sn_alterar as 'alterar', sn_consultar as 'consultar', sn_excluir as 'excluir' ";
-    sqlstring += " FROM usuarios_permissoes WHERE id_usuario = '" + userID + "' AND baseObjectID='" + layoutID + "'";
-    
-    var retorno = false;
+    var sqlAdmin = "SELECT sn_usuarioadministrador ";
+    sqlAdmin += " FROM usuarios WHERE id = '" + userID + "' AND sn_usuarioadministrador=0";
+
     sql.close()
 
     sql.connect(config, function (err) {    
         if (err) console.log(err);
 
-        var request = new sql.Request();    
-        
-        request.query(sqlstring, function (err, recordset) {            
+        var requestAdmin = new sql.Request();
+        requestAdmin.query(sqlAdmin, function (err, recordset) {            
             if (err) console.log(err)    
             if (recordset) {
-                if (recordset.recordset.length > 0) {                    
-                    switch(type) {
-                        case "incluir":
-                            if(recordset.recordset[0].incluir == true){
-                                retorno = true;
-                            }
-                            break;
-                        case "alterar":
-                            if(recordset.recordset[0].alterar == true){
-                                retorno = true;
-                            }
-                            break;
-                        case "consultar":
-                            if(recordset.recordset[0].consultar == true){
-                                retorno = true;
-                            }
-                            break;
-                        case "excluir":
-                            if(recordset.recordset[0].excluir == true){
-                                retorno = true;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                if (recordset.recordset.length > 0) {
+
+
+                    var sqlstring = "SELECT sn_incluir as 'incluir', sn_alterar as 'alterar', sn_consultar as 'consultar', sn_excluir as 'excluir' ";
+                    sqlstring += " FROM usuarios_permissoes WHERE id_usuario = '" + userID + "' AND baseObjectID='" + layoutID + "'";
+                    var retorno = false;
+                    sql.close()
+                    sql.connect(config, function (err) {    
+                        if (err) console.log(err);
+
+                        var request = new sql.Request();    
+                        
+                        request.query(sqlstring, function (err, recordset) {            
+                            if (err) console.log(err)    
+                            if (recordset) {
+                                if (recordset.recordset.length > 0) {     
+                                    console.log(recordset.recordset[0]);               
+                                    switch(type) {
+                                        case "incluir":
+                                            if(recordset.recordset[0].incluir == true){
+                                                retorno = true;
+                                            }
+                                            break;
+                                        case "alterar":
+                                            if(recordset.recordset[0].alterar == true){
+                                                retorno = true;
+                                            }
+                                            break;
+                                        case "consultar":
+                                            if(recordset.recordset[0].consultar == true){
+                                                retorno = true;
+                                            }
+                                            break;
+                                        case "excluir":
+                                            if(recordset.recordset[0].excluir == true){
+                                                retorno = true;
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }    
+                            callback(retorno);            
+                        });
+                    }); 
+                }else{
+                    callback(true); 
                 }
-            }    
-            
-            callback(retorno);            
-        });
-    }); 
+            }else{
+                callback(true); 
+            }
+        })
+    })
 
 }
 
@@ -1823,55 +1903,74 @@ router.route('/menucustom/:idusuario').get(function(req, res) {
 
         const cheerio = require('cheerio')
         const $ = cheerio.load(result[0].html)
+        
 
-        var sqlstring = "SELECT baseObjectID , sn_alterar, sn_consultar, sn_excluir, sn_incluir FROM usuarios_permissoes WHERE id_usuario = '" + idusuario + "' AND (sn_alterar=1 OR sn_consultar=1 OR sn_excluir=1 OR sn_incluir=1) "
-       
+        var sqlAdmin = "SELECT sn_usuarioadministrador ";
+        sqlAdmin += " FROM usuarios WHERE id = '" + idusuario + "' AND sn_usuarioadministrador=0";
+
         sql.close()
 
-        // connect to your database
         sql.connect(config, function (err) {    
             if (err) console.log(err);
 
-            // create Request object
-            var request = new sql.Request();       
-            var menu = $("li[id]")
-            
-            // query to the database and get the records
-            request.query(sqlstring, function (err, recordset) {            
+            var requestAdmin = new sql.Request();
+            requestAdmin.query(sqlAdmin, function (err, recordset) {            
                 if (err) console.log(err)    
                 if (recordset) {
                     if (recordset.recordset.length > 0) {
-                        
-                        for (let j = 0; j < menu.length; j++) {
-                            var itemmenu = 0;
-                            var itemHTML = $(menu[j]).attr("id").toLowerCase()
-                            for (let i = 0; i < recordset.recordset.length; i++) {
-                                var itemBD = recordset.recordset[i].baseObjectID.toLowerCase();
 
-                                if(itemBD==itemHTML){
-                                    itemmenu = i;
-                                    break;
+                        var sqlstring = "SELECT baseObjectID , sn_alterar, sn_consultar, sn_excluir, sn_incluir ";
+                        sqlstring += " FROM usuarios_permissoes WHERE id_usuario = '" + idusuario + "' AND (sn_alterar=1 OR sn_consultar=1 OR sn_excluir=1 OR sn_incluir=1) ";
+                      
+                        sql.close()
+
+                        sql.connect(config, function (err) {    
+                            if (err) console.log(err);
+
+                            var request = new sql.Request();
+                            request.query(sqlstring, function (err, recordset) {            
+                                if (err) console.log(err)    
+
+                                if (recordset) {
+                                    if (recordset.recordset.length > 0) {
+                                        var menuAdmin = $("[data-menuname='Administrador']")
+                                        if(menuAdmin.length > 0){
+                                            $(menuAdmin[0]).remove();
+                                        }
+                                        var menu = $("li[id]");
+                                        for (let j = 0; j < menu.length; j++) {
+                                            var itemmenu = 0;
+                                            var itemHTML = $(menu[j]).attr("id").toLowerCase()
+                                            for (let i = 0; i < recordset.recordset.length; i++) {
+                                                var itemBD = recordset.recordset[i].baseObjectID.toLowerCase();
+
+                                                if(itemBD==itemHTML){
+                                                    itemmenu = i;
+                                                    break;
+                                                }
+                                            } 
+
+                                            if(itemmenu == 0){
+                                                $("#" + itemHTML).remove()                                
+                                            }
+                                        }                
+                                    }
                                 }
-                            } 
+                        
+                                result[0].html = $.html();
 
-                            if(itemmenu == 0){
-                                $("#" + itemHTML).remove()                                
-                            }
-                        }                
+                                db.close();
+                                res.send(result)             
+                            });
+                        }); 
+
+                    }else{
+                        db.close();
+                        res.send(result)  
                     }
                 }
-        
-                result[0].html = $.html();
-
-                db.close();
-                res.send(result)             
-            });
-        }); 
-
-
-
-
-         
+            })
+        })
       });
     });
 

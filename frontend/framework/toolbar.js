@@ -264,6 +264,11 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
                         });
                     }
                    
+                    if (onAfterSaving) {
+                        if (onAfterSaving != "null") {
+                            executeFunctionByName(onAfterSaving.substring(0, onAfterSaving.indexOf("(")), window, result);
+                        }
+                    }
 
                 }else{
                     if (result) {
@@ -288,11 +293,7 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
             }
               
             
-            if (onAfterSaving) {
-                if (onAfterSaving != "null") {
-                    executeFunctionByName(onAfterSaving.substring(0, onAfterSaving.indexOf("(")), window, result);
-                }
-            }
+            
         }
         })
     }
