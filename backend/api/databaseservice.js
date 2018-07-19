@@ -6,6 +6,12 @@ const dados = require('./connections')
 var sql = require("mssql");
 const general = require('./general')
 const ObjectID = require('mongodb').ObjectID
+
+var pdf = require('html-pdf');
+const PDFDocument = require('pdfkit')
+
+var fs = require('fs');
+
 const router = express.Router()
 server.use('/api', router)
 
@@ -27,7 +33,7 @@ var EnterpriseID = "";
 var UserID = "";
 var base = "erpcloud"; //erpcloudfoodtown
 var url = "mongodb://localhost:27017/" + base;
-
+var host = "";
 router.route('/*').get(function(req, res, next) {
 
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
@@ -36,11 +42,12 @@ router.route('/*').get(function(req, res, next) {
     if (parts.length > 3) {
         dados = parts[0];
     }
+    host = dados;
     dados = dados.replace("http://","");
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "intelecta"; //"foodtown";
+        dados = "homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
@@ -130,11 +137,366 @@ function conectionsLink(full, callback){
     
 }
 
+
+router.route('/report/:nome').get(function(req, res) {
+    var nome = req.param('nome');
+    var html = "";
+    var full = req.host;
+    full = full.replace("http://","");
+    full = "http://" + full;
+
+    var MongoClient = require('mongodb').MongoClient;
+
+    var nome = req.param('nome');
+    var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
+    var html = "";
+    var engine = "";
+    var recipe = "";
+    var selectheader = "";
+    var titulo = "";
+    var headerhtml = "";
+    var headersize = "";
+
+    //nome = nome.toUpperCase();
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+      
+        db.collection("reports").find({"nome": nome}, { _id: false }).toArray(function(err, result) {
+            if (err) throw err;
+            if (result) {
+                if (result.length > 0) {
+                    select = result[0].select; 
+
+                    var top = "";
+
+                    if(result[0].selecttop){
+                        top = " TOP " + result[0].selecttop;
+                    }
+
+                    if(select){
+                        select = select.replace("SELECT","SELECT " + top + " (SELECT TOP 1 nm_razaosocial FROM empresa) AS 'empresadefault', ");
+                    }
+                    
+                    if(result[0].headerhtml){
+                        headerhtml = result[0].headerhtml
+                    }
+                    
+                    if(result[0].headersize){
+                        headersize = result[0].headersize
+                    }
+                    
+                    if(result[0].subdetailhtml){
+                        subdetailhtml = result[0].subdetailhtml
+                    }
+                    
+                    html = result[0].html;  
+                    engine = result[0].engine;
+                    recipe = result[0].recipe;
+                    titulo = result[0].titulo;
+                }
+            }
+            
+            db.close();
+            sql.close()
+
+            // connect to your database
+            sql.connect(config, function (err) {    
+                if (err) console.log(err);
+        
+                // create Request object
+                var request = new sql.Request();       
+        
+                // query to the database and get the records
+                request.query(select, function (err, recordset) {            
+                    if (err) console.log(err)
+                    var element = recordset.recordsets[0];
+                    var header = createHeader(element, headerhtml, titulo);
+                    html = createMaster(element, html);
+                    html = createDetails(element, html);
+                    html = createSubDetails(element, html, subdetailhtml)
+                    html = createFooter(element, html);
+                    html = createGraphic(element, html, engine);
+
+                    switch (recipe){
+                        case "pdf":
+                            if(!headersize){
+                                headersize = "20";
+                            }
+                            var options = { paginationOffset: 1, header: {"height": "" + headersize + "mm", "contents": header} ,footer: { "contents": '<span style="float: right;">Pagina {{page}}</span>' } };
+                            //var options = {};
+                            pdf.create(html, options).toStream(function(err, stream){
+                                stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                res.setHeader('Content-type', 'application/pdf')
+                                stream.pipe(res)
+                            });
+                            
+                            break;
+                        case "html":
+                            html = header + html;
+                            var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
+                            stream.on('open', function(fd) {
+                                stream.write(html);
+                                stream.end();
+                                res.writeHeader(200, {"Content-Type": "text/html"});  
+                                res.write(html);  
+                                res.end();  
+                            });                                
+                            break; 
+                    }    
+                });
+            }); 
+        })        
+    })
+})
+
+function createSubDetails(element,html, subdetailhtml){
+    var subdetail = "";
+    var arraayElem = [];
+    for(var i = 0; i < element.length; i++){           
+        arraayElem = [];
+        arraayElem.push(element[i]);         
+        subdetail += createMaster(arraayElem, subdetailhtml);
+        subdetail += createDetails(arraayElem, subdetailhtml);
+    }
+       
+    html = html.replace("{{subdetail}}", subdetail);
+    return html;
+}
+
+function createGraphic(element, html, type) {
+    var item = "";  
+    var field = "";
+    var data = "";
+    var labels = "";
+    var index = 0;
+    if(html){
+        element.forEach(function(name){                        
+            for (var key in name) { 
+                
+                if(labels == "" && key == "labels"){
+                    labels += "'" + name[key] + "'" 
+                }else{
+                    if(data == "" && key == "data"){
+                        if(name[key] == null){
+                            name[key] = "0";
+                        }
+                        data += name[key]
+                    }else{
+                        if(key == "data"){
+                            if(name[key] == null){
+                                name[key] = "0";
+                            }
+                            data += ", " + name[key]
+                        }else if(key == "labels"){
+                            labels += ", '" + name[key] + "'"                            
+                        }
+                    }                 
+                }
+                index += 1;
+            } 
+        });
+        
+        data = "[" + data + "]";
+        labels = "[" + labels + "]";
+
+        item = "<canvas id=\"myChart\" width=\"1000\" height=\"1000\" ></canvas>";
+        item += "<script>";
+        item += "var ctx = document.getElementById(\"myChart\");";
+        item += "var myChart = new Chart(ctx, {";
+        item += "    type: '" + type + "',";
+        item += "    data: {";
+        item += "        labels: " + labels + ",";
+        item += "        datasets: [{";
+        item += "            label: '',";
+        item += "            data: " + data + ",";
+        item += "            backgroundColor: [";
+        item += "                'red',";
+        item += "                'blue',";
+        item += "                'yellow',";
+        item += "                'green',";
+        item += "                'purple',";
+        item += "                'orange',";
+        item += "                'magenta',";
+        item += "                'brown',";
+        item += "                'white',";
+        item += "                'black',";
+        item += "                'gray',";
+        item += "                'gold',";
+        item += "                'belge',";
+        item += "                'violet',";
+        item += "                'viridian',";
+        item += "                'silver',";
+        item += "                'indigo',";
+        item += "                'coral'";
+        item += "            ],";
+        item += "            borderWidth: 1";
+        item += "        }]";
+        item += "    },";
+        item += "    options: {";
+        item += "        animation: {";
+        item += "            duration: 0";
+        item += "        }";
+        item += "    }";
+        item += "});";
+        item += "</script>";
+
+        html = html.replace("{{graphic}}", item);
+        
+    }
+    return html;
+}
+
+function createHeader(element, html, reportname){
+    var item = "";  
+    var field = "";
+    var empresa = "";
+
+    if(html){
+        if(html.indexOf("{{headerdefault}}") > -1){
+            element.forEach(function(name){                        
+                for (var key in name) { 
+                    if(key == "empresadefault" ){
+                        empresa = name[key];
+                        break;
+                    }
+                } 
+            });
+
+            var now = new Date;
+            var data = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear()
+            item = "<div>";
+            item += "<div style='float: right;'>" + data + "</div>";
+            item += "<div style='text-decoration:underline;font-weight:bold'>" + empresa + "</div>";
+            item += "<div style='text-decoration:underline;font-weight:bold'>" + reportname + "</div>";
+            item += "</div>"
+
+            html = html.replace("{{headerdefault}}", item);
+            html = html.replace("{{headerdefault}}","");
+            html = html.replace("{{/headerdefault}}","");
+        }else{
+            item = html;
+            element.forEach(function(name){                        
+                for (var key in name) { 
+                    if(item.indexOf("{{" + key + "}}") > -1){
+                        if(field.indexOf("{{" + key + "}}") == -1){
+                            item = item.replace("{{" + key + "}}", name[key]);
+                            field += "{{" + key + "}}";
+                        }
+                    }
+                } 
+            });
+
+            html = item;
+            console.log(html)
+            //html = html.replace("{{header}}", item);
+            //html = html.replace("{{header}}","");
+            //html = html.replace("{{/header}}","");
+        }
+    }
+    return html;
+}
+
+function createDetails(element, html){
+    var item = "";    
+    var arrayHtml = {};
+    var arrayAppend = [];
+    var fields = "";
+    var index = -1;
+    var arrayKey = [];
+    var arrayKeyName = [];
+    var arrayDetail = [];
+
+    element.forEach(function(name){                        
+        for (var key in name) {  
+            item = html.substring(html.indexOf("{{foreach " + key + "}}"),html.indexOf("{{/foreach " + key + "}}"));
+            item = item.replace("{{foreach " + key + "}}","");
+            if(item.indexOf("{{" + key + "}}") > -1){
+                fields += key + ",";                                   
+            }
+            
+            if(item.indexOf("{{" + key + "}}") > -1){
+                index += 1;
+                if(!arrayAppend[key]){
+                    arrayAppend[key] = "";
+                }
+                arrayAppend[index] = item.replace("{{" + key + "}}",name[key]);
+            }
+        } 
+    });
+
+    arrayDetail[0] = "";
+
+    for(var i = 0; i < arrayAppend.length; i++){  
+        arrayDetail[0] += arrayAppend[i];
+    }
+    
+    var detail = html.substring(html.indexOf("{{detail 0}}"),html.indexOf("{{/detail 0}}"));
+    detail = detail.replace("{{detail 0}}","");
+    detail = detail.replace("{{/detail 0}}","");
+
+    detail = "{{detail 0}}" + detail + "{{/detail 0}}";
+    html = html.replace(detail, arrayDetail[0]);
+
+    return html;
+}
+
+function createFooter(element, html){
+    var item = "";  
+    var field = "";
+    if(html){
+        item = html.substring(html.indexOf("{{footer}}"),html.indexOf("{{/footer}}"));
+        item = item.replace("{{footer}}","");
+        html = html.replace(item,"{{footer}}");
+
+        element.forEach(function(name){                        
+            for (var key in name) { 
+                if(item.indexOf("{{" + key + "}}") > -1){
+                    if(field.indexOf("{{" + key + "}}") == -1){
+                        item = item.replace("{{" + key + "}}", name[key]);
+                        field += "{{" + key + "}}";
+                    }
+                }
+            } 
+        });
+        
+        html = html.replace("{{footer}}", item);
+        html = html.replace("{{footer}}","");
+        html = html.replace("{{/footer}}","");
+    }
+    return html;
+}
+
+function createMaster(element, html){
+    var item = "";  
+    var field = "";
+    if(html){
+        item = html.substring(html.indexOf("{{master}}"),html.indexOf("{{/master}}"));
+        item = item.replace("{{master}}","");
+        html = html.replace(item,"{{master}}");
+
+        element.forEach(function(name){                        
+            for (var key in name) { 
+                if(item.indexOf("{{" + key + "}}") > -1){
+                    if(field.indexOf("{{" + key + "}}") == -1){
+                        item = item.replace("{{" + key + "}}", name[key]);
+                        field += "{{" + key + "}}";
+                    }
+                }
+            } 
+        });
+
+        html = html.replace("{{master}}", item);
+        html = html.replace("{{master}}","");
+        html = html.replace("{{/master}}","");
+    }
+    return html;
+}
+
 var http = require('http');
 //var jsreport = require('jsreport');
 var jsreport = require('jsreport-core')()
 
-router.route('/report/:nome').get(function(req, res) {
+router.route('/reportOLD/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
 
     var nome = req.param('nome');
@@ -155,8 +517,6 @@ router.route('/report/:nome').get(function(req, res) {
                 html = result[0].html;  
                 engine = result[0].engine;
                 recipe = result[0].recipe;
-
-
             }
         }
         
@@ -182,14 +542,14 @@ router.route('/report/:nome').get(function(req, res) {
                             engine: engine, //'handlebars', 'jsrender',
                             recipe: recipe //'xlsx' 'phantom-pdf'
                          },
-                         data:  recordset.recordsets[0]
+                         data:  recordset.recordsets
                      }).then(function(out) {
                         out.stream.pipe(res);
                     });
                  }).catch(function(e) {
                    console.log(e)
                  })
-    
+                     
                 // send records as a response
                 //res.send(recordset.recordset)            
             });
@@ -1949,7 +2309,10 @@ router.route('/menucustom/:idusuario').get(function(req, res) {
                                                     break;
                                                 }
                                             } 
-
+                                            if(itemHTML == "d82d11c8-ea16-47c7-be04-10423467f04e"){
+                                                console.log(itemHTML)
+                                                console.log(itemmenu)
+                                            }
                                             if(itemmenu == 0){
                                                 $("#" + itemHTML).remove()                                
                                             }
