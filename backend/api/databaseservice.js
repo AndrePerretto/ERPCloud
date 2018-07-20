@@ -1119,7 +1119,7 @@ router.route('/save').post(function(req, res) {
                                     }                    
                                 }
                                 
-                                insertOrUpdate = createInsert(submit, ind, guid)
+                                insertOrUpdate = createInsert(submit, ind, guid, layoutID)
                                 insertOrUpdate += updateincrement;                
                                 request = new sql.Request();
                                 request.query(insertOrUpdate).then(function(recordset) {
@@ -1259,7 +1259,6 @@ function beforeSave(submit, callback){
     }
     
     callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/BeforeSave", function(retorno){
-    //callWebAPI(arraySubmitObject,   serverWindows + "/api/DataBase/BeforeSave", function(retorno){
         callback(retorno)
     })
     
@@ -1294,7 +1293,7 @@ function afterSave(submit){
     callWebAPI(arraySubmitObject, serverWindows + "/api/DataBase/AfterSave")    
 }
 
-function createInsert(submit, index, guid){
+function createInsert(submit, index, guid, layoutID){
     var insertOrUpdate = "";
     var ind = 0;
     var table = "";        
@@ -1337,6 +1336,32 @@ function createInsert(submit, index, guid){
                     }else{
                         submit[index][key] = "1"
                     }
+                    
+                    switch (layoutID.toLowerCase()) {
+                        case "d82d11c8-ea16-47c7-be04-10423467f04e":
+                            if(key == "sn_tipoentidadecliente"){
+                                submit[index][key] = "1";
+                            }
+                            break;
+                        case "589b6dae-4b0b-41f1-9516-3eaf235dff61":
+                            if(key == "sn_tipoentidadefornecedor"){
+                                submit[index][key] = "1";
+                            }
+                            break;
+                        case "74cfff79-da65-4172-8f8c-e6ce92da5819":
+                            if(key == "sn_tipoentidadeprestador"){
+                                submit[index][key] = "1";
+                            }
+                            break;
+                        case "26d46f90-5b1f-4e64-b2a8-b97090df03dc":
+                            if(key == "sn_tipoentidadevendedor"){
+                                submit[index][key] = "1";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
                     break;
                 case "nm":
                     submit[index][key] = "'" + submit[index][key] + "'"                   

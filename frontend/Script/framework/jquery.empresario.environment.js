@@ -26,7 +26,7 @@ function checkEnvironment(sn_loadEnterprises) {
         dados = parts[0];
     }else {
         if(full.indexOf("localhost") > -1){
-            dados = "intelecta";
+            dados = "homologa";
         }else{
             window.location = "http://intelecta.com.br";
         }
