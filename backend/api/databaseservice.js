@@ -137,6 +137,46 @@ function conectionsLink(full, callback){
     
 }
 
+router.route('/report').get(function(req, res) {
+    var html = "";
+    var full = req.host;
+    full = full.replace("http://","");
+    full = "http://" + full;
+
+    var MongoClient = require('mongodb').MongoClient;
+
+    var nome = req.param('nome');
+    var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
+    var html = "";
+    var engine = "";
+    var recipe = "";
+    var selectheader = "";
+    var titulo = "";
+    var headerhtml = "";
+    var headersize = "";
+
+    //nome = nome.toUpperCase();
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+      
+        db.collection("reports").find().toArray(function(err, result) {
+            if (err) throw err;
+            if (result) {
+                result = result.sort(compareObj);
+                res.send(result) 
+            }
+        })
+    })
+
+})
+
+function compareObj(a,b) {
+    if (a.nome < b.nome)
+      return -1;
+    if (a.nome > b.nome)
+      return 1;
+    return 0;
+  }
 
 router.route('/report/:nome').get(function(req, res) {
     var nome = req.param('nome');
