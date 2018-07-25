@@ -178,8 +178,9 @@ function compareObj(a,b) {
     return 0;
   }
 
-router.route('/report/:nome').get(function(req, res) {
-    var nome = req.param('nome');
+router.route('/r/:id').get(function(req, res) {
+    var id = req.param('id');
+    var nome = id;
     var html = "";
     var full = req.host;
     full = full.replace("http://","");
@@ -187,7 +188,6 @@ router.route('/report/:nome').get(function(req, res) {
 
     var MongoClient = require('mongodb').MongoClient;
 
-    var nome = req.param('nome');
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
     var html = "";
     var engine = "";
@@ -196,13 +196,14 @@ router.route('/report/:nome').get(function(req, res) {
     var titulo = "";
     var headerhtml = "";
     var headersize = "";
-
+    
     //nome = nome.toUpperCase();
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
       
-        db.collection("reports").find({"nome": nome}, { _id: false }).toArray(function(err, result) {
+        db.collection("reports").find({"idReport": id}, { _id: false }).toArray(function(err, result) {
             if (err) throw err;
+
             if (result) {
                 if (result.length > 0) {
                     select = result[0].select; 
@@ -253,7 +254,7 @@ router.route('/report/:nome').get(function(req, res) {
                     var header = createHeader(element, headerhtml, titulo);
                     html = createMaster(element, html);
                     html = createDetails(element, html);
-                    html = createSubDetails(element, html, subdetailhtml)
+                    //html = createSubDetails(element, html, subdetailhtml)
                     html = createFooter(element, html);
                     html = createGraphic(element, html, engine);
 
@@ -446,37 +447,40 @@ function createDetails(element, html){
     var arrayKeyName = [];
     var arrayDetail = [];
 
-    element.forEach(function(name){                        
-        for (var key in name) {  
-            item = html.substring(html.indexOf("{{foreach " + key + "}}"),html.indexOf("{{/foreach " + key + "}}"));
-            item = item.replace("{{foreach " + key + "}}","");
-            if(item.indexOf("{{" + key + "}}") > -1){
-                fields += key + ",";                                   
-            }
-            
-            if(item.indexOf("{{" + key + "}}") > -1){
-                index += 1;
-                if(!arrayAppend[key]){
-                    arrayAppend[key] = "";
+    if(html.indexOf("{{detail") >= 0) {
+        element.forEach(function(name){                        
+            for (var key in name) {  
+                item = html.substring(html.indexOf("{{foreach " + key + "}}"),html.indexOf("{{/foreach " + key + "}}"));
+                item = item.replace("{{foreach " + key + "}}","");
+                if(item.indexOf("{{" + key + "}}") > -1){
+                    fields += key + ",";                                   
                 }
-                arrayAppend[index] = item.replace("{{" + key + "}}",name[key]);
-            }
-        } 
-    });
-
-    arrayDetail[0] = "";
-
-    for(var i = 0; i < arrayAppend.length; i++){  
-        arrayDetail[0] += arrayAppend[i];
+                
+                if(item.indexOf("{{" + key + "}}") > -1){
+                    index += 1;
+                    if(!arrayAppend[key]){
+                        arrayAppend[key] = "";
+                    }
+                    arrayAppend[index] = item.replace("{{" + key + "}}",name[key]);
+                }
+            } 
+        });
+    
+        arrayDetail[0] = "";
+    
+        for(var i = 0; i < arrayAppend.length; i++){  
+            arrayDetail[0] += arrayAppend[i];
+        }
+        
+        var detail = html.substring(html.indexOf("{{detail 0}}"),html.indexOf("{{/detail 0}}"));
+        detail = detail.replace("{{detail 0}}","");
+        detail = detail.replace("{{/detail 0}}","");
+    
+        detail = "{{detail 0}}" + detail + "{{/detail 0}}";
+        html = html.replace(detail, arrayDetail[0]);
+    
     }
     
-    var detail = html.substring(html.indexOf("{{detail 0}}"),html.indexOf("{{/detail 0}}"));
-    detail = detail.replace("{{detail 0}}","");
-    detail = detail.replace("{{/detail 0}}","");
-
-    detail = "{{detail 0}}" + detail + "{{/detail 0}}";
-    html = html.replace(detail, arrayDetail[0]);
-
     return html;
 }
 
