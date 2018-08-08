@@ -7,6 +7,7 @@ var sql = require("mssql");
 const general = require('./general')
 const ObjectID = require('mongodb').ObjectID
 
+
 var pdf = require('html-pdf');
 const PDFDocument = require('pdfkit')
 
@@ -207,16 +208,6 @@ router.route('/r/:id').get(function(req, res) {
             if (result) {
                 if (result.length > 0) {
                     select = result[0].select; 
-
-                    var top = "";
-
-                    if(result[0].selecttop){
-                        top = " TOP " + result[0].selecttop;
-                    }
-
-                    if(select){
-                        select = select.replace("SELECT","SELECT " + top + " (SELECT TOP 1 nm_razaosocial FROM empresa) AS 'empresadefault', ");
-                    }
                     
                     if(result[0].headerhtml){
                         headerhtml = result[0].headerhtml
@@ -225,13 +216,8 @@ router.route('/r/:id').get(function(req, res) {
                     if(result[0].headersize){
                         headersize = result[0].headersize
                     }
-                    
-                    if(result[0].subdetailhtml){
-                        subdetailhtml = result[0].subdetailhtml
-                    }
-                    
+                                        
                     html = result[0].html;  
-                    engine = result[0].engine;
                     recipe = result[0].recipe;
                     titulo = result[0].titulo;
                 }
@@ -239,6 +225,7 @@ router.route('/r/:id').get(function(req, res) {
             
             db.close();
             sql.close()
+
 
             // connect to your database
             sql.connect(config, function (err) {    
@@ -254,9 +241,8 @@ router.route('/r/:id').get(function(req, res) {
                     var header = createHeader(element, headerhtml, titulo);
                     html = createMaster(element, html);
                     html = createDetails(element, html);
-                    //html = createSubDetails(element, html, subdetailhtml)
                     html = createFooter(element, html);
-                    html = createGraphic(element, html, engine);
+                    html = createGraphic(element, html, "pie");
 
                     switch (recipe){
                         case "pdf":
@@ -290,19 +276,7 @@ router.route('/r/:id').get(function(req, res) {
     })
 })
 
-function createSubDetails(element,html, subdetailhtml){
-    var subdetail = "";
-    var arraayElem = [];
-    for(var i = 0; i < element.length; i++){           
-        arraayElem = [];
-        arraayElem.push(element[i]);         
-        subdetail += createMaster(arraayElem, subdetailhtml);
-        subdetail += createDetails(arraayElem, subdetailhtml);
-    }
-       
-    html = html.replace("{{subdetail}}", subdetail);
-    return html;
-}
+
 
 function createGraphic(element, html, type) {
     var item = "";  
@@ -2319,6 +2293,15 @@ function userPermission(type, layoutID, userID, callback){
     })
 
 }
+
+router.route('/testefunction').get(function(req, res) {
+    var _eval = require('eval')
+
+    var ret = _eval('module.exports = function () {var ret = 0; for(var i=0;i<3;i++){ ret += i; }  return ret }')
+    console.log(ret());
+        
+    res.send(ret)    
+});
 
 router.route('/menucustom/:idusuario').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
