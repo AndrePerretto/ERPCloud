@@ -31,6 +31,7 @@ var configEnvironment = {};
 //var configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
 
 var EnterpriseID = "";
+var EnterpriseName = "";
 var UserID = "";
 var base = "erpcloud"; //erpcloudfoodtown
 var url = "mongodb://localhost:27017/" + base;
@@ -48,8 +49,8 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa"; //"foodtown";
-        configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+        dados = "intelecta10";  //"homologa"; //"foodtown";
+        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
@@ -60,7 +61,7 @@ router.route('/*').get(function(req, res, next) {
     var password = ""; //"1234567890";
     var user = ""; //"sa";
 
-    var select = "SELECT nm_DatabaseName_Aplication AS 'database',  ";
+    var select = "SELECT id AS idempresa,nm_CompanyName nome,nm_DatabaseName_Aplication AS 'database',  ";
     select += " nm_ServerIP_Aplication AS 'server', ";
     select += " password_Aplication AS 'password', ";
     select += " nm_User_Aplication AS 'user' ";
@@ -78,9 +79,11 @@ router.route('/*').get(function(req, res, next) {
                 server = element.server;
                 password = element.password;
                 user = element.user;
+                EnterpriseID = element.idempresa;
+                EnterpriseName = element.nome;
                 
                 config = {user: user, password: password, server: server,  database: database};
-                
+
                 next();
             }
         });
@@ -88,12 +91,11 @@ router.route('/*').get(function(req, res, next) {
 });
 
 
-
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "intelecta"; //"foodtown";
-        configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
+        dados = "intelecta10"; //"foodtown";
+        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
         var dados = "";
@@ -177,12 +179,13 @@ function compareObj(a,b) {
     if (a.nome > b.nome)
       return 1;
     return 0;
-  }
+}
 
-router.route('/r/:id').get(function(req, res) {
+  router.route('/r/:id').get(function(req, res) {
     var id = req.param('id');
     var nome = id;
     var html = "";
+    var funcao = "";
     var full = req.host;
     full = full.replace("http://","");
     full = "http://" + full;
@@ -197,7 +200,7 @@ router.route('/r/:id').get(function(req, res) {
     var titulo = "";
     var headerhtml = "";
     var headersize = "";
-    
+
     //nome = nome.toUpperCase();
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -224,8 +227,7 @@ router.route('/r/:id').get(function(req, res) {
             }
             
             db.close();
-            sql.close()
-
+            sql.close();
 
             // connect to your database
             sql.connect(config, function (err) {    
@@ -235,47 +237,184 @@ router.route('/r/:id').get(function(req, res) {
                 var request = new sql.Request();       
         
                 // query to the database and get the records
-                request.query(select, function (err, recordset) {            
+                request.query(select, function (err, recordset) {
                     if (err) console.log(err)
                     var element = recordset.recordsets[0];
+                    /*                    
                     var header = createHeader(element, headerhtml, titulo);
                     html = createMaster(element, html);
                     html = createDetails(element, html);
                     html = createFooter(element, html);
                     html = createGraphic(element, html, "pie");
-
+                    */
                     switch (recipe){
-                        case "pdf":
+                        case "pdf":                                                
+                            html = createHTML(result[0],element);                            
                             if(!headersize){
                                 headersize = "20";
                             }
-                            var options = { paginationOffset: 1, header: {"height": "" + headersize + "mm", "contents": header} ,footer: { "contents": '<span style="float: right;">Pagina {{page}}</span>' } };
+                            var orientation = "portrait";
+                            if(result[0].orientation != "")
+                                orientation = result[0].orientation;
+
+                            //var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents": '<span style="float:right;font-weight:bold;font-family:Arial;font-size:x-small;">{{page}}</span>' } };
+                            var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":''} };
                             //var options = {};
-                            pdf.create(html, options).toStream(function(err, stream){
+                            pdf.create(html.topo +  html.detail + html.footer, options).toStream(function(err, stream){
                                 stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
                                 res.setHeader('Content-type', 'application/pdf')
                                 stream.pipe(res)
                             });
                             
                             break;
-                        case "html":
-                            html = header + html;
+                        case "html":                        
+                            html = createHTML(result[0],element);                            
                             var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
                             stream.on('open', function(fd) {
-                                stream.write(html);
+                                stream.write(html.topo + html.header + html.detail + html.footer + html.base);
                                 stream.end();
                                 res.writeHeader(200, {"Content-Type": "text/html"});  
-                                res.write(html);  
+                                res.write(html.topo + html.header + html.detail + html.footer + html.base);  
                                 res.end();  
                             });                                
+                            
                             break; 
                     }    
                 });
-            }); 
-        })        
-    })
+            });
+        })
+    });
 })
 
+
+function createHTML(element,select){
+    var _eval = require("eval");
+    var html = "";
+    var funcao = "";
+    var htmlAux = "";
+    var comando = "";
+    var htmlFinal = "";
+    var blocoFuncao = "";
+    var linhaComando = "";
+    var itemRelatorio = "";
+    var corpoRelatorio = "";
+    var cmdFinaisFuncao = "";
+    var cabecalhoFuncao = "";
+    var variaveisFuncao = "";
+    var cmdIniciaisFuncao = "";
+    var posFim = 0;
+    var posInicio = 0;
+    var posDetalhe = 0;
+    var posFimDetalhe = 0;
+    var retorno = null;
+    var geraHtmlRelatorio = null;
+
+    retorno = {
+        topo: "",
+        header: "",
+        detail: "",
+        footer: "",
+        base: ""
+    }
+
+    cabecalhoFuncao = "module.exports = function(select) { ";
+
+    variaveisFuncao += "var html = \"\"; ";
+    variaveisFuncao += "var ok = true; "
+
+    if(element.length > 0){
+        variaveisFuncao += "var linhaQuery = 0; "; 
+    }
+    
+    cmdIniciaisFuncao += "try{ "
+    cmdIniciaisFuncao += "if(ok) { ";
+
+    posInicio = element.html.indexOf("{{ntlct_report}}");    
+    posFim = element.html.indexOf("{{/ntlct_report}}");
+    posFimDetalhe = posFim + 2;
+    if(posInicio > -1 && posFim > -1){
+        retorno.topo = element.html.substring(0,posInicio);
+        retorno.base = element.html.substring(posFim + 17);
+        corpoRelatorio = element.html.substring(posInicio + 16,posFim);
+    };
+
+    if(corpoRelatorio != ""){
+        posInicio = corpoRelatorio.indexOf("{{header}}");
+        posFim = corpoRelatorio.indexOf("{{/header}}");
+        if(posInicio > -1 && posFim > -1){
+            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+            posInicio = itemRelatorio.indexOf("{{headerdefault}}")
+            if(posInicio > -1){
+                htmlAux = createHeader(element,itemRelatorio,element.titulo);
+                itemRelatorio = itemRelatorio.replace("{{headerdefault}}", htmlAux);
+            }
+            retorno.header = itemRelatorio;
+        }
+        /*-*/
+        posInicio = corpoRelatorio.indexOf("{{detail}}");
+        posFim = corpoRelatorio.indexOf("{{/detail}}");
+        if(posInicio > -1 && posFim > -1){
+            posDetalhe = 0;
+            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+            posInicio = itemRelatorio.indexOf("{{",posDetalhe);
+            while(posDetalhe < itemRelatorio.length && posInicio > -1){
+                blocoFuncao += "html += \"" + itemRelatorio.substring(posDetalhe,posInicio) +  "\"; ";
+                posFim = itemRelatorio.indexOf("}}",posInicio);
+                posDetalhe = posFim + 2;
+                linhaComando = itemRelatorio.substring(posInicio + 2,posFim);
+                posFim = linhaComando.indexOf(":");
+                if(posFim > -1)
+                    comando = linhaComando.substring(0,posFim+1);
+                else{
+                    posFim = linhaComando.indexOf(".");
+                    if(posFim > -1){
+                    }
+                }
+                comando = linhaComando.substring(0,posFim + 1)
+                switch(comando){
+                    case "loop:":
+                        blocoFuncao += "linhaQuery = 0; while(linhaQuery < select.length) { ";
+                        break;
+                    case "/loop:":
+                        blocoFuncao += "linhaQuery++; }; ";
+                        break;
+                    case "select.":
+                        blocoFuncao += "html += (select[linhaQuery]." + linhaComando.substring(posFim + 1) + " == null ? \" \" : select[linhaQuery]." + linhaComando.substring(posFim + 1) + "); ";
+                        break;
+                    default:
+                        blocoFuncao += "html += \"" + linhaComando + "\"; ";
+                        break;            
+                }
+
+                posInicio = itemRelatorio.indexOf("{{",posDetalhe);
+            }
+
+            if(posDetalhe < itemRelatorio.length){
+                blocoFuncao += "html += \"" + itemRelatorio.substring(posDetalhe) + "\"; ";
+            }
+        }
+
+        blocoFuncao += "html += \"" + itemRelatorio.substring(posFimDetalhe) + "\"; ";
+    }
+
+    cmdFinaisFuncao += "} ";
+    cmdFinaisFuncao += "} ";
+    cmdFinaisFuncao += "catch(err) { ";
+    cmdFinaisFuncao += "html = err; "
+    cmdFinaisFuncao += "}";
+    cmdFinaisFuncao += "return(html); ";
+    cmdFinaisFuncao += "}";
+
+    funcao = cabecalhoFuncao;
+    funcao += variaveisFuncao;
+    funcao += cmdIniciaisFuncao;
+    funcao += blocoFuncao;
+    funcao += cmdFinaisFuncao;
+    geraHtmlRelatorio = _eval(funcao);
+    retorno.detail = geraHtmlRelatorio(select);
+
+    return(retorno);
+}
 
 
 function createGraphic(element, html, type) {
@@ -365,26 +504,33 @@ function createHeader(element, html, reportname){
     var item = "";  
     var field = "";
     var empresa = "";
+    var now = new Date();
+    var data = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear()
 
     if(html){
         if(html.indexOf("{{headerdefault}}") > -1){
-            element.forEach(function(name){                        
-                for (var key in name) { 
-                    if(key == "empresadefault" ){
-                        empresa = name[key];
-                        break;
-                    }
-                } 
-            });
-
-            var now = new Date;
-            var data = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear()
-            item = "<div>";
-            item += "<div style='float: right;'>" + data + "</div>";
-            item += "<div style='text-decoration:underline;font-weight:bold'>" + empresa + "</div>";
-            item += "<div style='text-decoration:underline;font-weight:bold'>" + reportname + "</div>";
-            item += "</div>"
-
+            item = "<div style=\"width:100%\">";
+            item += "<table style=\"width:100%;font-family:Arial\">";
+            item += "<thead>";
+            item += "<tr>";
+            item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/images/logo_empresa/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
+            item += "<th style=\"width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;\">" + reportname + "</th>";
+            item += "<th rowspan=2 style=\"width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;\">" + data + "</th>";
+            item += "</tr>";
+            item += "<tr></tr>";
+            item += "<tr>"
+            if(element.recipe == "pdf"){
+                item += "<th colspan=2 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
+                item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">Página: {{page}}</th>";
+            }
+            else{
+                item += "<th colspan=3 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
+            }
+            item += "<tr><th colspan=3></th></tr>";
+            item += "</thead>";
+            item += "</table>";
+            item += "</div>";
+            
             html = html.replace("{{headerdefault}}", item);
             html = html.replace("{{headerdefault}}","");
             html = html.replace("{{/headerdefault}}","");
@@ -402,13 +548,12 @@ function createHeader(element, html, reportname){
             });
 
             html = item;
-            console.log(html)
             //html = html.replace("{{header}}", item);
             //html = html.replace("{{header}}","");
             //html = html.replace("{{/header}}","");
         }
     }
-    return html;
+    return item;
 }
 
 function createDetails(element, html){
@@ -2392,9 +2537,3 @@ router.route('/menucustom/:idusuario').get(function(req, res) {
 });
     
 module.exports = database
-
-
-
-
-
-
