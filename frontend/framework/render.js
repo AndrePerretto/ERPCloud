@@ -150,6 +150,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         panel_change_start(tabGenID + " > form > .panel  > .panel-body > div > .panel-nav ");
         $("[data-tabgenlayout='" + tabGenID2 + "']").attr("data-principaltabgen",tabGenID);
         tabGenID = tabGenID2;
+        $("[id*='_" + tabGenID + "_panel'").attr("data-guidwizard",tabGenID);
         var wizard = $("[data-guidwizard='" + tabGenID + "'][data-hidden!='true']"); //$("[data-guidwizard='" + tabGenID + "']");
         $("textarea").val("");
         $("[value='undefined']").val("");
@@ -175,6 +176,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             }
 
             if ($(wizard[i]).attr("containeronload")) {
+                $(wizard[i]).attr("data-guidwizard", tabGenID);
                 eval($(wizard[i]).attr("containeronload"));
             }
         }
@@ -1047,7 +1049,7 @@ function filleditnavigation(filtro, LayoutID, Fill1PropertyID, tabGenID, fillgri
                     }
                 }
                 
-                
+                $("[id*='_" + tabGenID + "_panel'").attr("data-guidwizard",tabGenID);
                 var wizard = $("[data-guidwizard='" + tabGenID + "']");
         
                 for (var i = 0; i < wizard.length; i++) {  
