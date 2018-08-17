@@ -258,7 +258,7 @@ function compareObj(a,b) {
                                 orientation = result[0].orientation;
 
                             //var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents": '<span style="float:right;font-weight:bold;font-family:Arial;font-size:x-small;">{{page}}</span>' } };
-                            var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":''} };
+                            var options = {paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":''} };
                             //var options = {};
                             pdf.create(html.topo +  html.detail + html.footer, options).toStream(function(err, stream){
                                 stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
@@ -289,11 +289,12 @@ function compareObj(a,b) {
 
 function createHTML(element,select){
     var _eval = require("eval");
-    var html = "";
+    var cond = "";
     var funcao = "";
     var htmlAux = "";
     var comando = "";
-    var htmlFinal = "";
+    var varLoop = "";
+    var condicao = "";
     var blocoFuncao = "";
     var linhaComando = "";
     var itemRelatorio = "";
@@ -305,7 +306,10 @@ function createHTML(element,select){
     var posFim = 0;
     var posInicio = 0;
     var posDetalhe = 0;
+    var varCtrlLoop = 0;
     var posFimDetalhe = 0;
+    var pilhaLoops = [];
+    var saltoLinha = false;
     var retorno = null;
     var geraHtmlRelatorio = null;
 
@@ -321,10 +325,7 @@ function createHTML(element,select){
 
     variaveisFuncao += "var html = \"\"; ";
     variaveisFuncao += "var ok = true; "
-
-    if(element.length > 0){
-        variaveisFuncao += "var linhaQuery = 0; "; 
-    }
+    variaveisFuncao += "var linhaQuery = 0; "; 
     
     cmdIniciaisFuncao += "try{ "
     cmdIniciaisFuncao += "if(ok) { ";
@@ -354,36 +355,66 @@ function createHTML(element,select){
         posInicio = corpoRelatorio.indexOf("{{detail}}");
         posFim = corpoRelatorio.indexOf("{{/detail}}");
         if(posInicio > -1 && posFim > -1){
+            condicao = "true";
             posDetalhe = 0;
             itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
             posInicio = itemRelatorio.indexOf("{{",posDetalhe);
-            while(posDetalhe < itemRelatorio.length && posInicio > -1){
+            while(posDetalhe < itemRelatorio.length && posInicio > -1){                
                 blocoFuncao += "html += \"" + itemRelatorio.substring(posDetalhe,posInicio) +  "\"; ";
                 posFim = itemRelatorio.indexOf("}}",posInicio);
                 posDetalhe = posFim + 2;
                 linhaComando = itemRelatorio.substring(posInicio + 2,posFim);
                 posFim = linhaComando.indexOf(":");
-                if(posFim > -1)
-                    comando = linhaComando.substring(0,posFim+1);
-                else{
+                if(posFim < 0)
                     posFim = linhaComando.indexOf(".");
-                    if(posFim > -1){
-                    }
-                }
                 comando = linhaComando.substring(0,posFim + 1)
                 switch(comando){
                     case "loop:":
-                        blocoFuncao += "linhaQuery = 0; while(linhaQuery < select.length) { ";
+                        condicao = "true";
+                        salto = false;
+                        posInicio = posFim + 1;
+                        posFim = linhaComando.indexOf(";",posInicio);
+                        if(posFim < 0)
+                            posFim = linhaComando.length;
+                        while(posFim > -1){
+                            cond = linhaComando.substring(0,posFim);
+                            linhaComando = linhaComando.substring(posFim + 1);
+                            posFim = cond.indexOf("select.");
+                            if( posFim > -1){
+                                cond = cond.substring(posFim + 7);
+                                if(cond == "end"){
+                                    salto = true;
+                                    condicao += " && linhaQuery < select.length"
+                                }
+                                else{
+                                    varCtrlLoop++;
+                                    varLoop = "varloop" + varCtrlLoop.toString().trim();
+                                    variaveisFuncao += " var " + varLoop + " = \"\"; ";
+                                    blocoFuncao += varLoop + " = select[linhaQuery]." + cond.trim() + "; ";
+                                    condicao += " && select[linhaQuery]." + cond.trim() + " == " + varLoop;
+                                }
+                            }
+                            posFim = linhaComando.indexOf(";");
+                        }
+                        pilhaLoops.push(salto);
+                        blocoFuncao += "while(" + condicao + ") { ";
                         break;
                     case "/loop:":
-                        blocoFuncao += "linhaQuery++; }; ";
+                        salto = pilhaLoops.pop();
+                        if(salto){
+                            if(!saltoLinha){
+                                saltoLinha = true;
+                                blocoFuncao += "linhaQuery++; ";
+                            }
+                        }
+                        blocoFuncao += "}; ";
                         break;
                     case "select.":
                         blocoFuncao += "html += (select[linhaQuery]." + linhaComando.substring(posFim + 1) + " == null ? \" \" : select[linhaQuery]." + linhaComando.substring(posFim + 1) + "); ";
                         break;
                     default:
                         blocoFuncao += "html += \"" + linhaComando + "\"; ";
-                        break;            
+                        break;  
                 }
 
                 posInicio = itemRelatorio.indexOf("{{",posDetalhe);
@@ -503,22 +534,32 @@ function createGraphic(element, html, type) {
 function createHeader(element, html, reportname){
     var item = "";  
     var field = "";
+    var imagem = "";
     var empresa = "";
     var now = new Date();
     var data = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear()
+    var fs = require('fs');
 
     if(html){
         if(html.indexOf("{{headerdefault}}") > -1){
-            item = "<div style=\"width:100%\">";
+            item = "<div id=\"pageHeader\" style=\"width:100%\">";
             item += "<table style=\"width:100%;font-family:Arial\">";
             item += "<thead>";
             item += "<tr>";
-            item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/images/logo_empresa/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
+            if(element.recipe == "pdf"){
+                imagem = fs.readFileSync("/imagens/logos/logo_" + EnterpriseID + ".jpg", "base64");
+                //<IMG SRC="data:image/jpg;base64, codigos-base64">
+                item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"data:image/jpg;base64," + imagem + "\" width=130px height=auto></div> </th>";
+                //item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"file://imagens/logos/logo_" + EnterpriseID + "\" width=130px height=auto></div> </th>";
+            }
+            else{
+                item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
+            }
             item += "<th style=\"width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;\">" + reportname + "</th>";
             item += "<th rowspan=2 style=\"width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;\">" + data + "</th>";
             item += "</tr>";
             item += "<tr></tr>";
-            item += "<tr>"
+            item += "<tr>";
             if(element.recipe == "pdf"){
                 item += "<th colspan=2 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
                 item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">Página: {{page}}</th>";
@@ -526,6 +567,7 @@ function createHeader(element, html, reportname){
             else{
                 item += "<th colspan=3 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
             }
+            item += "</tr>";
             item += "<tr><th colspan=3></th></tr>";
             item += "</thead>";
             item += "</table>";
