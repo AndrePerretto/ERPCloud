@@ -395,6 +395,8 @@ function createHTML(element,select){
                                 }
                             }
                             posFim = linhaComando.indexOf(";");
+                            if(posFim == -1 && linhaComando.length > 0)
+                                posFim = linhaComando.length;
                         }
                         pilhaLoops.push(salto);
                         blocoFuncao += "while(" + condicao + ") { ";
@@ -546,6 +548,7 @@ function createHeader(element, html, reportname){
             item += "<table style=\"width:100%;font-family:Arial\">";
             item += "<thead>";
             item += "<tr>";
+            /*
             if(element.recipe == "pdf"){
                 imagem = fs.readFileSync("/imagens/logos/logo_" + EnterpriseID + ".jpg", "base64");
                 //<IMG SRC="data:image/jpg;base64, codigos-base64">
@@ -555,6 +558,10 @@ function createHeader(element, html, reportname){
             else{
                 item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
             }
+            */
+           
+            item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
+
             item += "<th style=\"width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;\">" + reportname + "</th>";
             item += "<th rowspan=2 style=\"width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;\">" + data + "</th>";
             item += "</tr>";
