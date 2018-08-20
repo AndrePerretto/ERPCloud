@@ -289,7 +289,9 @@ function compareObj(a,b) {
 
 function createHTML(element,select){
     var _eval = require("eval");
-    var cond = "";
+    var fs = require('fs');
+    var aux = "";
+    var valor = "";
     var funcao = "";
     var htmlAux = "";
     var comando = "";
@@ -298,6 +300,7 @@ function createHTML(element,select){
     var blocoFuncao = "";
     var linhaComando = "";
     var itemRelatorio = "";
+    var funcoesnumeros = "";
     var corpoRelatorio = "";
     var cmdFinaisFuncao = "";
     var cabecalhoFuncao = "";
@@ -308,8 +311,7 @@ function createHTML(element,select){
     var posDetalhe = 0;
     var varCtrlLoop = 0;
     var posFimDetalhe = 0;
-    var pilhaLoops = [];
-    var saltoLinha = false;
+    var listaVariaveis = [];
     var retorno = null;
     var geraHtmlRelatorio = null;
 
@@ -371,51 +373,129 @@ function createHTML(element,select){
                 switch(comando){
                     case "loop:":
                         condicao = "true";
-                        salto = false;
                         posInicio = posFim + 1;
                         posFim = linhaComando.indexOf(";",posInicio);
                         if(posFim < 0)
                             posFim = linhaComando.length;
                         while(posFim > -1){
-                            cond = linhaComando.substring(0,posFim);
+                            aux = linhaComando.substring(0,posFim);
                             linhaComando = linhaComando.substring(posFim + 1);
-                            posFim = cond.indexOf("select.");
+                            posFim = aux.indexOf("select.");
                             if( posFim > -1){
-                                cond = cond.substring(posFim + 7);
-                                if(cond == "end"){
-                                    salto = true;
+                                aux = aux.substring(posFim + 7);
+                                if(aux == "end"){
                                     condicao += " && linhaQuery < select.length"
                                 }
                                 else{
                                     varCtrlLoop++;
                                     varLoop = "varloop" + varCtrlLoop.toString().trim();
                                     variaveisFuncao += " var " + varLoop + " = \"\"; ";
-                                    blocoFuncao += varLoop + " = select[linhaQuery]." + cond.trim() + "; ";
-                                    condicao += " && select[linhaQuery]." + cond.trim() + " == " + varLoop;
+                                    blocoFuncao += varLoop + " = select[linhaQuery]." + aux.trim() + "; ";
+                                    condicao += " && select[linhaQuery]." + aux.trim() + " == " + varLoop;
                                 }
                             }
                             posFim = linhaComando.indexOf(";");
                             if(posFim == -1 && linhaComando.length > 0)
                                 posFim = linhaComando.length;
                         }
-                        pilhaLoops.push(salto);
                         blocoFuncao += "while(" + condicao + ") { ";
                         break;
                     case "/loop:":
-                        salto = pilhaLoops.pop();
-                        if(salto){
-                            if(!saltoLinha){
-                                saltoLinha = true;
-                                blocoFuncao += "linhaQuery++; ";
-                            }
-                        }
                         blocoFuncao += "}; ";
                         break;
                     case "select.":
-                        blocoFuncao += "html += (select[linhaQuery]." + linhaComando.substring(posFim + 1) + " == null ? \" \" : select[linhaQuery]." + linhaComando.substring(posFim + 1) + "); ";
+                        aux = linhaComando.substring(posFim + 1).trim();
+                        if(aux == "next")
+                            blocoFuncao += "linhaQuery++; ";
+                        else
+                            blocoFuncao += "html += (select[linhaQuery]." + aux + " == null ? \" \" : select[linhaQuery]." + aux + "); ";
+                        break;
+                    case "set:":
+                        posInicio = posFim + 1
+                        posFim = linhaComando.indexOf(",");
+                        if(posFim < 0){
+                            posFim = linhaComando.length;
+                            aux = linhaComando.substring(posInicio,posFim).trim();
+                            valor = "null";
+                        }
+                        else{
+                            aux = linhaComando.substring(posInicio,posFim).trim();
+                            valor = linhaComando.substring(posFim + 1);
+                            posFim = valor.indexOf("select.");
+                            if(posFim > -1){
+                                valor = valor.substring(posFim + 7);
+                                valor = "select[linhaQuery]." + valor.trim();
+                            }
+                        }
+                        if(listaVariaveis.indexOf(aux) < 0){
+                            listaVariaveis.push(aux);
+                            variaveisFuncao += "var " + aux + " = null; ";
+                        }                        
+                        blocoFuncao += aux + " = " + valor + "; ";
+                        break;
+                    case "mul:":
+                        posInicio = posFim + 1
+                        posFim = linhaComando.indexOf(",");
+                        if(posFim > -1){
+                            aux = linhaComando.substring(posInicio,posFim).trim();
+                            valor = linhaComando.substring(posFim + 1);
+                            posFim = valor.indexOf("select.");
+                            if(posFim > -1){
+                                valor = valor.substring(posFim + 7);
+                                valor = "select[linhaQuery]." + valor.trim();
+                            }
+                            if(listaVariaveis.indexOf(aux) < 0){
+                                listaVariaveis.push(aux);
+                                variaveisFuncao += "var " + aux + " = null; ";
+                            }                        
+                            blocoFuncao += aux + " *= " + valor + "; ";
+                        }
+                        break;
+                    case "sum:":
+                        posInicio = posFim + 1
+                        posFim = linhaComando.indexOf(",");
+                        if(posFim > -1){
+                            aux = linhaComando.substring(posInicio,posFim).trim();
+                            valor = linhaComando.substring(posFim + 1);
+                            posFim = valor.indexOf("select.");
+                            if(posFim > -1){
+                                valor = valor.substring(posFim + 7);
+                                valor = "select[linhaQuery]." + valor.trim();
+                            }
+                            if(listaVariaveis.indexOf(aux) < 0){
+                                listaVariaveis.push(aux);
+                                variaveisFuncao += "var " + aux + " = null; ";
+                            }                        
+                            blocoFuncao += aux + " += " + valor + "; ";
+                        }
+                        break;
+                    case "fmtn:":
+                        posInicio = posFim + 1
+                        posFim = linhaComando.indexOf(",");
+                        if(posFim > -1){
+                            aux = linhaComando.substring(posInicio,posFim).trim();
+                            valor = linhaComando.substring(posFim + 1);
+                            posFim = aux.indexOf("select.");
+                            if(posFim > -1){
+                                aux = aux.substring(posFim + 7);
+                                aux = "select[linhaQuery]." + aux.trim()
+                            }
+                            else{
+                               if(listaVariaveis.indexOf(aux) < 0){
+                                    listaVariaveis.push(aux);
+                                    variaveisFuncao += "var " + aux + " = null; ";
+                                }
+                            }                            
+                            blocoFuncao += "html += formataNumero(" + aux + "," + valor + ",\".\",\",\"); ";
+                        }
                         break;
                     default:
-                        blocoFuncao += "html += \"" + linhaComando + "\"; ";
+                        if(listaVariaveis.indexOf(linhaComando) > -1){
+                            blocoFuncao += "html += " + linhaComando + " == null ? \" \" : " + linhaComando + ".toString(); ";
+                        }
+                        else{
+                            blocoFuncao += "html += \"" + linhaComando + "\"; ";
+                        }
                         break;  
                 }
 
@@ -436,6 +516,11 @@ function createHTML(element,select){
     cmdFinaisFuncao += "html = err; "
     cmdFinaisFuncao += "}";
     cmdFinaisFuncao += "return(html); ";
+    
+    funcoesnumeros = fs.readFileSync("../frontend/framework/funcoesnumeros.js");
+
+    cmdFinaisFuncao += funcoesnumeros;
+
     cmdFinaisFuncao += "}";
 
     funcao = cabecalhoFuncao;
