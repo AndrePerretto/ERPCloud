@@ -210,7 +210,7 @@ function compareObj(a,b) {
 
             if (result) {
                 if (result.length > 0) {
-                    select = result[0].select; 
+                    select = result[0].select;
                     
                     if(result[0].headerhtml){
                         headerhtml = result[0].headerhtml
@@ -227,65 +227,155 @@ function compareObj(a,b) {
             }
             
             db.close();
-            sql.close();
 
-            // connect to your database
-            sql.connect(config, function (err) {    
-                if (err) console.log(err);
-        
-                // create Request object
-                var request = new sql.Request();       
-        
-                // query to the database and get the records
-                request.query(select, function (err, recordset) {
-                    if (err) console.log(err)
-                    var element = recordset.recordsets[0];
-                    /*                    
-                    var header = createHeader(element, headerhtml, titulo);
-                    html = createMaster(element, html);
-                    html = createDetails(element, html);
-                    html = createFooter(element, html);
-                    html = createGraphic(element, html, "pie");
-                    */
-                    switch (recipe){
-                        case "pdf":                                                
-                            html = createHTML(result[0],element);                            
-                            if(!headersize){
-                                headersize = "20";
-                            }
-                            var orientation = "portrait";
-                            if(result[0].orientation != "")
-                                orientation = result[0].orientation;
+            if(result[0].parameters.length > 0) {
+               createModalParam(result[0],function(html){
+                    res.writeHeader(200, {"Content-Type": "text/html"});  
+                    res.write(html);  
+                    res.end();
+               });
+            }
+            else{
+               sql.close();
 
-                            //var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents": '<span style="float:right;font-weight:bold;font-family:Arial;font-size:x-small;">{{page}}</span>' } };
-                            var options = {paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":''} };
-                            //var options = {};
-                            pdf.create(html.topo +  html.detail + html.footer, options).toStream(function(err, stream){
-                                stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
-                                res.setHeader('Content-type', 'application/pdf')
-                                stream.pipe(res)
-                            });
+                // connect to your database
+                sql.connect(config, function (err) {    
+                    if (err) console.log(err);
+        
+                    // create Request object
+                    var request = new sql.Request();       
+        
+                    // query to the database and get the records
+                    request.query(select, function (err, recordset) {
+                        if (err) console.log(err)
+                        var element = recordset.recordsets[0];
+                        /*                    
+                        var header = createHeader(element, headerhtml, titulo);
+                        html = createMaster(element, html);
+                        html = createDetails(element, html);
+                        html = createFooter(element, html);
+                        html = createGraphic(element, html, "pie");
+                        */
+                        switch (recipe){
+                            case "pdf":                                                
+                                html = createHTML(result[0],element);                            
+                                if(!headersize){
+                                    headersize = "20";
+                                }
+                                var orientation = "portrait";
+                                if(result[0].orientation != "")
+                                    orientation = result[0].orientation;
+
+                                //var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents": '<span style="float:right;font-weight:bold;font-family:Arial;font-size:x-small;">{{page}}</span>' } };
+                                var options = {paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":html.footer} };
+                                //var options = {};
+                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
+                                    stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                    res.setHeader('Content-type', 'application/pdf')
+                                    stream.pipe(res)
+                                });
                             
-                            break;
-                        case "html":                        
-                            html = createHTML(result[0],element);                            
-                            var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
-                            stream.on('open', function(fd) {
-                                stream.write(html.topo + html.header + html.detail + html.footer + html.base);
-                                stream.end();
-                                res.writeHeader(200, {"Content-Type": "text/html"});  
-                                res.write(html.topo + html.header + html.detail + html.footer + html.base);  
-                                res.end();  
-                            });                                
+                                break;
+                            case "html":                        
+                                html = createHTML(result[0],element);                            
+                                var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
+                                stream.on('open', function(fd) {
+                                    stream.write(html.topo + html.header + html.detail + html.footer + html.base);
+                                    stream.end();
+                                    res.writeHeader(200, {"Content-Type": "text/html"});  
+                                    res.write(html.topo + html.header + html.detail + html.footer + html.base);  
+                                    res.end();  
+                                });                                
                             
-                            break; 
-                    }    
+                                break; 
+                        }    
+                    });
                 });
-            });
+            }
         })
     });
 })
 
+function createModalParam(element,callback){
+    var html = "";
+    var parametros = [];
+    var query = "";
+    var htmlAux = "";
+    var parametro = 0;
+    var nrelementos = 0;
+    var guid = general.guid(); 
+
+    html = "<html>";
+    html += "<head>";
+    html += "<meta charset='UTF-8'>"
+    html += "<head>";
+    html += "<body>";
+    html += "<div id=\"" + guid + "\">";
+    html += "<h3>" + element.titulo + " (parâmetros)</h3>";
+    html += "<form id=\"" + guid + "_form\">";
+    nrelementos = element.parameters.length;
+    for(parametro = 0; parametro < nrelementos; parametro++){
+        html += element.parameters[parametro].title + "<br>"
+        switch(element.parameters[parametro].type){
+            case "drop":
+                parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","query":element.parameters[parametro].select});
+                html += "<select id=\"" + guid + "_" + element.parameters[parametro].name + "\">";
+                html += "<option value = \"\">Selecione...</option>";
+                html += "{{" + element.parameters[parametro].name + "}}";
+                html += "</select>";
+                html += "<br>";
+                html += "<br>";
+                break;
+            default:
+                html += "<input type=\"text\" name=\"" + element.parameters[parametro].name + "\" id=\"" + guid + "_" + element.parameters[parametro].name + "\">";
+                html += "<br>";
+                html += "<br>";
+                break;
+        }
+    }       
+    html += "<br><br>";
+    html += "</form>";
+    html += "</div>";
+    html += "</body>";
+    html += "</html>";
+    if(parametros.length == 0){
+        callback(html);
+    }
+    else{
+        query = "select parametro,tipo,valor,descricao from (";
+        for(parametro = 0; parametro < parametros.length; parametro++){
+            if(parametro > 0)
+                query += " union all ";
+
+            query += "select '" + parametros[parametro].parametro + "' parametro,"
+            query += "'" + parametros[parametro].tipo + "' tipo,"
+            query += parametros[parametro].query.substring(parametros[parametro].query.indexOf("select ") + 7);
+        }
+        query += ") opcoes order by parametro,descricao"
+        sql.close();
+        sql.connect(config, function (err) {
+            if (err) console.log(err);
+            var request = new sql.Request();
+            request.query(query, function (err, recordset) {
+                if (err) console.log(err)
+                var i = 0;
+                var nomeParametro = "";
+                while(i < recordset.recordsets[0].length){
+                    nomeParametro = recordset.recordsets[0][i].parametro;
+                    htmlAux = "";
+                    while(i < recordset.recordsets[0].length && nomeParametro == recordset.recordsets[0][i].parametro){
+                        if(recordset.recordsets[0][i].tipo == "drop"){
+                            htmlAux += "<option value=\"" + recordset.recordsets[0][i].valor + "\">" + recordset.recordsets[0][i].descricao + "</option>";
+                        }
+                        i++;
+                    }
+                    html = html.replace("{{" + nomeParametro + "}}",htmlAux);
+                }
+                callback(html);
+            })
+        })
+    }
+}
 
 function createHTML(element,select){
     var _eval = require("eval");
@@ -507,6 +597,19 @@ function createHTML(element,select){
             }
         }
 
+        /*-*/
+        posInicio = corpoRelatorio.indexOf("{{footer}}");
+        posFim = corpoRelatorio.indexOf("{{/footer}}");
+        if(posInicio > -1 && posFim > -1){
+            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+            posInicio = itemRelatorio.indexOf("{{footerdefault}}")
+            if(posInicio > -1){
+                htmlAux = createFooter(element,itemRelatorio,element.titulo);
+                itemRelatorio = itemRelatorio.replace("{{footerdefault}}", htmlAux);
+            }
+            retorno.footer = itemRelatorio;
+        }
+
         blocoFuncao += "html += \"" + itemRelatorio.substring(posFimDetalhe) + "\"; ";
     }
 
@@ -657,7 +760,8 @@ function createHeader(element, html, reportname){
                 item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">Página: {{page}}</th>";
             }
             else{
-                item += "<th colspan=3 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
+                item += "<th colspan=2 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
+                item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=100px height=auto> </th>";
             }
             item += "</tr>";
             item += "<tr><th colspan=3></th></tr>";
@@ -737,9 +841,25 @@ function createDetails(element, html){
     return html;
 }
 
-function createFooter(element, html){
+function createFooter(element, html, reportname){
     var item = "";  
     var field = "";
+
+    item += "<div id=\"pageFooterr\" style=\"width:100%\">";
+    item += "<table style=\"width:100%;font-family:Arial;border-style:hidden;\">";
+    item += "<thead>";
+    item += "<tr>";
+    if(element.recipe == "pdf")
+        item += "<th style=\"width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=90px height=15px> </th>";
+    else
+        item += "<th style=\"width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=100px height=20px> </th>";
+    item += "</tr>";
+    item += "</thead>";
+    item += "</table>";
+    item += "</div>";
+
+    return(item);
+    /*
     if(html){
         item = html.substring(html.indexOf("{{footer}}"),html.indexOf("{{/footer}}"));
         item = item.replace("{{footer}}","");
@@ -761,6 +881,7 @@ function createFooter(element, html){
         html = html.replace("{{/footer}}","");
     }
     return html;
+    */
 }
 
 function createMaster(element, html){
