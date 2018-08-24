@@ -30,6 +30,8 @@ var configEnvironment = {};
 //var configEnvironment = {user: 'sa', password: '1234567890', server: '127.0.0.1',  database: 'Environment'};
 //var configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
 
+var pastaParametrosRelatorios = "../frontend/reports/parametrosusuarios/";
+
 var EnterpriseID = "";
 var EnterpriseName = "";
 var UserID = "";
@@ -177,19 +179,23 @@ function compareObj(a,b) {
     if (a.nome < b.nome)
       return -1;
     if (a.nome > b.nome)
+
       return 1;
     return 0;
 }
 
-  router.route('/r/:id').get(function(req, res) {
+  router.route('/r/:id/:parametros').get(function(req, res) {
+    var fs = require('fs');
     var id = req.param('id');
+    var nomeArquivo = "";
     var nome = id;
     var html = "";
-    var funcao = "";
+    var handlef = null;
     var full = req.host;
-    full = full.replace("http://","");
-    full = "http://" + full;
-
+    var paramRelatorio = null;
+    var paraRelatorioProps = null;
+    var saidaRelatorio = "";
+    var orientacaoRelatorio = "portrait";
     var MongoClient = require('mongodb').MongoClient;
 
     var select = ""; //'select Id, nm_razaosocial, nr_codigo, dt_cadastro, nm_nomefantasia, sn_pessoafisica, nm_cpf, nm_cnpj FROM entidade'
@@ -200,6 +206,35 @@ function compareObj(a,b) {
     var titulo = "";
     var headerhtml = "";
     var headersize = "";
+
+    full = full.replace("http://","");
+    full = "http://" + full;
+
+    paramRelatorio = JSON.parse(req.param('parametros'));
+    nomeArquivo = id + "_" + paramRelatorio.userId;
+    saidaRelatorio = paramRelatorio._saida_;
+    orientacaoRelatorio = paramRelatorio._orientacao_;
+    delete paramRelatorio.userId;
+
+    try{
+        if(!fs.existsSync(pastaParametrosRelatorios)){
+            fs.mkdirSync(pastaParametrosRelatorios);
+        }
+        handlef = fs.openSync(pastaParametrosRelatorios + nomeArquivo,"w");
+        if(handlef > -1){
+            fs.writeFileSync(handlef,JSON.stringify(paramRelatorio));
+            fs.closeSync(handlef);
+        }
+        else{
+            console.log("Relatório: " + id + " *** Não foi possível abrir o arquivo de parâmetros de usuário ***");
+        }
+    }
+    catch(err){
+        console.log("Relatório: " + id + " *** " + err + " ***");
+    }
+    
+    delete paramRelatorio._orientacao_;
+    delete paramRelatorio._saida_;
 
     //nome = nome.toUpperCase();
     MongoClient.connect(url, function(err, db) {
@@ -227,28 +262,32 @@ function compareObj(a,b) {
             }
             
             db.close();
+            sql.close();
 
-            if(result[0].parameters.length > 0) {
-               createModalParam(result[0],function(html){
-                    res.writeHeader(200, {"Content-Type": "text/html"});  
-                    res.write(html);  
-                    res.end();
-               });
-            }
-            else{
-               sql.close();
+            // connect to your database
+            sql.connect(config, function (err) {    
+                if (err) console.log(err);
+    
+                // create Request object
+                var request = new sql.Request();
 
-                // connect to your database
-                sql.connect(config, function (err) {    
-                    if (err) console.log(err);
-        
-                    // create Request object
-                    var request = new sql.Request();       
-        
-                    // query to the database and get the records
-                    request.query(select, function (err, recordset) {
-                        if (err) console.log(err)
-                        var element = recordset.recordsets[0];
+                paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
+
+                for(var i = 0; i < paramRelatorioProps.length; i++){
+                    request.input(paramRelatorioProps[i],paramRelatorio[paramRelatorioProps[i]]);
+                }
+    
+                // query to the database and get the records
+                request.query(select, function (err, recordset) {
+                    if (err){
+                        console.log(err);
+                        res.writeHeader(200, {"Content-Type": "text/html"});  
+                        res.write(err);  
+                        res.end();
+                    }
+                    else{
+                        var element = recordset.recordsets[0];                                                
+                        html = createHTML(result[0],element);
                         /*                    
                         var header = createHeader(element, headerhtml, titulo);
                         html = createMaster(element, html);
@@ -256,15 +295,19 @@ function compareObj(a,b) {
                         html = createFooter(element, html);
                         html = createGraphic(element, html, "pie");
                         */
-                        switch (recipe){
-                            case "pdf":                                                
-                                html = createHTML(result[0],element);                            
+                        switch (saidaRelatorio){
+                            case "pdf":
                                 if(!headersize){
                                     headersize = "20";
                                 }
+                                
                                 var orientation = "portrait";
-                                if(result[0].orientation != "")
-                                    orientation = result[0].orientation;
+                                if(orientacaoRelatorio != "")
+                                    orientation = orientacaoRelatorio;
+                                else{
+                                    if(result[0].orientation != "")
+                                        orientation = result[0].orientation;
+                                }
 
                                 //var options = { paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents": '<span style="float:right;font-weight:bold;font-family:Arial;font-size:x-small;">{{page}}</span>' } };
                                 var options = {paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":html.footer} };
@@ -276,8 +319,7 @@ function compareObj(a,b) {
                                 });
                             
                                 break;
-                            case "html":                        
-                                html = createHTML(result[0],element);                            
+                            case "html":
                                 var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
                                 stream.on('open', function(fd) {
                                     stream.write(html.topo + html.header + html.detail + html.footer + html.base);
@@ -288,67 +330,225 @@ function compareObj(a,b) {
                                 });                                
                             
                                 break; 
-                        }    
-                    });
+                        }
+                    }
                 });
-            }
+            });            
         })
     });
 })
 
-function createModalParam(element,callback){
-    var html = "";
-    var parametros = [];
-    var query = "";
-    var htmlAux = "";
-    var parametro = 0;
-    var nrelementos = 0;
-    var guid = general.guid(); 
 
+router.route('/ntlctreports/:id/:userid').get(function(req, res) {
+    var id = req.param('id');
+    var full = "http://" + req.headers.host;
+    var MongoClient = require('mongodb').MongoClient;
+
+    MongoClient.connect(url, function(err, db) {
+        if (err)
+            throw err;
+        else{      
+            db.collection("reports").find({"idReport": id}, { _id: false }).toArray(function(err, result) {
+                if (err) 
+                    throw err;
+                else{            
+                    db.close();
+                    if (result) {
+                        createModalParam(result[0],req.param("userid"),full,function(html){
+                            res.writeHeader(200, {"Content-Type": "text/html"});  
+                            res.write(html);  
+                            res.end();
+                        });
+                    }
+                }
+            })
+        }
+    });
+})
+
+
+function createModalParam(element,userid,rota,callback){
+    var fs = require("fs");
+    var id = "";
+    var html = "";
+    var nomeArquivo = "";
+    var query = "";
+    var vlrAnterior = "";
+    var htmlAux = "";
+    var jsonParametros = "";
+    var indValor = 0;
+    var parametro = 0;
+    var handlef = 0;
+    var colunas = 0;
+    var nrelementos = 0;
+    var parametros = [];
+    var valoresAnteriores = {};
+    var guid = general.guid();     
+    
+    try{
+        nomeArquivo = element.idReport + "_" + userid
+        handlef = fs.openSync(pastaParametrosRelatorios + nomeArquivo,"r");
+        if(handlef > -1){
+            jsonParametros = fs.readFileSync(handlef);
+            fs.closeSync(handlef);
+            valoresAnteriores = JSON.parse(jsonParametros);
+        }       
+        else{
+            console.log("Relatório (parâmetros): " + nomeArquivo + " *** Não foi possível abrir o arquivo de parâmetros de usuário ***");
+        }
+    }
+    catch(err){
+        console.log("Relatório (parâmetros): " + nomeArquivo + " *** " + err + " ***");
+    }
+    
+    jsonParametros = "parametros = {";
+    jsonParametros += "\"userId\":\"" + userid + "\",";
+    
+/*
     html = "<html>";
     html += "<head>";
     html += "<meta charset='UTF-8'>"
     html += "<head>";
     html += "<body>";
+*/
     html += "<div id=\"" + guid + "\">";
     html += "<h3>" + element.titulo + " (parâmetros)</h3>";
     html += "<form id=\"" + guid + "_form\">";
+    html += "<table class=\"table table-borderless\" id=\"" + guid + "_table\" cellspacing=\"10\" style=\"width:100%;\">";
+    html += "<tbody>";
+    html += "<tr>";
+    /*
+    Parâmetro para orientação */
+    if(valoresAnteriores.hasOwnProperty("_orientacao_")){
+        vlrAnterior = valoresAnteriores._orientacao_;
+    }
+    else
+        vlrAnterior = "";
+    html += "<td style=\"width:50%\">";
+    html += "<div class=\"form-group\" id=\"" + guid + "orientacao_formgroup\">";
+    html += "<div class=\"control-group\" id=\"" + guid + "orientacao_controlgroup\">";
+    id = guid + "_orientacao";
+    html += "<label class for=\"" + id + "\">Orientação</label>";
+    jsonParametros += "\"_orientacao_\":document.getElementById(\"" + id + "\").value,";
+    html += "<select id=\"" + id + "\" class=\"form-control\">";
+    html += "<option value=\"portrait\"" + (vlrAnterior == "portrait"?"selected":"") + ">Retrato</option>";
+    html += "<option value=\"landscape\"" + (vlrAnterior == "landscape"?"selected":"") + ">Paisagem</option>";
+    html += "</select>";
+    html += "</div>";
+    html += "</div>";
+    html += "</td>";
+    /*
+    Parâmetro para tipo de saída */
+    if(valoresAnteriores.hasOwnProperty("_saida_"))
+        vlrAnterior = valoresAnteriores._saida_;
+    else
+        vlrAnterior = "";
+    html += "<td style=\"width:50%\">";
+    html += "<div class=\"form-group\" id=\"" + guid + "tiposaida_formgroup\">";
+    html += "<div class=\"control-group\" id=\"" + guid + "tiposaida_controlgroup\">";
+    id = guid + "_tiposaida";
+    html += "<label class for=\"" + id + "\">Saída</label>";
+    jsonParametros += "\"_saida_\":document.getElementById(\"" + id + "\").value,";
+    html += "<select id=\"" + id + "\" class=\"form-control\" value=\"" + vlrAnterior + "\">";
+    html += "<option value=\"html\"" + (vlrAnterior == "html"?"selected":"") + ">html</option>";
+    html += "<option value=\"pdf\"" + (vlrAnterior == "pdf"?"selected":"") + ">Pdf</option>";
+    html += "</select>";
+    html += "</div>";
+    html += "</div>";
+    html += "</td>";
+    html += "</tr>";
+    /*-*/
     nrelementos = element.parameters.length;
+    colunas = 0;
     for(parametro = 0; parametro < nrelementos; parametro++){
-        html += element.parameters[parametro].title + "<br>"
+        if(colunas == 0)
+            html += "<tr>";
+        if(parametro > 0)
+            jsonParametros += ",";
+        id = guid + "_" + element.parameters[parametro].name
+        jsonParametros += "\"" + element.parameters[parametro].name + "\":document.getElementById(\"" + id + "\").value";
+        if(valoresAnteriores.hasOwnProperty(element.parameters[parametro].name))
+            vlrAnterior = valoresAnteriores[element.parameters[parametro].name];
+        else
+            vlrAnterior = "";
         switch(element.parameters[parametro].type){
             case "drop":
-                parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","query":element.parameters[parametro].select});
-                html += "<select id=\"" + guid + "_" + element.parameters[parametro].name + "\">";
+                colunas = 2;
+                html += "<td colspan=\"2\">";
+                html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
+                html += "<div class=\"control-group\" id=\"" + id + "_controlgroup\">";
+                html += "<label class for=\"" + id + "\">" + element.parameters[parametro].title + "</label>";
+                parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","valoranterior":vlrAnterior,"query":element.parameters[parametro].select});
+                html += "<select id=\"" + id + "\" class=\"form-control\" autocomplete=\"on\">";
                 html += "<option value = \"\">Selecione...</option>";
                 html += "{{" + element.parameters[parametro].name + "}}";
                 html += "</select>";
-                html += "<br>";
-                html += "<br>";
+                html += "</div>";
+                html += "</div>";
+                html += "</td>";
                 break;
+            case "date":
+                colunas++;
+                html += "<td style=\"width:50%\">";
+                html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
+                html += "<div class=\"control-group\" id=\"" + id + "_controlgroup\">";
+                html += "<label class for=\"" + id + "\">" + element.parameters[parametro].title + "</label>";
+                html += "<input type=\"date\" data-mask=\"00/00/0000\" name=\"" + element.parameters[parametro].name + "\" id=\"" + id + "\" class=\"form-control\" value=\"" + vlrAnterior + "\">";
+                html += "</div>";
+                html += "</div>";
+                html += "</td>";
+                break;                
             default:
-                html += "<input type=\"text\" name=\"" + element.parameters[parametro].name + "\" id=\"" + guid + "_" + element.parameters[parametro].name + "\">";
-                html += "<br>";
-                html += "<br>";
+                colunas++;
+                html += "<td style=\"width:50%\">";
+                html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
+                html += "<div class=\"control-group\" id=\"" + id + "_controlgroup\">";
+                html += "<label class for=\"" + id + "\">" + element.parameters[parametro].title + "</label>";
+                html += "<input type=\"text\" name=\"" + element.parameters[parametro].name + "\" id=\"" + id + "\" class=\"form-control\" value=\"" + vlrAnterior + "\">";
+                html += "</div>";
+                html += "</div>";
+                html += "</td>";
                 break;
         }
-    }       
+        if(colunas == 2){
+            colunas = 0;
+            html += "</tr>";
+        }
+    }
+    jsonParametros += "}; ";
+    html += "</tbody>";
+    html += "</table>";
     html += "<br><br>";
+    html += "<div id=\"" + guid + "_botoes\">"
+    html += "<button id=\"" + guid + "_btnConfRel\" type=\"button\" class=\"btn btn-icon btn-success btn-round btn-xs\" style=\"height: 20px;\" title=\Confirmar\" onclick=\"geraRelatorio()\"><span class=\"fa fa-check\"></span></button>"
+    html += "<button id=\"" + guid + "_btnCancRel\" type=\"button\" class=\"btn btn-icon btn-danger btn-round btn-xs\" style=\"height: 20px;\" title=\"Cancelar\" onclick=\"(function(){$('.close').click();})()\"><span class=\"fa fa-remove\"></span></button>"
+    html += "</div>"
     html += "</form>";
     html += "</div>";
+    html += "<script>";
+    html += "function geraRelatorio(){ ";
+    html += "var parametros = \"\"; ";
+    html += jsonParametros;    
+    html += "window.open('" + rota+ "/api/r/" + element.idReport + "/' + JSON.stringify(parametros)); "
+    html += "$('.close').click(); ";
+    html += "}";
+    html += "</script>";
     html += "</body>";
     html += "</html>";
+    html += "</div>";
+    html += "</body>";
     if(parametros.length == 0){
         callback(html);
     }
     else{
-        query = "select parametro,tipo,valor,descricao from (";
+        query = "select parametro,tipo,valoranterior,valor,descricao from (";
         for(parametro = 0; parametro < parametros.length; parametro++){
             if(parametro > 0)
                 query += " union all ";
 
             query += "select '" + parametros[parametro].parametro + "' parametro,"
             query += "'" + parametros[parametro].tipo + "' tipo,"
+            query += "'" + parametros[parametro].valoranterior + "' valoranterior,"
             query += parametros[parametro].query.substring(parametros[parametro].query.indexOf("select ") + 7);
         }
         query += ") opcoes order by parametro,descricao"
@@ -365,7 +565,7 @@ function createModalParam(element,callback){
                     htmlAux = "";
                     while(i < recordset.recordsets[0].length && nomeParametro == recordset.recordsets[0][i].parametro){
                         if(recordset.recordsets[0][i].tipo == "drop"){
-                            htmlAux += "<option value=\"" + recordset.recordsets[0][i].valor + "\">" + recordset.recordsets[0][i].descricao + "</option>";
+                            htmlAux += "<option value=\"" + recordset.recordsets[0][i].valor + "\"" + (recordset.recordsets[0][i].valor == recordset.recordsets[0][i].valoranterior?"selected":"") + ">" + recordset.recordsets[0][i].descricao + "</option>";
                         }
                         i++;
                     }
@@ -374,6 +574,10 @@ function createModalParam(element,callback){
                 callback(html);
             })
         })
+    }
+
+    function localizaValorAnterior(valor){
+
     }
 }
 
@@ -565,6 +769,9 @@ function createHTML(element,select){
                         if(posFim > -1){
                             aux = linhaComando.substring(posInicio,posFim).trim();
                             valor = linhaComando.substring(posFim + 1);
+                            if(isNaN(valor)){
+                                valor = "0.00";
+                            }
                             posFim = aux.indexOf("select.");
                             if(posFim > -1){
                                 aux = aux.substring(posFim + 7);

@@ -2113,5 +2113,18 @@ function reportScreen(id){
 }
 
 function openReport(name){
-    window.open(getGlobalParameters("urlPlataform") + "/api/report/" + name,'_blank');
+    //window.open(getGlobalParameters("urlPlataform") + "/api/report/" + name,'_blank');
+
+    $("#myModalLabelInfo").html("");
+
+    $("#mensagem").load(getGlobalParameters("urlPlataform") + "/api/ntlctreports/" + name + "/" + returnCookie("UserID"),function(response,status,xhr){
+        if(status == "success"){
+            $("#mensagem").html(response);
+        }
+        else{
+            $("#mensagem").html(xhr.status + " " + xhr.statusText);
+        }
+    });
+
+    $('#alertaModalShow').modal();
 }
