@@ -211,9 +211,9 @@ function compareObj(a,b) {
     full = "http://" + full;
 
     paramRelatorio = JSON.parse(req.param('parametros'));
-    nomeArquivo = id + "_" + paramRelatorio.userId;
-    saidaRelatorio = paramRelatorio._saida_;
-    orientacaoRelatorio = paramRelatorio._orientacao_;
+    nomeArquivo = id + "_" + paramRelatorio.userId.value;
+    saidaRelatorio = paramRelatorio._saida_.value;
+    orientacaoRelatorio = paramRelatorio._orientacao_.value;
     delete paramRelatorio.userId;
 
     try{
@@ -271,10 +271,13 @@ function compareObj(a,b) {
                 // create Request object
                 var request = new sql.Request();
 
+                //Parametro com o id da empresa
+                request.input("idempresa",EnterpriseID);
+                /*
+                Parâmetros do relatórios */                
                 paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
-
                 for(var i = 0; i < paramRelatorioProps.length; i++){
-                    request.input(paramRelatorioProps[i],paramRelatorio[paramRelatorioProps[i]]);
+                    request.input(paramRelatorioProps[i],(paramRelatorio[paramRelatorioProps[i]].value == "" ? null : paramRelatorio[paramRelatorioProps[i]].value));
                 }
     
                 // query to the database and get the records
@@ -286,8 +289,10 @@ function compareObj(a,b) {
                         res.end();
                     }
                     else{
-                        var element = recordset.recordsets[0];                                                
-                        html = createHTML(result[0],element);
+                        var element = recordset.recordsets[0];   
+                        result[0].recipe = saidaRelatorio;     
+                        result[0].orientation = orientacaoRelatorio;                                        
+                        html = createHTML(result[0],element,paramRelatorio);
                         /*                    
                         var header = createHeader(element, headerhtml, titulo);
                         html = createMaster(element, html);
@@ -403,7 +408,7 @@ function createModalParam(element,userid,rota,callback){
     }
     
     jsonParametros = "parametros = {";
-    jsonParametros += "\"userId\":\"" + userid + "\",";
+    jsonParametros += "\"userId\":{\"value\":\"" + userid + "\",\"text\":\"" + userid + "\"},";  
     
 /*
     html = "<html>";
@@ -421,7 +426,7 @@ function createModalParam(element,userid,rota,callback){
     /*
     Parâmetro para orientação */
     if(valoresAnteriores.hasOwnProperty("_orientacao_")){
-        vlrAnterior = valoresAnteriores._orientacao_;
+        vlrAnterior = valoresAnteriores._orientacao_.value;
     }
     else
         vlrAnterior = "";
@@ -430,7 +435,7 @@ function createModalParam(element,userid,rota,callback){
     html += "<div class=\"control-group\" id=\"" + guid + "orientacao_controlgroup\">";
     id = guid + "_orientacao";
     html += "<label class for=\"" + id + "\">Orientação</label>";
-    jsonParametros += "\"_orientacao_\":document.getElementById(\"" + id + "\").value,";
+    jsonParametros += "\"_orientacao_\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text},";
     html += "<select id=\"" + id + "\" class=\"form-control\">";
     html += "<option value=\"portrait\"" + (vlrAnterior == "portrait"?"selected":"") + ">Retrato</option>";
     html += "<option value=\"landscape\"" + (vlrAnterior == "landscape"?"selected":"") + ">Paisagem</option>";
@@ -441,7 +446,7 @@ function createModalParam(element,userid,rota,callback){
     /*
     Parâmetro para tipo de saída */
     if(valoresAnteriores.hasOwnProperty("_saida_"))
-        vlrAnterior = valoresAnteriores._saida_;
+        vlrAnterior = valoresAnteriores._saida_.value;
     else
         vlrAnterior = "";
     html += "<td style=\"width:50%\">";
@@ -449,7 +454,7 @@ function createModalParam(element,userid,rota,callback){
     html += "<div class=\"control-group\" id=\"" + guid + "tiposaida_controlgroup\">";
     id = guid + "_tiposaida";
     html += "<label class for=\"" + id + "\">Saída</label>";
-    jsonParametros += "\"_saida_\":document.getElementById(\"" + id + "\").value,";
+    jsonParametros += "\"_saida_\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text},";  
     html += "<select id=\"" + id + "\" class=\"form-control\" value=\"" + vlrAnterior + "\">";
     html += "<option value=\"html\"" + (vlrAnterior == "html"?"selected":"") + ">html</option>";
     html += "<option value=\"pdf\"" + (vlrAnterior == "pdf"?"selected":"") + ">Pdf</option>";
@@ -467,13 +472,13 @@ function createModalParam(element,userid,rota,callback){
         if(parametro > 0)
             jsonParametros += ",";
         id = guid + "_" + element.parameters[parametro].name
-        jsonParametros += "\"" + element.parameters[parametro].name + "\":document.getElementById(\"" + id + "\").value";
         if(valoresAnteriores.hasOwnProperty(element.parameters[parametro].name))
-            vlrAnterior = valoresAnteriores[element.parameters[parametro].name];
+            vlrAnterior = valoresAnteriores[element.parameters[parametro].name].value;
         else
             vlrAnterior = "";
         switch(element.parameters[parametro].type){
             case "drop":
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text}";  
                 colunas = 2;
                 html += "<td colspan=\"2\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -481,7 +486,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "<label class for=\"" + id + "\">" + element.parameters[parametro].title + "</label>";
                 parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","valoranterior":vlrAnterior,"query":element.parameters[parametro].select});
                 html += "<select id=\"" + id + "\" class=\"form-control\" autocomplete=\"on\">";
-                html += "<option value = \"\">Selecione...</option>";
+                html += "<option value = \"\"> </option>";
                 html += "{{" + element.parameters[parametro].name + "}}";
                 html += "</select>";
                 html += "</div>";
@@ -489,6 +494,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "</td>";
                 break;
             case "date":
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value.split(\"-\").reverse().join(\"-\").toString()}";
                 colunas++;
                 html += "<td style=\"width:50%\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -500,6 +506,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "</td>";
                 break;                
             default:
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value}";  
                 colunas++;
                 html += "<td style=\"width:50%\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -575,14 +582,10 @@ function createModalParam(element,userid,rota,callback){
                 callback(html);
             })
         })
-    }
-
-    function localizaValorAnterior(valor){
-
-    }
+    }   
 }
 
-function createHTML(element,select){
+function createHTML(element,select,paramRelatorio){
     var _eval = require("eval");
     var fs = require('fs');
     var aux = "";
@@ -601,6 +604,7 @@ function createHTML(element,select){
     var cabecalhoFuncao = "";
     var variaveisFuncao = "";
     var cmdIniciaisFuncao = "";
+    var pos = 0;
     var posFim = 0;
     var posInicio = 0;
     var posDetalhe = 0;
@@ -609,6 +613,7 @@ function createHTML(element,select){
     var listaVariaveis = [];
     var retorno = null;
     var geraHtmlRelatorio = null;
+    var paramRelatorioProps = null
 
     retorno = {
         topo: "",
@@ -617,6 +622,8 @@ function createHTML(element,select){
         footer: "",
         base: ""
     }
+                
+    paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
 
     cabecalhoFuncao = "module.exports = function(select) { ";
 
@@ -666,6 +673,23 @@ function createHTML(element,select){
                     posFim = linhaComando.indexOf(".");
                 comando = linhaComando.substring(0,posFim + 1)
                 switch(comando){
+                    case "paramrel:":
+                        posInicio = posFim + 1;
+                        posFim = linhaComando.indexOf(".",posInicio);
+                        if(posFim < 0)
+                            posFim = linhaComando.length;
+                        aux = linhaComando.substring(posInicio,posFim);
+                        linhaComando = linhaComando.substring(posFim + 1);
+                        pos = paramRelatorioProps.indexOf(aux)
+                        if(pos > -1){
+                            if(linhaComando == "name")
+                                blocoFuncao += "html += \"" + element.parameters[pos].title + "\"; ";
+                            else{
+                                if(linhaComando == "value")
+                                    blocoFuncao += "html += \"" + paramRelatorio[paramRelatorioProps[pos]].text + "\"; ";
+                            }
+                        }
+                        break;
                     case "loop:":
                         condicao = "true";
                         posInicio = posFim + 1;
