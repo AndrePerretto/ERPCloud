@@ -313,7 +313,8 @@ function compareObj(a,b) {
                                 var options = {paginationOffset: 1,orientation: orientation, header: {"height": "" + headersize + "mm", "contents": html.header} ,footer: {"height":"10mm", "contents":html.footer} };
                                 //var options = {};
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
-                                    //stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                    console.log(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'))
+                                    stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
                                     res.setHeader('Content-type', 'application/pdf')
                                     stream.pipe(res)
                                 });
