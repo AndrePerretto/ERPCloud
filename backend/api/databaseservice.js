@@ -382,10 +382,10 @@ function createModalParam(element,userid,rota,callback){
     var vlrAnterior = "";
     var htmlAux = "";
     var jsonParametros = "";
-    var indValor = 0;
-    var parametro = 0;
+    var ind = 0;
     var handlef = 0;
     var colunas = 0;
+    var parametro = 0;
     var nrelementos = 0;
     var parametros = [];
     var valoresAnteriores = {};
@@ -477,6 +477,23 @@ function createModalParam(element,userid,rota,callback){
         else
             vlrAnterior = "";
         switch(element.parameters[parametro].type){
+            case "check":
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value}";  
+                colunas = 2;
+                html += "<td colspan=\"2\">";
+                //html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
+                //html += "<div class=\"control-group\" id=\"" + id + "_controlgroup\">";
+                html += "<br>";
+                html += "<label>";
+                html += "<div class=\"icheckbox_flat-blue hover\" id=\"" + id + "_icheckbox\">";
+                html += "<input class=\"icheck-grey\" type=\"checkbox\" id=\"" + id + "\">"
+                html += "</div>";
+                html += " " + element.parameters[parametro].title;
+                html += "</label>";
+                //html += "</div>";
+                //html += "</div>";
+                html += "</td>";
+                break;
             case "drop":
                 jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text}";  
                 colunas = 2;
@@ -484,11 +501,25 @@ function createModalParam(element,userid,rota,callback){
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
                 html += "<div class=\"control-group\" id=\"" + id + "_controlgroup\">";
                 html += "<label class for=\"" + id + "\">" + element.parameters[parametro].title + "</label>";
-                parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","valoranterior":vlrAnterior,"query":element.parameters[parametro].select});
-                html += "<select id=\"" + id + "\" class=\"form-control\" autocomplete=\"on\">";
-                html += "<option value = \"\"> </option>";
-                html += "{{" + element.parameters[parametro].name + "}}";
-                html += "</select>";
+                if(element.parameters[parametro].hasOwnProperty("options")){
+                   if(element.parameters[parametro].options.length > 0){
+                        html += "<select id=\"" + id + "\" class=\"form-control\" autocomplete=\"on\">";
+                        for(ind = 0; ind < element.parameters[parametro].options.length; ind++){
+                            html += "<option value = \"" + element.parameters[parametro].options[ind].value + "\"" + (element.parameters[parametro].options[ind].value == vlrAnterior ?"selected":"") + ">" + element.parameters[parametro].options[ind].text;
+                            html += "</option>" ;
+                        }
+                        html += "</select>";
+                    }
+                }
+                else{
+                    if(element.parameters[parametro].hasOwnProperty("select")){
+                        parametros.push({"parametro":element.parameters[parametro].name,"tipo":"drop","valoranterior":vlrAnterior,"query":element.parameters[parametro].select});
+                        html += "<select id=\"" + id + "\" class=\"form-control\" autocomplete=\"on\">";
+                        html += "<option value = \"\"> </option>";
+                        html += "{{" + element.parameters[parametro].name + "}}";
+                        html += "</select>";
+                    }
+                }
                 html += "</div>";
                 html += "</div>";
                 html += "</td>";
@@ -595,7 +626,6 @@ function createHTML(element,select,paramRelatorio){
     var comando = "";
     var varLoop = "";
     var condicao = "";
-    var blocoFuncao = "";
     var linhaComando = "";
     var itemRelatorio = "";
     var funcoesnumeros = "";
@@ -603,270 +633,422 @@ function createHTML(element,select,paramRelatorio){
     var cmdFinaisFuncao = "";
     var cabecalhoFuncao = "";
     var variaveisFuncao = "";
+    var blocoFuncaoDetail = "";
+    var blocoFuncaoHeader = "";
+    var blocoFuncaoFooter = "";
     var cmdIniciaisFuncao = "";
     var pos = 0;
     var posFim = 0;
     var posInicio = 0;
     var posDetalhe = 0;
     var varCtrlLoop = 0;
-    var posFimDetalhe = 0;
     var listaVariaveis = [];
     var retorno = null;
+    var resultadoFuncao = null;
     var geraHtmlRelatorio = null;
     var paramRelatorioProps = null
 
-    retorno = {
-        topo: "",
-        header: "",
-        detail: "",
-        footer: "",
-        base: ""
-    }
-                
-    paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
-
-    cabecalhoFuncao = "module.exports = function(select) { ";
-
-    variaveisFuncao += "var html = \"\"; ";
-    variaveisFuncao += "var ok = true; "
-    variaveisFuncao += "var linhaQuery = 0; "; 
-    
-    cmdIniciaisFuncao += "try{ "
-    cmdIniciaisFuncao += "if(ok) { ";
-
-    posInicio = element.html.indexOf("{{ntlct_report}}");    
-    posFim = element.html.indexOf("{{/ntlct_report}}");
-    posFimDetalhe = posFim + 2;
-    if(posInicio > -1 && posFim > -1){
-        retorno.topo = element.html.substring(0,posInicio);
-        retorno.base = element.html.substring(posFim + 17);
-        corpoRelatorio = element.html.substring(posInicio + 16,posFim);
-    };
-
-    if(corpoRelatorio != ""){
-        posInicio = corpoRelatorio.indexOf("{{header}}");
-        posFim = corpoRelatorio.indexOf("{{/header}}");
-        if(posInicio > -1 && posFim > -1){
-            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
-            posInicio = itemRelatorio.indexOf("{{headerdefault}}")
-            if(posInicio > -1){
-                htmlAux = createHeader(element,itemRelatorio,element.titulo);
-                itemRelatorio = itemRelatorio.replace("{{headerdefault}}", htmlAux);
-            }
-            retorno.header = itemRelatorio;
+    try{
+        retorno = {
+            topo: "",
+            header: "",
+            detail: "",
+            footer: "",
+            base: ""
         }
-        /*-*/
-        posInicio = corpoRelatorio.indexOf("{{detail}}");
-        posFim = corpoRelatorio.indexOf("{{/detail}}");
+
+        cabecalhoFuncao = "module.exports = function(_select_,_resultado_) { ";
+
+        variaveisFuncao += "var _html_ = \"\"; ";
+        variaveisFuncao += "var _ok_ = true; "
+        variaveisFuncao += "var _linhaQuery_ = 0; "; 
+        variaveisFuncao += "var _subtitulo_ = \"\"; ";
+
+        listaVariaveis.push("_subtitulo_");
+                    
+        paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
+        for(pos = 0; pos < paramRelatorioProps.length; pos++){
+            variaveisFuncao += "var " + "p_" + element.parameters[pos].name.trim() + "_ = \"" + paramRelatorio[paramRelatorioProps[pos]].value + "\"; ";            
+        }
+
+        cmdIniciaisFuncao += "try{ "
+        cmdIniciaisFuncao += "if(_ok_) { ";
+
+        posInicio = element.html.indexOf("{{ntlct_report}}");    
+        posFim = element.html.indexOf("{{/ntlct_report}}");
         if(posInicio > -1 && posFim > -1){
-            condicao = "true";
-            posDetalhe = 0;
-            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
-            posInicio = itemRelatorio.indexOf("{{",posDetalhe);
-            while(posDetalhe < itemRelatorio.length && posInicio > -1){                
-                blocoFuncao += "html += \"" + itemRelatorio.substring(posDetalhe,posInicio) +  "\"; ";
-                posFim = itemRelatorio.indexOf("}}",posInicio);
-                posDetalhe = posFim + 2;
-                linhaComando = itemRelatorio.substring(posInicio + 2,posFim);
-                posFim = linhaComando.indexOf(":");
-                if(posFim < 0)
-                    posFim = linhaComando.indexOf(".");
-                comando = linhaComando.substring(0,posFim + 1)
-                switch(comando){
-                    case "paramrel:":
-                        posInicio = posFim + 1;
-                        posFim = linhaComando.indexOf(".",posInicio);
+            retorno.topo = element.html.substring(0,posInicio);
+            retorno.base = element.html.substring(posFim + 17);
+            corpoRelatorio = element.html.substring(posInicio + 16,posFim);
+        };
+
+        if(corpoRelatorio != ""){
+            posInicio = corpoRelatorio.indexOf("{{header}}");
+            posFim = corpoRelatorio.indexOf("{{/header}}");
+            if(posInicio > -1 && posFim > -1){
+                itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+                posInicio = itemRelatorio.indexOf("{{headerdefault}}")
+                if(posInicio > -1){
+                    htmlAux = createHeader(element,itemRelatorio,element.titulo);
+                    itemRelatorio = itemRelatorio.replace("{{headerdefault}}", htmlAux);
+                }
+                retorno.header = itemRelatorio;
+                blocoFuncaoHeader = avaliaComando();
+            }
+            /*-*/
+            posInicio = corpoRelatorio.indexOf("{{detail}}");
+            posFim = corpoRelatorio.indexOf("{{/detail}}");
+            if(posInicio > -1 && posFim > -1){
+                itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+                retorno.detail = itemRelatorio;
+                blocoFuncaoDetail = avaliaComando();
+            }
+
+            /*-*/
+            posInicio = corpoRelatorio.indexOf("{{footer}}");
+            posFim = corpoRelatorio.indexOf("{{/footer}}");
+            if(posInicio > -1 && posFim > -1){
+                itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
+                posInicio = itemRelatorio.indexOf("{{footerdefault}}")
+                if(posInicio > -1){
+                    htmlAux = createFooter(element,itemRelatorio,element.titulo);
+                    itemRelatorio = itemRelatorio.replace("{{footerdefault}}", htmlAux);
+                }
+                retorno.footer = itemRelatorio;
+                blocoFuncaoFooter = avaliaComando();
+            }
+        }
+
+        cmdFinaisFuncao += "} ";
+        cmdFinaisFuncao += "} ";
+        cmdFinaisFuncao += "catch(err) { ";
+        cmdFinaisFuncao += "_resultado_.erro = true; ";
+        cmdFinaisFuncao += "_html_ = _resultado_.funcao + \" \" + err; "
+        cmdFinaisFuncao += "}";
+        cmdFinaisFuncao += "return(_html_); ";
+        
+        funcoesnumeros = fs.readFileSync("../frontend/framework/funcoesnumeros.js");
+
+        cmdFinaisFuncao += funcoesnumeros;
+
+        cmdFinaisFuncao += "}";
+
+        resultadoFuncao = {
+            "funcao":"",
+            "erro":false
+        }
+
+        /*
+        Montando o cabecalho */
+        if(blocoFuncaoHeader != ""){
+            resultadoFuncao.funcao = "cabecalho";
+            resultadoFuncao.erro = false;
+            funcao = cabecalhoFuncao;
+            funcao += variaveisFuncao;
+            funcao += cmdIniciaisFuncao;
+            funcao += blocoFuncaoHeader;
+            funcao += cmdFinaisFuncao;
+            geraHtmlRelatorio = _eval(funcao);
+            retorno.header = geraHtmlRelatorio(select,resultadoFuncao);
+        }
+        /*
+        Montando o detalhe */
+        if(!resultadoFuncao.erro){
+            if(blocoFuncaoDetail != ""){
+                resultadoFuncao.funcao = "detalhe";
+                resultadoFuncao.erro = false;
+                funcao = cabecalhoFuncao;
+                funcao += variaveisFuncao;
+                funcao += cmdIniciaisFuncao;
+                funcao += blocoFuncaoDetail;
+                funcao += cmdFinaisFuncao;
+                geraHtmlRelatorio = _eval(funcao);
+                retorno.detail = geraHtmlRelatorio(select,resultadoFuncao);
+            }
+            /*
+            Montando o footer */
+            if(!resultadoFuncao.erro){
+                if(blocoFuncaoFooter != ""){
+                    resultadoFuncao.funcao = "rodape";
+                    resultadoFuncao.erro = false;
+                    funcao = cabecalhoFuncao;
+                    funcao += variaveisFuncao;
+                    funcao += cmdIniciaisFuncao;
+                    funcao += blocoFuncaoFooter;
+                    funcao += cmdFinaisFuncao;
+                    geraHtmlRelatorio = _eval(funcao);
+                    retorno.footer = geraHtmlRelatorio(select,resultadoFuncao);
+                }
+            }
+        }
+    }
+    catch(err){
+        retorno = {
+            topo: err,
+            header: "",
+            detail: "",
+            footer: "",
+            base: ""
+        }
+    }
+
+    return(retorno);
+
+
+    function avaliaComando(){
+        var blocoFuncao = "";
+
+        condicao = "true";
+        posDetalhe = 0;
+        posInicio = itemRelatorio.indexOf("{{",posDetalhe);
+        while(posDetalhe < itemRelatorio.length && posInicio > -1){                
+            blocoFuncao += "_html_ += \"" + itemRelatorio.substring(posDetalhe,posInicio) +  "\"; ";
+            posFim = itemRelatorio.indexOf("}}",posInicio);
+            posDetalhe = posFim + 2;
+            linhaComando = itemRelatorio.substring(posInicio + 2,posFim);
+            posFim = linhaComando.indexOf(":");
+            if(posFim < 0)
+                posFim = linhaComando.indexOf(".");
+            comando = linhaComando.substring(0,posFim + 1).toLowerCase();
+            switch(comando){
+                /*
+                Comandos especiais */
+                case "subt:":
+                    subTitulo = true;
+                    blocoFuncao += "_html_ += _subtitulo_; ";
+                    break;
+                /*
+                Controle de fluxo */
+                case "if:":
+                    condicao = "";
+                    linhaComando = linhaComando.substring(posFim + 1);
+                    posInicio = 0;
+                    posFim = linhaComando.indexOf("select.",posInicio);
+                    while(posFim > -1){
+                        posInicio = posFim;
+                        posFim = linhaComando.indexOf(" ",posInicio);
                         if(posFim < 0)
                             posFim = linhaComando.length;
-                        aux = linhaComando.substring(posInicio,posFim);
-                        linhaComando = linhaComando.substring(posFim + 1);
-                        pos = paramRelatorioProps.indexOf(aux)
-                        if(pos > -1){
-                            if(linhaComando == "name")
-                                blocoFuncao += "html += \"" + element.parameters[pos].title + "\"; ";
-                            else{
-                                if(linhaComando == "value")
-                                    blocoFuncao += "html += \"" + paramRelatorio[paramRelatorioProps[pos]].text + "\"; ";
-                            }
-                        }
-                        break;
-                    case "loop:":
-                        condicao = "true";
-                        posInicio = posFim + 1;
-                        posFim = linhaComando.indexOf(";",posInicio);
-                        if(posFim < 0)
-                            posFim = linhaComando.length;
-                        while(posFim > -1){
-                            aux = linhaComando.substring(0,posFim);
-                            linhaComando = linhaComando.substring(posFim + 1);
-                            posFim = aux.indexOf("select.");
-                            if( posFim > -1){
-                                aux = aux.substring(posFim + 7);
-                                if(aux == "end"){
-                                    condicao += " && linhaQuery < select.length"
-                                }
-                                else{
-                                    varCtrlLoop++;
-                                    varLoop = "varloop" + varCtrlLoop.toString().trim();
-                                    variaveisFuncao += " var " + varLoop + " = \"\"; ";
-                                    blocoFuncao += varLoop + " = select[linhaQuery]." + aux.trim() + "; ";
-                                    condicao += " && select[linhaQuery]." + aux.trim() + " == " + varLoop;
-                                }
-                            }
-                            posFim = linhaComando.indexOf(";");
-                            if(posFim == -1 && linhaComando.length > 0)
-                                posFim = linhaComando.length;
-                        }
-                        blocoFuncao += "while(" + condicao + ") { ";
-                        break;
-                    case "/loop:":
-                        blocoFuncao += "}; ";
-                        break;
-                    case "select.":
-                        aux = linhaComando.substring(posFim + 1).trim();
-                        if(aux == "next")
-                            blocoFuncao += "linhaQuery++; ";
-                        else
-                            blocoFuncao += "html += (select[linhaQuery]." + aux + " == null ? \" \" : select[linhaQuery]." + aux + "); ";
-                        break;
-                    case "set:":
-                        posInicio = posFim + 1
-                        posFim = linhaComando.indexOf(",");
-                        if(posFim < 0){
-                            posFim = linhaComando.length;
-                            aux = linhaComando.substring(posInicio,posFim).trim();
-                            valor = "null";
+                        condicao = linhaComando.substring(posInicio,posFim)
+                        aux = linhaComando.substring(posInicio + 7,posFim);
+                        if(aux == "end"){
+                            linhaComando = linhaComando.replace(condicao,"_linhaQuery_ >= _select_.length");
                         }
                         else{
-                            aux = linhaComando.substring(posInicio,posFim).trim();
-                            valor = linhaComando.substring(posFim + 1);
-                            posFim = valor.indexOf("select.");
-                            if(posFim > -1){
-                                valor = valor.substring(posFim + 7);
-                                valor = "select[linhaQuery]." + valor.trim();
+                            linhaComando = linhaComando.replace(condicao,"_select_[_linhaQuery_]." + aux.trim())
+                        }
+                        posFim = linhaComando.indexOf("select.",posFim);
+                    }
+                    /*-*/
+                    condicao = "";
+                    posInicio = 0;
+                    posFim = linhaComando.indexOf("paramrel.",posInicio);
+                    while(posFim > -1){
+                        posInicio = posFim;
+                        posFim = linhaComando.indexOf(" ",posInicio);
+                        if(posFim < 0)
+                            posFim = linhaComando.length;
+                        condicao = linhaComando.substring(posInicio,posFim)
+                        aux = linhaComando.substring(posInicio + 9,posFim);
+                        linhaComando = linhaComando.replace(condicao,"p_" + aux + "_");
+                        posFim = linhaComando.indexOf("paramrel.",posFim);
+                    }
+                    blocoFuncao += "if(" + linhaComando + ") {";
+                    break;
+                case "else:":
+                    blocoFuncao += "} ";
+                    blocoFuncao += "else{";
+                    break;
+                case "/if:":
+                    blocoFuncao += "}; "
+                    break;
+                case "loop:":
+                    condicao = "true";
+                    posInicio = posFim + 1;
+                    posFim = linhaComando.indexOf(";",posInicio);
+                    if(posFim < 0)
+                        posFim = linhaComando.length;
+                    while(posFim > -1){
+                        aux = linhaComando.substring(0,posFim);
+                        linhaComando = linhaComando.substring(posFim + 1);
+                        posFim = aux.indexOf("select.");
+                        if( posFim > -1){
+                            aux = aux.substring(posFim + 7);
+                            if(aux == "end"){
+                                condicao += " && _linhaQuery_ < _select_.length"
                             }
+                            else{
+                                varCtrlLoop++;
+                                varLoop = "_varloop" + varCtrlLoop.toString().trim() + "_";
+                                variaveisFuncao += " var " + varLoop + " = \"\"; ";
+                                blocoFuncao += varLoop + " = _select_[_linhaQuery_]." + aux.trim() + "; ";
+                                condicao += " && _select_[_linhaQuery_]." + aux.trim() + " == " + varLoop;
+                            }
+                        }
+                        posFim = linhaComando.indexOf(";");
+                        if(posFim == -1 && linhaComando.length > 0)
+                            posFim = linhaComando.length;
+                    }
+                    blocoFuncao += "while(" + condicao + ") { ";
+                    break;
+                case "/loop:":
+                    blocoFuncao += "}; ";
+                    break;
+                /*
+                Manipulação do resultado de queries */
+                case "select.":
+                    aux = linhaComando.substring(posFim + 1).trim();
+                    if(aux == "next")
+                        blocoFuncao += "_linhaQuery_++; ";
+                    else
+                        blocoFuncao += "_html_ += (_select_[_linhaQuery_]." + aux + " == null ? \" \" : _select_[_linhaQuery_]." + aux + "); ";
+                    break;
+                /*
+                Manipulação de variáveis de memória */
+                case "paramrel.": 
+                    blocoFuncao += "_html_ += " + avaliaParamRel(linhaComando.substring(posFim + 1)) + "; ";
+                    break;
+                case "set:":
+                    posInicio = posFim + 1
+                    posFim = linhaComando.indexOf(",");
+                    if(posFim < 0){
+                        posFim = linhaComando.length;
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = "null";
+                    }
+                    else{
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = linhaComando.substring(posFim + 1);
+                        posFim = valor.indexOf("select.");
+                        if(posFim > -1){
+                            valor = valor.substring(posFim + 7);
+                            valor = "_select_[_linhaQuery_]." + valor.trim();
+                        }
+                        posFim = valor.indexOf("paramrel.");
+                        if(posFim > -1){
+                            valor = avaliaParamRel(valor);
+                        }
+                    }
+                    if(listaVariaveis.indexOf(aux) < 0){
+                        listaVariaveis.push(aux);
+                        variaveisFuncao += "var " + aux + " = null; ";
+                    }                        
+                    blocoFuncao += aux + " = " + valor + "; ";
+                    break;
+                case "mul:":
+                    posInicio = posFim + 1
+                    posFim = linhaComando.indexOf(",");
+                    if(posFim > -1){
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = linhaComando.substring(posFim + 1);
+                        posFim = valor.indexOf("select.");
+                        if(posFim > -1){
+                            valor = valor.substring(posFim + 7);
+                            valor = "_select_[_linhaQuery_]." + valor.trim();
+                        }
+                        posFim = valor.indexOf("paramrel:");
+                        if(posFim > -1){
+                            valor = valor.substring(posFim + 9);
+                            valor = "p_" + valor.trim() + "_";
                         }
                         if(listaVariaveis.indexOf(aux) < 0){
                             listaVariaveis.push(aux);
                             variaveisFuncao += "var " + aux + " = null; ";
                         }                        
-                        blocoFuncao += aux + " = " + valor + "; ";
-                        break;
-                    case "mul:":
-                        posInicio = posFim + 1
-                        posFim = linhaComando.indexOf(",");
+                        blocoFuncao += aux + " *= " + valor + "; ";
+                    }
+                    break;
+                case "sum:":
+                    posInicio = posFim + 1
+                    posFim = linhaComando.indexOf(",");
+                    if(posFim > -1){
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = linhaComando.substring(posFim + 1);
+                        posFim = valor.indexOf("select.");
                         if(posFim > -1){
-                            aux = linhaComando.substring(posInicio,posFim).trim();
-                            valor = linhaComando.substring(posFim + 1);
-                            posFim = valor.indexOf("select.");
-                            if(posFim > -1){
-                                valor = valor.substring(posFim + 7);
-                                valor = "select[linhaQuery]." + valor.trim();
-                            }
-                            if(listaVariaveis.indexOf(aux) < 0){
-                                listaVariaveis.push(aux);
-                                variaveisFuncao += "var " + aux + " = null; ";
-                            }                        
-                            blocoFuncao += aux + " *= " + valor + "; ";
+                            valor = valor.substring(posFim + 7);
+                            valor = "_select_[_linhaQuery_]." + valor.trim();
                         }
-                        break;
-                    case "sum:":
-                        posInicio = posFim + 1
-                        posFim = linhaComando.indexOf(",");
+                        posFim = valor.indexOf("paramrel.");
                         if(posFim > -1){
-                            aux = linhaComando.substring(posInicio,posFim).trim();
-                            valor = linhaComando.substring(posFim + 1);
-                            posFim = valor.indexOf("select.");
-                            if(posFim > -1){
-                                valor = valor.substring(posFim + 7);
-                                valor = "select[linhaQuery]." + valor.trim();
-                            }
-                            if(listaVariaveis.indexOf(aux) < 0){
-                                listaVariaveis.push(aux);
-                                variaveisFuncao += "var " + aux + " = null; ";
-                            }                        
-                            blocoFuncao += aux + " += " + valor + "; ";
+                            valor = avaliaParamRel(valor);
                         }
-                        break;
-                    case "fmtn:":
-                        posInicio = posFim + 1
-                        posFim = linhaComando.indexOf(",");
+                        if(listaVariaveis.indexOf(aux) < 0){
+                            listaVariaveis.push(aux);
+                            variaveisFuncao += "var " + aux + " = null; ";
+                        }                        
+                        blocoFuncao += aux + " += " + valor + "; ";
+                    }
+                    break;
+                case "fmtn:":
+                    posInicio = posFim + 1
+                    posFim = linhaComando.indexOf(",");
+                    if(posFim > -1){
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = linhaComando.substring(posFim + 1);
+                        if(isNaN(valor)){
+                            valor = "0.00";
+                        }
+                        posFim = aux.indexOf("select.");
                         if(posFim > -1){
-                            aux = linhaComando.substring(posInicio,posFim).trim();
-                            valor = linhaComando.substring(posFim + 1);
-                            if(isNaN(valor)){
-                                valor = "0.00";
-                            }
-                            posFim = aux.indexOf("select.");
-                            if(posFim > -1){
-                                aux = aux.substring(posFim + 7);
-                                aux = "select[linhaQuery]." + aux.trim()
-                            }
-                            else{
-                               if(listaVariaveis.indexOf(aux) < 0){
-                                    listaVariaveis.push(aux);
-                                    variaveisFuncao += "var " + aux + " = null; ";
-                                }
-                            }                            
-                            blocoFuncao += "html += formataNumero(" + aux + "," + valor + ",\".\",\",\"); ";
-                        }
-                        break;
-                    default:
-                        if(listaVariaveis.indexOf(linhaComando) > -1){
-                            blocoFuncao += "html += " + linhaComando + " == null ? \" \" : " + linhaComando + ".toString(); ";
+                            aux = aux.substring(posFim + 7);
+                            aux = "_select_[_linhaQuery_]." + aux.trim()
                         }
                         else{
-                            blocoFuncao += "html += \"" + linhaComando + "\"; ";
-                        }
-                        break;  
-                }
-
-                posInicio = itemRelatorio.indexOf("{{",posDetalhe);
+                           if(listaVariaveis.indexOf(aux) < 0){
+                                listaVariaveis.push(aux);
+                                variaveisFuncao += "var " + aux + " = null; ";
+                            }
+                        }                            
+                        blocoFuncao += "_html_ += formataNumero(" + aux + "," + valor + ",\".\",\",\"); ";
+                    }
+                    break;
+                default:
+                    if(listaVariaveis.indexOf(linhaComando) > -1){
+                        blocoFuncao += "_html_ += " + linhaComando + " == null ? \" \" : " + linhaComando + ".toString(); ";
+                    }
+                    else{
+                        blocoFuncao += "_html_ += \"{{" + linhaComando + "}}\"; ";
+                    }
+                    break;  
             }
 
-            if(posDetalhe < itemRelatorio.length){
-                blocoFuncao += "html += \"" + itemRelatorio.substring(posDetalhe) + "\"; ";
-            }
+            posInicio = itemRelatorio.indexOf("{{",posDetalhe);
         }
+        
+        blocoFuncao += "_html_ += \"" + itemRelatorio.substring(posDetalhe) + "\"; ";
 
-        /*-*/
-        posInicio = corpoRelatorio.indexOf("{{footer}}");
-        posFim = corpoRelatorio.indexOf("{{/footer}}");
-        if(posInicio > -1 && posFim > -1){
-            itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
-            posInicio = itemRelatorio.indexOf("{{footerdefault}}")
-            if(posInicio > -1){
-                htmlAux = createFooter(element,itemRelatorio,element.titulo);
-                itemRelatorio = itemRelatorio.replace("{{footerdefault}}", htmlAux);
-            }
-            retorno.footer = itemRelatorio;
-        }
-
-        blocoFuncao += "html += \"" + itemRelatorio.substring(posFimDetalhe) + "\"; ";
+        return(blocoFuncao);
     }
 
-    cmdFinaisFuncao += "} ";
-    cmdFinaisFuncao += "} ";
-    cmdFinaisFuncao += "catch(err) { ";
-    cmdFinaisFuncao += "html = err; "
-    cmdFinaisFuncao += "}";
-    cmdFinaisFuncao += "return(html); ";
-    
-    funcoesnumeros = fs.readFileSync("../frontend/framework/funcoesnumeros.js");
+    function avaliaParamRel(linhaComando){
+        var valorParam = "";
+        var parametro = "";
 
-    cmdFinaisFuncao += funcoesnumeros;
-
-    cmdFinaisFuncao += "}";
-
-    funcao = cabecalhoFuncao;
-    funcao += variaveisFuncao;
-    funcao += cmdIniciaisFuncao;
-    funcao += blocoFuncao;
-    funcao += cmdFinaisFuncao;
-    geraHtmlRelatorio = _eval(funcao);
-    retorno.detail = geraHtmlRelatorio(select);
-
-    return(retorno);
+        posInicio = posFim + 9;
+        posFim = linhaComando.indexOf(".",posInicio);
+        if(posFim < 0)
+            posFim = linhaComando.length;
+        parametro = linhaComando.substring(posInicio,posFim);
+        linhaComando = linhaComando.substring(posFim + 1);
+        if(linhaComando == "")
+            linhaComando = "value";
+        pos = paramRelatorioProps.indexOf(parametro)
+        if(pos > -1){
+            if(linhaComando == "name")
+                valorParam =  "\"" + element.parameters[pos].title + "\"";
+            else{
+                if(linhaComando == "text")
+                    valorParam = "\"" + paramRelatorio[paramRelatorioProps[pos]].text + "\"";
+                else{
+                    if(linhaComando == "value"){
+                        valorParam = "p_" + parametro.trim() + "_";
+                    }
+                }
+            }
+        }
+        return(valorParam);
+    }
 }
 
 
@@ -960,69 +1142,49 @@ function createHeader(element, html, reportname){
     var empresa = "";
     var now = new Date();
     var data = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear()
-    var fs = require('fs');
 
-    if(html){
-        if(html.indexOf("{{headerdefault}}") > -1){
-            item = "<div id=\"pageHeader\" style=\"width:100%\">";
-            item += "<table style=\"width:100%;font-family:Arial\">";
-            item += "<thead>";
-            item += "<tr>";
-            /*
-            if(element.recipe == "pdf"){
-                imagem = fs.readFileSync("/imagens/logos/logo_" + EnterpriseID + ".jpg", "base64");
-                //<IMG SRC="data:image/jpg;base64, codigos-base64">
-                item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"data:image/jpg;base64," + imagem + "\" width=130px height=auto></div> </th>";
-                //item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"file://imagens/logos/logo_" + EnterpriseID + "\" width=130px height=auto></div> </th>";
-            }
-            else{
-                item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
-            }
-            */
-           
-            item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
-
-            item += "<th style=\"width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;\">" + reportname + "</th>";
-            item += "<th rowspan=2 style=\"width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;\">" + data + "</th>";
-            item += "</tr>";
-            item += "<tr></tr>";
-            item += "<tr>";
-            if(element.recipe == "pdf"){
-                item += "<th colspan=2 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
-                item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">Página: {{page}}</th>";
-            }
-            else{
-                item += "<th colspan=2 style=\"text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;\">" + EnterpriseName + "</th>";
-                item += "<th style=\"text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=100px height=auto> </th>";
-            }
-            item += "</tr>";
-            item += "<tr><th colspan=3></th></tr>";
-            item += "</thead>";
-            item += "</table>";
-            item += "</div>";
-            
-            html = html.replace("{{headerdefault}}", item);
-            html = html.replace("{{headerdefault}}","");
-            html = html.replace("{{/headerdefault}}","");
-        }else{
-            item = html;
-            element.forEach(function(name){                        
-                for (var key in name) { 
-                    if(item.indexOf("{{" + key + "}}") > -1){
-                        if(field.indexOf("{{" + key + "}}") == -1){
-                            item = item.replace("{{" + key + "}}", name[key]);
-                            field += "{{" + key + "}}";
-                        }
-                    }
-                } 
-            });
-
-            html = item;
-            //html = html.replace("{{header}}", item);
-            //html = html.replace("{{header}}","");
-            //html = html.replace("{{/header}}","");
-        }
+    item = "<div id='pageHeader' style='width:100%'>";
+    item += "<table cellspacing='0' style='width:100%;font-family:Arial'>";
+    item += "<thead>";
+    /*
+    item += "<tr>";
+    if(element.recipe == "pdf"){
+        imagem = fs.readFileSync("/imagens/logos/logo_" + EnterpriseID + ".jpg", "base64");
+        //<IMG SRC="data:image/jpg;base64, codigos-base64">
+        item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"data:image/jpg;base64," + imagem + "\" width=130px height=auto></div> </th>";
+        //item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <div><img border=0 src=\"file://imagens/logos/logo_" + EnterpriseID + "\" width=130px height=auto></div> </th>";
     }
+    else{
+        item += "<th rowspan=2 style=\"width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg\" width=130px height=auto> </th>";
+    }
+    */
+    item += "<tr>";    
+    item += "<th rowspan='2' style='width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg' width=130px height=auto> </th>";
+    item += "<th style='width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;'>" + reportname + "</th>";
+    item += "<th rowspan='2' style='width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;'>" + data + "</th>";
+    item += "</tr>";
+    item += "<tr>";
+    item += "<th style='text-align:center; vertical-align:middle; font-weight: bold; font-size:small; color:black; border-style:hidden;'> {{subt:}} </th>";
+    item += "</tr>";
+    item += "<tr>";
+    if(element.recipe == "pdf"){
+        item += "<th colspan='2' style='text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;'>" + EnterpriseName + "</th>";
+        item += "<th style='text-align:right; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;'>Página: {{page}}</th>";
+    }
+    else{
+        item += "<th colspan='2' style='width:10%;text-align:left; vertical-align:middle; font-weight: bold; font-size: x-small; color:black; border-style:hidden;'>" + EnterpriseName + "</th>";
+        item += "<th style='text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=100px height=auto> </th>";
+    }
+    item += "</tr>";
+    item += "<tr><th colspan=3></th></tr>";
+    item += "</thead>";
+    item += "</table>";
+    item += "</div>";
+    
+    html = html.replace("{{headerdefault}}", item);
+    html = html.replace("{{headerdefault}}","");
+    html = html.replace("{{/headerdefault}}","");
+
     return item;
 }
 
@@ -1077,14 +1239,14 @@ function createFooter(element, html, reportname){
     var item = "";  
     var field = "";
 
-    item += "<div id=\"pageFooterr\" style=\"width:100%\">";
-    item += "<table style=\"width:100%;font-family:Arial;border-style:hidden;\">";
+    item += "<div id='pageFooter' style='width:100%'>";
+    item += "<table cellspacing='0' style='width:100%;font-family:Arial;border-style:hidden;'>";
     item += "<thead>";
     item += "<tr>";
     if(element.recipe == "pdf")
-        item += "<th style=\"width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=90px height=15px> </th>";
+        item += "<th style='width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=90px height=15px> </th>";
     else
-        item += "<th style=\"width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;\"> <img border=0 src=\"" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg\" width=100px height=20px> </th>";
+        item += "<th style='width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=100px height=20px> </th>";
     item += "</tr>";
     item += "</thead>";
     item += "</table>";
