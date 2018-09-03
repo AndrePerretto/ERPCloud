@@ -1000,7 +1000,7 @@ function createHTML(element,select,paramRelatorio){
                                 variaveisFuncao += "var " + aux + " = null; ";
                             }
                         }                            
-                        blocoFuncao += "_html_ += formataNumero(" + aux + "," + valor + ",\".\",\",\"); ";
+                        blocoFuncao += "_html_ += formataNumero((" + aux + " == null ? \"0.00\" : " + aux + ")," + valor + ",\".\",\",\"); ";
                     }
                     break;
                 default:
@@ -1243,10 +1243,14 @@ function createFooter(element, html, reportname){
     item += "<table cellspacing='0' style='width:100%;font-family:Arial;border-style:hidden;'>";
     item += "<thead>";
     item += "<tr>";
-    if(element.recipe == "pdf")
-        item += "<th style='width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=90px height=15px> </th>";
-    else
-        item += "<th style='width:100%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=100px height=20px> </th>";
+    if(element.recipe == "pdf"){
+        item += "<th style='width:50%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_intelecta.jpg' width=90px height=15px> </th>";
+        item += "<th style='width:50%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=90px height=15px> </th>";
+    }
+    else{
+        item += "<th style='width:50%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_intelecta.jpg' width=100px height=20px> </th>";
+        item += "<th style='width:50%; text-align:right; vertical-align:middle; font-weight: bold; font-size: medium; color:black;'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_empresariocloud.jpg' width=100px height=20px> </th>";
+    }
     item += "</tr>";
     item += "</thead>";
     item += "</table>";
