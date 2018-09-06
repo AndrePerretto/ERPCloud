@@ -277,7 +277,10 @@ function compareObj(a,b) {
                 Parâmetros do relatórios */                
                 paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
                 for(var i = 0; i < paramRelatorioProps.length; i++){
-                    request.input(paramRelatorioProps[i],(paramRelatorio[paramRelatorioProps[i]].value == "" ? null : paramRelatorio[paramRelatorioProps[i]].value));
+                    if(paramRelatorio[paramRelatorioProps[i]].type == "numeric")
+                        request.input(paramRelatorioProps[i],(paramRelatorio[paramRelatorioProps[i]].value == "" ? null : Number(paramRelatorio[paramRelatorioProps[i]].value)));
+                    else
+                        request.input(paramRelatorioProps[i],(paramRelatorio[paramRelatorioProps[i]].value == "" ? null : paramRelatorio[paramRelatorioProps[i]].value));
                 }
     
                 // query to the database and get the records
@@ -382,6 +385,7 @@ function createModalParam(element,userid,rota,callback){
     var vlrAnterior = "";
     var htmlAux = "";
     var jsonParametros = "";
+    var tiporetorno = "";
     var ind = 0;
     var handlef = 0;
     var colunas = 0;
@@ -476,9 +480,15 @@ function createModalParam(element,userid,rota,callback){
             vlrAnterior = valoresAnteriores[element.parameters[parametro].name].value;
         else
             vlrAnterior = "";
+
+        if(element.parameters[parametro].hasOwnProperty("returntype"))
+            tiporetorno = element.parameters[parametro].returntype;
+        else
+            tiporetorno = "caracter";
+            
         switch(element.parameters[parametro].type){
             case "check":
-                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value}";  
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"type\":\"" + tiporetorno + "\",\"text\":document.getElementById(\"" + id + "\").value}";
                 colunas = 2;
                 html += "<td colspan=\"2\">";
                 //html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -495,7 +505,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "</td>";
                 break;
             case "drop":
-                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text}";  
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"type\":\"" + tiporetorno + "\",\"text\":document.getElementById(\"" + id + "\").selectedOptions[0].text}";  
                 colunas = 2;
                 html += "<td colspan=\"2\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -525,7 +535,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "</td>";
                 break;
             case "date":
-                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value.split(\"-\").reverse().join(\"-\").toString()}";
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"type\":\"" + tiporetorno + "\",\"text\":document.getElementById(\"" + id + "\").value.split(\"-\").reverse().join(\"-\").toString()}";
                 colunas++;
                 html += "<td style=\"width:50%\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -537,7 +547,7 @@ function createModalParam(element,userid,rota,callback){
                 html += "</td>";
                 break;                
             default:
-                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"text\":document.getElementById(\"" + id + "\").value}";  
+                jsonParametros += "\"" + element.parameters[parametro].name + "\":{\"value\":document.getElementById(\"" + id + "\").value,\"type\":\"" + tiporetorno + "\",\"text\":document.getElementById(\"" + id + "\").value}";  
                 colunas++;
                 html += "<td style=\"width:50%\">";
                 html += "<div class=\"form-group\" id=\"" + id + "_formgroup\">";
@@ -657,22 +667,32 @@ function createHTML(element,select,paramRelatorio){
             base: ""
         }
 
+        resultadoFuncao = {
+            "funcao":"",
+            "erro":false
+        }
+
         cabecalhoFuncao = "module.exports = function(_select_,_resultado_) { ";
 
         variaveisFuncao += "var _html_ = \"\"; ";
         variaveisFuncao += "var _ok_ = true; "
         variaveisFuncao += "var _linhaQuery_ = 0; "; 
         variaveisFuncao += "var _subtitulo_ = \"\"; ";
+        variaveisFuncao += "var _titulo_ = \"\"; ";
 
         listaVariaveis.push("_subtitulo_");
                     
         paramRelatorioProps = Object.getOwnPropertyNames(paramRelatorio);
         for(pos = 0; pos < paramRelatorioProps.length; pos++){
-            variaveisFuncao += "var " + "p_" + element.parameters[pos].name.trim() + "_ = \"" + paramRelatorio[paramRelatorioProps[pos]].value + "\"; ";            
+            if(paramRelatorio[paramRelatorioProps[pos]].type == "numeric")
+                variaveisFuncao += "var " + "p_" + element.parameters[pos].name.trim() + "_ = " + Number(paramRelatorio[paramRelatorioProps[pos]].value).toString() + "; ";            
+            else
+                variaveisFuncao += "var " + "p_" + element.parameters[pos].name.trim() + "_ = \"" + paramRelatorio[paramRelatorioProps[pos]].value + "\"; ";            
         }
 
         cmdIniciaisFuncao += "try{ "
         cmdIniciaisFuncao += "if(_ok_) { ";
+        cmdIniciaisFuncao += "_titulo_ += \"" +  element.titulo + "\"; ";
 
         posInicio = element.html.indexOf("{{ntlct_report}}");    
         posFim = element.html.indexOf("{{/ntlct_report}}");
@@ -693,6 +713,7 @@ function createHTML(element,select,paramRelatorio){
                     itemRelatorio = itemRelatorio.replace("{{headerdefault}}", htmlAux);
                 }
                 retorno.header = itemRelatorio;
+                resultadoFuncao.funcao = "htmlheader";
                 blocoFuncaoHeader = avaliaComando();
             }
             /*-*/
@@ -701,6 +722,7 @@ function createHTML(element,select,paramRelatorio){
             if(posInicio > -1 && posFim > -1){
                 itemRelatorio = corpoRelatorio.substring(posInicio + 10,posFim);
                 retorno.detail = itemRelatorio;
+                resultadoFuncao.funcao = "htmldetail";
                 blocoFuncaoDetail = avaliaComando();
             }
 
@@ -715,6 +737,7 @@ function createHTML(element,select,paramRelatorio){
                     itemRelatorio = itemRelatorio.replace("{{footerdefault}}", htmlAux);
                 }
                 retorno.footer = itemRelatorio;
+                resultadoFuncao.funcao = "htmlfooter";
                 blocoFuncaoFooter = avaliaComando();
             }
         }
@@ -732,11 +755,6 @@ function createHTML(element,select,paramRelatorio){
         cmdFinaisFuncao += funcoesnumeros;
 
         cmdFinaisFuncao += "}";
-
-        resultadoFuncao = {
-            "funcao":"",
-            "erro":false
-        }
 
         /*
         Montando o cabecalho */
@@ -797,6 +815,8 @@ function createHTML(element,select,paramRelatorio){
 
     function avaliaComando(){
         var blocoFuncao = "";
+        var textoMsgErro = "";
+        var pilhaControleFluxo = [];
 
         condicao = "true";
         posDetalhe = 0;
@@ -813,6 +833,9 @@ function createHTML(element,select,paramRelatorio){
             switch(comando){
                 /*
                 Comandos especiais */
+                case "titulo:":
+                    blocoFuncao += "_html_ += _titulo_; "
+                    break;
                 case "subt:":
                     subTitulo = true;
                     blocoFuncao += "_html_ += _subtitulo_; ";
@@ -820,6 +843,7 @@ function createHTML(element,select,paramRelatorio){
                 /*
                 Controle de fluxo */
                 case "if:":
+                    pilhaControleFluxo.push("if")
                     condicao = "";
                     linhaComando = linhaComando.substring(posFim + 1);
                     posInicio = 0;
@@ -849,6 +873,7 @@ function createHTML(element,select,paramRelatorio){
                         if(posFim < 0)
                             posFim = linhaComando.length;
                         condicao = linhaComando.substring(posInicio,posFim)
+                        aux = avaliaParamRel(condicao);
                         aux = linhaComando.substring(posInicio + 9,posFim);
                         linhaComando = linhaComando.replace(condicao,"p_" + aux + "_");
                         posFim = linhaComando.indexOf("paramrel.",posFim);
@@ -856,13 +881,27 @@ function createHTML(element,select,paramRelatorio){
                     blocoFuncao += "if(" + linhaComando + ") {";
                     break;
                 case "else:":
-                    blocoFuncao += "} ";
-                    blocoFuncao += "else{";
+                    condicao = pilhaControleFluxo.pop();
+                    if(condicao != "if"){
+                        textoMsgErro = resultadoFuncao.funcao + ": estrutura de controle de fluxo incorreta - \"else\" sem \"if\" correspondente.";
+                        throw textoMsgErro;
+                    }
+                    else{
+                        pilhaControleFluxo.push(condicao);
+                        blocoFuncao += "} ";
+                        blocoFuncao += "else{";
+                    }
                     break;
                 case "/if:":
                     blocoFuncao += "}; "
+                    condicao = pilhaControleFluxo.pop();
+                    if(condicao != "if"){
+                        textoMsgErro = resultadoFuncao.funcao + ": estrutura de controle de fluxo incorreta - finalização de um \"if\" não inicializado.";
+                        throw textoMsgErro;
+                    }
                     break;
                 case "loop:":
+                    pilhaControleFluxo.push("loop");
                     condicao = "true";
                     posInicio = posFim + 1;
                     posFim = linhaComando.indexOf(";",posInicio);
@@ -893,6 +932,11 @@ function createHTML(element,select,paramRelatorio){
                     break;
                 case "/loop:":
                     blocoFuncao += "}; ";
+                    condicao = pilhaControleFluxo.pop();
+                    if(condicao != "loop"){
+                        textoMsgErro = resultadoFuncao.funcao + ": estrutura de controle de fluxo incorreta - finalização de um \"loop\" não inicializado.";
+                        throw textoMsgErro;
+                    }
                     break;
                 /*
                 Manipulação do resultado de queries */
@@ -906,7 +950,9 @@ function createHTML(element,select,paramRelatorio){
                 /*
                 Manipulação de variáveis de memória */
                 case "paramrel.": 
-                    blocoFuncao += "_html_ += " + avaliaParamRel(linhaComando.substring(posFim + 1)) + "; ";
+                    htmlAux = linhaComando.substring(posFim + 1);
+                    comando = avaliaParamRel(htmlAux);
+                    blocoFuncao += "_html_ += " + comando + "; ";
                     break;
                 case "set:":
                     posInicio = posFim + 1
@@ -980,6 +1026,28 @@ function createHTML(element,select,paramRelatorio){
                         blocoFuncao += aux + " += " + valor + "; ";
                     }
                     break;
+                case "sub:":
+                    posInicio = posFim + 1
+                    posFim = linhaComando.indexOf(",");
+                    if(posFim > -1){
+                        aux = linhaComando.substring(posInicio,posFim).trim();
+                        valor = linhaComando.substring(posFim + 1);
+                        posFim = valor.indexOf("select.");
+                        if(posFim > -1){
+                            valor = valor.substring(posFim + 7);
+                            valor = "_select_[_linhaQuery_]." + valor.trim();
+                        }
+                        posFim = valor.indexOf("paramrel.");
+                        if(posFim > -1){
+                            valor = avaliaParamRel(valor);
+                        }
+                        if(listaVariaveis.indexOf(aux) < 0){
+                            listaVariaveis.push(aux);
+                            variaveisFuncao += "var " + aux + " = null; ";
+                        }                        
+                        blocoFuncao += aux + " -= " + valor + "; ";
+                    }
+                    break;
                 case "fmtn:":
                     posInicio = posFim + 1
                     posFim = linhaComando.indexOf(",");
@@ -1018,19 +1086,27 @@ function createHTML(element,select,paramRelatorio){
         
         blocoFuncao += "_html_ += \"" + itemRelatorio.substring(posDetalhe) + "\"; ";
 
+        if(pilhaControleFluxo.length > 0){
+            textoMsgErro = resultadoFuncao.funcao + ": Há estruturas de controle (loop / if) não finalizadas.";
+            throw textoMsgErro;
+        }
+
         return(blocoFuncao);
     }
 
     function avaliaParamRel(linhaComando){
         var valorParam = "";
         var parametro = "";
+        var posInicial = 0;
+        var posFinal = 0;
+        var pos = 0;
 
-        posInicio = posFim + 9;
-        posFim = linhaComando.indexOf(".",posInicio);
-        if(posFim < 0)
-            posFim = linhaComando.length;
-        parametro = linhaComando.substring(posInicio,posFim);
-        linhaComando = linhaComando.substring(posFim + 1);
+        posInicial = 9;
+        posFinal = linhaComando.indexOf(".",posInicial);
+        if(posFinal < 0)
+            posFinal = linhaComando.length;
+        parametro = linhaComando.substring(posInicial,posFinal);
+        linhaComando = linhaComando.substring(posFinal + 1);
         if(linhaComando == "")
             linhaComando = "value";
         pos = paramRelatorioProps.indexOf(parametro)
@@ -1046,6 +1122,10 @@ function createHTML(element,select,paramRelatorio){
                     }
                 }
             }
+        }
+        if(valorParam == ""){
+            textoMsgErro = resultadoFuncao.funcao + ": Parâmetro " + parametro + " não reconhecido.";
+            throw textoMsgErro;
         }
         return(valorParam);
     }
@@ -1160,11 +1240,11 @@ function createHeader(element, html, reportname){
     */
     item += "<tr>";    
     item += "<th rowspan='2' style='width:10%; text-align:left; vertical-align:middle; font-weight: bold; font-size: medium; color:black; border-style:hidden'> <img border=0 src='" + serverWindows + "/imagens/logos/logo_" + EnterpriseID + ".jpg' width=130px height=auto> </th>";
-    item += "<th style='width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;'>" + reportname + "</th>";
+    item += "<th style='width:80%; text-align:center; vertical-align:middle; font-weight: bold; font-size: large; color:black; border-style:hidden;'>{{titulo:}}</th>";
     item += "<th rowspan='2' style='width:10%; text-align:right; vertical-align:middle; font-weight: bold; font-size: small; color:black; border-style:hidden;'>" + data + "</th>";
     item += "</tr>";
     item += "<tr>";
-    item += "<th style='text-align:center; vertical-align:middle; font-weight: bold; font-size:small; color:black; border-style:hidden;'> {{subt:}} </th>";
+    item += "<th style='text-align:center; vertical-align:middle; font-weight: bold; font-size:small; color:black; border-style:hidden;'>{{subt:}}</th>";
     item += "</tr>";
     item += "<tr>";
     if(element.recipe == "pdf"){
