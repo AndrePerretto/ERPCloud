@@ -335,7 +335,8 @@ function compareObj(a,b) {
                                     //stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
                                     res.setHeader('Content-type', 'application/pdf')
                                     //stream.pipe(res)
-                                    res.send(Buffer.isBuffer(buffer))
+                                    res.send(buffer)
+                                    //console.log(buffer);
                                 });
                             
                                 break;
