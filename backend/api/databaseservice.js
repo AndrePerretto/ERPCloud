@@ -328,13 +328,14 @@ function compareObj(a,b) {
                                     //console.log(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'))
                                     if(local == true){
                                         stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                        res.setHeader('Content-type', 'application/pdf')
+                                        stream.pipe(res)
                                     }else{
-                                        stream.pipe(fs.createWriteStream('/home/ubuntu/ERPCloud/frontend/reports/' + nome + '.pdf'));
+                                        res.writeHeader(200, {"Content-Type": "text/html"});  
+                                        res.write(fs.createWriteStream('/home/ubuntu/ERPCloud/frontend/frontend/reports/' + nome + '.pdf'));  
+                                        res.end();  
                                     }
                                     
-
-                                    res.setHeader('Content-type', 'application/pdf')
-                                    stream.pipe(res)
                                 });
                             
                                 break;
