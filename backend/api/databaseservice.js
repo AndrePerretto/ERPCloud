@@ -38,6 +38,8 @@ var UserID = "";
 var base = "erpcloud"; //erpcloudfoodtown
 var url = "mongodb://localhost:27017/" + base;
 var host = "";
+var local;
+
 router.route('/*').get(function(req, res, next) {
 
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
@@ -53,9 +55,11 @@ router.route('/*').get(function(req, res, next) {
         serverWindows = "http://localhost:2444";
         dados = "homologa";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
+        local = true;
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
+        local = false;
     }
 
     var database = ""; //"eCloud-homologa";
@@ -749,9 +753,12 @@ function createHTML(element,select,paramRelatorio){
         cmdFinaisFuncao += "_html_ = _resultado_.funcao + \" \" + err; "
         cmdFinaisFuncao += "}";
         cmdFinaisFuncao += "return(_html_); ";
+        if(local == true){
+            funcoesnumeros = fs.readFileSync("../frontend/framework/funcoesnumeros.js");
+        }else{
+            funcoesnumeros = fs.readFileSync("/home/ubuntu/ERPCloud/frontend/framework/funcoesnumeros.js");
+        }
         
-        funcoesnumeros = fs.readFileSync("/home/ubuntu/ERPCloud/frontend/framework/funcoesnumeros.js");
-
         cmdFinaisFuncao += funcoesnumeros;
 
         cmdFinaisFuncao += "}";
