@@ -326,15 +326,15 @@ function compareObj(a,b) {
                                 //var options = {};
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
                                     //console.log(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'))
-                                    if(local == true){
-                                        stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                    //if(local == true){
+                                        //stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
                                         res.setHeader('Content-type', 'application/pdf')
                                         stream.pipe(res)
-                                    }else{
-                                        res.writeHeader(200, {"Content-Type": "text/html"});  
-                                        res.write(fs.createWriteStream('/home/ubuntu/ERPCloud/frontend/frontend/reports/' + nome + '.pdf'));  
-                                        res.end();  
-                                    }
+                                    //}else{
+                                    //    res.writeHeader(200, {"Content-Type": "text/html"});  
+                                    //    res.write(fs.createWriteStream('/home/ubuntu/ERPCloud/frontend/frontend/reports/' + nome + '.pdf'));  
+                                    //    res.end();  
+                                    //}
                                     
                                 });
                             
