@@ -329,14 +329,14 @@ function compareObj(a,b) {
                             
                                 break;
                             case "html":
-                                var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
-                                stream.on('open', function(fd) {
-                                    stream.write(html.topo + html.header + html.detail + html.footer + html.base);
-                                    stream.end();
+                                //var stream = fs.createWriteStream('../frontend/reports/' + nome + '.html');
+                                //stream.on('open', function(fd) {
+                                //    stream.write(html.topo + html.header + html.detail + html.footer + html.base);
+                                //    stream.end();
                                     res.writeHeader(200, {"Content-Type": "text/html"});  
                                     res.write(html.topo + html.header + html.detail + html.footer + html.base);  
                                     res.end();  
-                                });                                
+                                //});                                
                             
                                 break; 
                         }
