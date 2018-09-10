@@ -331,25 +331,11 @@ function compareObj(a,b) {
                                 //        stream.pipe(res)
                                 //});
 
-                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream((err, pdfStream) => {
-                                    if (err) {   
-                                      // handle error and return a error response code
-                                      console.log(err)
-                                      res.sendStatus(500)
-                                    } else {
-                                      // send a status code of 200 OK
-                                      res.statusCode = 200             
-                                
-                                      // once we are done reading end the response
-                                      pdfStream.on('end', () => {
-                                        // done reading
-                                        res.end()
-                                      })
-                                
-                                      // pipe the contents of the PDF directly to the response
-                                      pdfStream.pipe(res)
-                                    }
-                                  })
+                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
+                                    stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
+                                    res.setHeader('Content-type', 'application/pdf')
+                                    stream.pipe(res)
+                                });
                             
                                 break;
                             case "html":
