@@ -331,10 +331,11 @@ function compareObj(a,b) {
                                 //        stream.pipe(res)
                                 //});
 
-                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function (err, buffer) {
-                                    if (err) return res.send(err);
-                                    res.type('pdf');
-                                    res.end(buffer, 'binary');
+
+                                res.setHeader('Content-type', 'application/pdf');
+
+                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
+                                    stream.pipe(res);
                                 });
                             
                                 break;
