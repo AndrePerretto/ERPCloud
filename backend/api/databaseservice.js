@@ -750,7 +750,7 @@ function createHTML(element,select,paramRelatorio){
         cmdFinaisFuncao += "}";
         cmdFinaisFuncao += "return(_html_); ";
         
-        funcoesnumeros = fs.readFileSync("/frontend/framework/funcoesnumeros.js");
+        funcoesnumeros = fs.readFileSync("/home/ubuntu/ERPCloud/frontend/framework/funcoesnumeros.js");
 
         cmdFinaisFuncao += funcoesnumeros;
 
