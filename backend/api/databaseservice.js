@@ -335,7 +335,7 @@ function compareObj(a,b) {
                                     if (err) {   
                                       // handle error and return a error response code
                                       console.log(err)
-                                      return res.sendStatus(500)
+                                      res.sendStatus(500)
                                     } else {
                                       // send a status code of 200 OK
                                       res.statusCode = 200             
@@ -343,7 +343,7 @@ function compareObj(a,b) {
                                       // once we are done reading end the response
                                       pdfStream.on('end', () => {
                                         // done reading
-                                        return res.end()
+                                        res.end()
                                       })
                                 
                                       // pipe the contents of the PDF directly to the response
