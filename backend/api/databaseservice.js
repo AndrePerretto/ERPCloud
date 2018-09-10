@@ -331,8 +331,10 @@ function compareObj(a,b) {
                                 //        stream.pipe(res)
                                 //});
 
-                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toFile('/home/ubuntu/ERPCloud/frontend/reports/' + nome + '.pdf', function(err, stream){
-                                    res.send();
+                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function (err, buffer) {
+                                    if (err) return res.send(err);
+                                    res.type('pdf');
+                                    res.end(buffer, 'binary');
                                 });
                             
                                 break;
