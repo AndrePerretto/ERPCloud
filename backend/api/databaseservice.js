@@ -332,11 +332,9 @@ function compareObj(a,b) {
                                 //});
 
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function(err, buffer){
-                                    //stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
-                                    res.setHeader('Content-type', 'application/pdf')
-                                    //stream.pipe(res)
-                                    res.send(buffer)
-                                    //console.log(buffer);
+                                    if (err) return res.send(err);
+                                    res.type('pdf');
+                                    res.end(buffer, 'binary');
                                 });
                             
                                 break;
