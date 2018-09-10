@@ -331,14 +331,8 @@ function compareObj(a,b) {
                                 //        stream.pipe(res)
                                 //});
 
-                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toStream(function(err, stream){
-                                    if(local == true){
-                                        stream.pipe(fs.createWriteStream('../frontend/reports/' + nome + '.pdf'));
-                                    }else{
-                                        stream.pipe(fs.createWriteStream('/home/ubuntu/ERPCloud/frontend/reports/' + nome + '.pdf'));
-                                    }
-                                    res.setHeader('Content-type', 'application/pdf')
-                                    stream.pipe(res)
+                                pdf.create(html.topo +  html.detail + html.footer + html.base, options).toFile('/home/ubuntu/ERPCloud/frontend/reports/' + nome + '.pdf', function(err, stream){
+                                    res.send();
                                 });
                             
                                 break;
