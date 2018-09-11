@@ -336,7 +336,7 @@ function compareObj(a,b) {
 
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function(err, buffer){
                                     //stream.pipe(res);
-                                    res.send(buffer)
+                                    res.send(new Buffer(buffer, 'binary'))
                                 });
                             
                                 break;
