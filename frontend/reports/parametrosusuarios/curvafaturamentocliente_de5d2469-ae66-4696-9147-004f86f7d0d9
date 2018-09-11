@@ -1,1 +1,1 @@
-{"_orientacao_":{"value":"portrait","text":"Retrato"},"_saida_":{"value":"pdf","text":"Pdf"},"datainicial":{"value":"","type":"caracter","text":""},"datafinal":{"value":"2018-09-10","type":"caracter","text":"10-09-2018"},"topclientes":{"value":"50","type":"numeric","text":"50"}}
+{"_orientacao_":{"value":"portrait","text":"Retrato"},"_saida_":{"value":"html","text":"html"},"datainicial":{"value":"","type":"caracter","text":""},"datafinal":{"value":"2018-09-10","type":"caracter","text":"10-09-2018"},"topclientes":{"value":"50","type":"numeric","text":"50"}}
