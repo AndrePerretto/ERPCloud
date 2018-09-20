@@ -35,8 +35,8 @@ var pastaParametrosRelatorios = "../frontend/reports/parametrosusuarios/";
 var EnterpriseID = "";
 var EnterpriseName = "";
 var UserID = "";
-var base = "erpcloud"; //erpcloudfoodtown
-var url = "mongodb://localhost:27017/" + base;
+var base = ""; //erpcloudfoodtown
+var url = "";
 var host = "";
 var local;
 
@@ -53,8 +53,8 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa";  //"homologa"; //"foodtown";
-        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
+        dados = "broker";  //"homologa"; //"foodtown";
+        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
@@ -70,7 +70,7 @@ router.route('/*').get(function(req, res, next) {
     var select = "SELECT id AS idempresa,nm_CompanyName nome,nm_DatabaseName_Aplication AS 'database',  ";
     select += " nm_ServerIP_Aplication AS 'server', ";
     select += " password_Aplication AS 'password', ";
-    select += " nm_User_Aplication AS 'user' ";
+    select += " nm_User_Aplication AS 'user', nm_mongodb AS 'mongodb' ";
     select += " FROM Enterprise WHERE domainName='" + dados + "' ";
     
     sql.close();
@@ -90,6 +90,8 @@ router.route('/*').get(function(req, res, next) {
                 
                 config = {user: user, password: password, server: server,  database: database};
 
+                base = element.mongodb; //erpcloudfoodtown
+                url = "mongodb://localhost:27017/" + base;
                 next();
             }
         });
@@ -100,8 +102,8 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa"; //"foodtown";
-        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
+        dados = "broker"; //"foodtown";
+        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
         var dados = "";
@@ -121,7 +123,7 @@ function conectionsLink(full, callback){
     var select = "SELECT nm_DatabaseName_Aplication AS 'database',  ";
     select += " nm_ServerIP_Aplication AS 'server', ";
     select += " password_Aplication AS 'password', ";
-    select += " nm_User_Aplication AS 'user' ";
+    select += " nm_User_Aplication AS 'user', nm_mongodb AS 'mongodb'  ";
     select += " FROM Enterprise WHERE domainName='" + dados + "' ";
     
     sql.close();
@@ -138,7 +140,8 @@ function conectionsLink(full, callback){
                 user = element.user;
                 
                 config = {user: user, password: password, server: server,  database: database};
-                
+                base = element.mongodb; //erpcloudfoodtown
+                url = "mongodb://localhost:27017/" + base;
                 callback(true);
             }
         });
