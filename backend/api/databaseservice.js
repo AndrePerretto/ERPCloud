@@ -3098,6 +3098,77 @@ code = ""
     obj["visibleGrid"]=false
     result.push(obj);
 
+    //===================================================================================
+    
+    obj = {};
+    code = " function editarServico(botao) { ";
+    code += "    var idTela='f8af21d6-e280-060a-1d92-0e7948ad107f_';";
+    code += "    console.log(botao);";
+    code += "    var reference = $(botao).attr('data-referenceid'); ";
+    code += "    console.log(reference);";
+    code += "    var elements = $(\"[data-registerid=\" + reference + \"]\"); ";
+    code += "    console.log(elements);";
+    code += "    for (let index = 0; index < elements.length; index++) { ";
+    code += "       const element = elements[index]; ";
+    code += "       var value = $(element).attr('data-newvalue'); ";
+    code += "       var elementid = $(element).attr('data-id'); ";
+
+    code += "       console.log(value);";
+    code += "       console.log(elementid);";
+
+    code += "       if(elementid){ ";
+    code += "           $(\"#\" + elementid).val(value); ";
+    code += "           $(\"#\" + elementid).attr('data-principalid', reference);";
+    code += "       } ";
+    code += "    } ";
+    code += "} ";
+   
+    obj["FormID"]="9caa5207-726f-4786-ac69-27a07352bf78_f8af21d6-e280-060a-1d92-0e7948ad107f"
+    obj["classe"]="hidden"
+    obj["containerID"]="9caa5207-726f-4786-ac69-27a07352bf78_f8af21d6-e280-060a-1d92-0e7948ad107f .panel-body #3818d7aa-e57f-40da-bb26-e93a9aaa28bf_controlgroup"
+    obj["containerIDScreen"]="9caa5207-726f-4786-ac69-27a07352bf78_f8af21d6-e280-060a-1d92-0e7948ad107f"
+    obj["controlID"]="d0c96f7f-bca6-418d-a723-231ae5678d66"
+    obj["controlType"]="BUTTONGRID"
+    obj["derivedFrom"]=null
+    obj["field"]=null
+    obj["fill1PropertyID"]="00000000-0000-0000-0000-000000000000"
+    obj["fill2PropertyID"]="00000000-0000-0000-0000-000000000000"
+    obj["icon"]=""
+    obj["id"]="f8af21d6-e280-060a-1d92-0e7948ad107f_CoServicos_txtid"
+    obj["layoutID"]="00000000-0000-0000-0000-000000000000"
+    obj["layoutName"]="lyImportarXML"
+    obj["layoutScreen"]="9caa5207-726f-4786-ac69-27a07352bf78"
+    obj["localAutoComplete"]=false
+    obj["mask"]=""
+    obj["nameLayout"]=""
+    obj["nativeDataType"]=null
+    obj["newValue"]=""
+    obj["nome"]=""
+    obj["onClickName"]="editarServico"
+    obj["ownerFieldTreeView"]=false
+    obj["propertyID"]="00000000-0000-0000-0000-000000000000"
+    obj["readOnly"]=false
+    obj["required"]=false
+    obj["scriptEvents"]= code;
+    obj["sequenceRecording"]=0
+    obj["serializable"]=false
+    obj["symbol"]=""
+    obj["tabGenID"]="f8af21d6-e280-060a-1d92-0e7948ad107f"
+    obj["table"]=null
+    obj["tamanho"]="col-md-9"
+    obj["tamanhofield"]=""
+    obj["tamanholabel"]=""
+    obj["template"]="MASTERDETAIL"
+    obj["text"]=""
+    obj["textList"]=""
+    obj["titleMenu"]=""
+    obj["titulo"]="Editar"
+    obj["tooltip"]="Editar"
+    obj["typeOpeningLayout"]=""
+    obj["valueList"]=""
+    obj["visibleGrid"]=false
+    result.push(obj);
+
     res.send(result);
 });
 
