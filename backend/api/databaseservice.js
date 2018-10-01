@@ -3176,7 +3176,6 @@ code = ""
 
 router.route('/listreport/:id').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
-    //var url = "mongodb://localhost:27017/erpcloud";
     var id = req.param('id');
     id = id.toUpperCase();
 
@@ -3358,5 +3357,150 @@ router.route('/menucustom/:idusuario').get(function(req, res) {
     });
 
 });
+
+
+router.route('/createCustomJS').get(function(req, res) {
+    var fs = require('fs');   
+    var MongoClient = require('mongodb').MongoClient;
+
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        db.collection("class").find().toArray(function(err, result) {
+        if (err) throw err;
+        
+        for (let index = 0; index < result.length; index++) {
+            const element = result[index];
+            var mkdirp = require('mkdirp');
+
+            mkdirp(".././backend/custom_modules/" + element.client + "/" + element.classname, function (err) {
+                if (err) console.error(err)
+                else console.log('pow!')
+                
+                var codeScript = "";
+
+                fs.readFile(".././backend/custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + ".js", 'utf-8', function (err, dataScript) {
+                                       
+                    codeScript += "const server = require('../../../config/server');\n";
+                    codeScript += "const express = require('express');\n";
+                    codeScript += "const router = express.Router();\n";
+                    codeScript += "const sql = require(\"mssql\");\n";
+                    codeScript += "const general = require('../../../api/general');\n";
+                    codeScript += "server.use('/custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + "', router);\n";
+                    codeScript += "var serverWindows = \"\";\n";
+                    codeScript += "var configEnvironment = {};\n";
+                    codeScript += "var EnterpriseID = \"\";\n";
+                    codeScript += "var EnterpriseName = \"\";\n";
+                    codeScript += "var UserID = \"\";\n";
+                    codeScript += "var base = \"\";\n"; 
+                    codeScript += "var url = \"\";\n";
+                    codeScript += "var host = \"\";\n";
+                    codeScript += "var config = {};\n";
+                    codeScript += "\n";
+
+                    codeScript += "router.route('/*').get(function(req, res, next) {\n";
+                    codeScript += "    var full = req.host;\n";
+                    codeScript += "    var parts = full.split('.');\n";
+                    codeScript += "    var dados = \"\";\n";
+                    codeScript += "    if (parts.length > 3) {\n";
+                    codeScript += "        dados = parts[0];\n";
+                    codeScript += "    }\n";
+                    codeScript += "    host = dados;\n";
+                    codeScript += "    dados = dados.replace(\"http://\",\"\");   \n";                 
+                    codeScript += "    if(full.indexOf(\"localhost\") > -1){\n";
+                    codeScript += "        serverWindows = \"http://localhost:2444\";\n";
+                    codeScript += "        dados = \"broker\";\n";
+                    codeScript += "        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};\n";
+                    codeScript += "    }else{\n";
+                    codeScript += "        serverWindows = \"http://\" + dados + \".empresariocloud.com.br\";\n";
+                    codeScript += "        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};\n";
+                    codeScript += "    }                    \n";
+                    codeScript += "    var database = \"\";\n";
+                    codeScript += "    var server = \"\";\n";
+                    codeScript += "    var password = \"\";\n";
+                    codeScript += "    var user = \"\";";            
+                    codeScript += "    var select = \"SELECT id AS idempresa,nm_CompanyName nome,nm_DatabaseName_Aplication AS 'database',  \";\n";
+                    codeScript += "    select += \" nm_ServerIP_Aplication AS 'server', \";\n";
+                    codeScript += "    select += \" password_Aplication AS 'password', \";\n";
+                    codeScript += "    select += \" nm_User_Aplication AS 'user', \";\n";
+                    codeScript += "    select += \" nm_mongodb AS mongodb \";\n";
+                    codeScript += "    select += \" FROM Enterprise WHERE domainName='\" + dados + \"' \";  \n";                  
+                    codeScript += "    sql.close();\n";
+                    codeScript += "    sql.connect(configEnvironment, function (err) {  \n";  
+                    codeScript += "        if (err) console.log(err);\n";
+                    codeScript += "        var request = new sql.Request();\n";
+                    codeScript += "        request.query(select, function (err, recordset) {    \n";        
+                    codeScript += "            if (err) console.log(err)\n";
+                    codeScript += "            if(recordset.recordsets[0].length > 0){\n";
+                    codeScript += "                const element = recordset.recordsets[0][0];\n";
+                    codeScript += "                database = element.database;\n";
+                    codeScript += "                server = element.server;\n";
+                    codeScript += "                password = element.password;\n";
+                    codeScript += "                user = element.user;\n";
+                    codeScript += "                EnterpriseID = element.idempresa;\n";
+                    codeScript += "                EnterpriseName = element.nome;\n";
+                    codeScript += "                base = element.mongodb;\n";
+                    codeScript += "                url = \"mongodb://localhost:27017/\" + base;\n";
+                                                    
+                    codeScript += "                config = {user: user, password: password, server: server,  database: database};\n";
+                    
+                    codeScript += "                next();\n";
+                    codeScript += "            }\n";
+                    codeScript += "        });\n";
+                    codeScript += "    });    \n";
+                    codeScript += "});    \n";
+
+
+                    if(dataScript != undefined && dataScript != ""){
+                        if(dataScript.indexOf(codeScript) > -1){  
+                            codeScript = dataScript;
+                        }                        
+                    }else{
+                        dataScript = "";
+                    }                    
+                    var codeFunction = "router.route('/" + element.functionname + "').get(function(req, res) {";
+                    
+                    if(codeScript.indexOf(codeFunction) == -1){ 
+                        codeScript +=  "\n";
+                        codeScript +=  "// " + element.classname + "/" + element.filename + "/" + element.functionname ;
+                        codeScript +=  "\n";
+                        codeScript +=  codeFunction;
+                        codeScript +=  "\n";
+                        codeScript +=  element.ffunction;
+                        codeScript +=  "\n";
+                        codeScript +=  "});\n";
+                    }
+                    
+
+                    fs.writeFile(".././backend/custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + ".js", codeScript,{enconding:'utf-8',flag: 'w'}, function (err) {
+                        if (err) throw err;
+                                                
+                        var importData = "    const " + element.classname + " = require('../custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + "')\n}";
+                        
+                        fs.readFile('.././backend/config/routes.js', 'utf-8', function (err, data) {
+                            if(err) throw err;
+
+                            if(data.indexOf(importData) == -1){            
+                                data = data.replace("}",importData);
+                                fs.writeFile('.././backend/config/routes.js', data,{enconding:'utf-8',flag: 'r+'}, function (err) {
+                                    if (err) throw err;
+                                    console.log('Arquivo salvo!');
+                                    res.send("Arquivo salvo!");
+                                });
+                            } else{
+                                res.send("OK");
+                            }
+
+                            
+                        });
+                    });
+                });
+            });
+        }  
+        });
+    });
+
     
+})
+
+
 module.exports = database
