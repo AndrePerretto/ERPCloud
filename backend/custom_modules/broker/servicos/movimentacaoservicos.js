@@ -63,21 +63,33 @@ router.route('/*').get(function(req, res, next) {
     });    
 });    
 
-// servicos/movimentacaoservicos/testesoma
-router.route('/testesoma').get(function(req, res) {
- res.send("retorno");
-});
+//* servicos/movimentacaoservicos/testesoma 
 
-// servicos/movimentacaoservicos/testeconexao
-router.route('/testeconexao').get(function(req, res) {
-sql.close(); 
- sql.connect(config, function (err) { 
- var select = "SELECT nm_razaosocial AS 'razao' FROM entidade ";
- var request = new sql.Request(); 
- request.query(select, function (err, recordset){
- if (err) console.log(err) 
+router.route('/testesoma/:param1/:param2').get(function(req, res) {
+var param1 = req.param('param1');
+var param2 = req.param('param2');
+
+ res.send(param1 + ' - ' + param2);
+});
+//% servicos/movimentacaoservicos/testesoma 
+ 
+
+//* servicos/movimentacaoservicos/carregaSubServico 
+
+router.route('/carregaSubServico/:idProdutos').get(function(req, res) {
+var idProdutos = req.param('idProdutos');
+
+
+     sql.close();
+ sql.connect(config, function (err) {
+ if (err) console.log(err); 
+ var select = "SELECT produtos.id AS 'id', produtos.nm_descricao AS 'desc', produtos.id_dsg_moeda AS 'moeda' , produtos.vl_precovenda AS 'precovenda'  FROM produtos_subservicos INNER JOIN produtos ON produtos.id=produtos_subservicos.id_subservicos WHERE produtos_subservicos.id_produtos='" + idProdutos + "'";
+ var request = new sql.Request();
+ request.query(select, function (err, recordset){ 
+ if (err) console.log(err); 
  res.send(recordset);
-});
+ });
 });
 
 });
+//% servicos/movimentacaoservicos/carregaSubServico 

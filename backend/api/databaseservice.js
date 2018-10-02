@@ -1977,14 +1977,14 @@ router.route('/save').post(function(req, res) {
         }else{
 
     incremento(submit, function(resultado, submit){
+        
         sql.close()
         sql.connect(config).then(function() {
         for (var index = 0; index < submit.length; index++) {
-            
             beforeSave(submit[index], function(retornoBefore){
                 ind += 1;
                 var booleanBefore = true;
-
+                
                 if (retornoBefore) {
                     if (retornoBefore.length > 0) {
                         booleanBefore = retornoBefore[0].success;
@@ -2012,11 +2012,11 @@ router.route('/save').post(function(req, res) {
                         delete submit[ind]["layoutID"];
                     }
                 }
-
+                
                 if (booleanBefore) {      
                     
                     if (submit[ind]["id"] == "" || !submit[ind]["id"]) {
-                                                      
+                                          
                                 var numberincrement;
                                 var updateincrement = ""
                 
@@ -3456,25 +3456,40 @@ router.route('/createCustomJS').get(function(req, res) {
                         }                        
                     }else{
                         dataScript = "";
-                    }                    
-                    var codeFunction = "router.route('/" + element.functionname + "').get(function(req, res) {";
+                    }   
                     
+                    var paramentros = "";
+                    var variaveisparametros = "";
+                    for (let i = 0; i < element.parameters.length; i++) {
+                        const elementParameter = element.parameters[i];
+                        paramentros +=  "/:" + elementParameter;
+
+                        variaveisparametros += "var " + elementParameter + " = " + "req.param('" + elementParameter + "');\n"
+                    }
+                    
+                    var codeFunctionName = "router.route('/" + element.functionname + paramentros + "').get(function(req, res) {";
+                    var codeFunction =  "\n";
+                    codeFunction +=  "//* " + element.classname + "/" + element.filename + "/" + element.functionname + " \n";
+                    codeFunction +=  "\n";
+                    codeFunction +=  codeFunctionName;
+                    codeFunction +=  "\n";
+                    codeFunction +=  variaveisparametros;
+                    codeFunction +=  "\n";
+                    codeFunction +=  element.ffunction;
+                    codeFunction +=  "\n";
+                    codeFunction +=  "});\n";
+                    codeFunction +=  "//% " + element.classname + "/" + element.filename + "/" + element.functionname + " \n";
+                   
+
                     if(codeScript.indexOf(codeFunction) == -1){ 
-                        codeScript +=  "\n";
-                        codeScript +=  "// " + element.classname + "/" + element.filename + "/" + element.functionname ;
-                        codeScript +=  "\n";
-                        codeScript +=  codeFunction;
-                        codeScript +=  "\n";
-                        codeScript +=  element.ffunction;
-                        codeScript +=  "\n";
-                        codeScript +=  "});\n";
+                        codeScript += codeFunction;
                     }
                     
 
                     fs.writeFile(".././backend/custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + ".js", codeScript,{enconding:'utf-8',flag: 'w'}, function (err) {
                         if (err) throw err;
                                                 
-                        var importData = "    const " + element.classname + " = require('../custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + "')\n}";
+                        var importData = "    const " + element.filename + " = require('../custom_modules/" + element.client + "/" + element.classname + "/" + element.filename + "')\n}";
                         
                         fs.readFile('.././backend/config/routes.js', 'utf-8', function (err, data) {
                             if(err) throw err;
