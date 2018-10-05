@@ -31,8 +31,8 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker";  //"homologa"; //"foodtown";
-        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
+        dados = "intelecta10";  //"homologa"; //"foodtown";
+        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
@@ -88,8 +88,8 @@ router.route('/*').post(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa";  //"homologa"; //"foodtown";
-        configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
+        dados = "intelecta10";  //"homologa"; //"foodtown";
+        configEnvironment = {user: 'sa', password: '12345678', server: '127.0.0.1',  database: 'Environment'};
     }else{
         serverWindows = "http://" + dados + ".empresariocloud.com.br"; //"http://localhost:2444";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '172.31.8.216',  database: 'Environment'};
@@ -132,8 +132,178 @@ router.route('/*').post(function(req, res, next) {
     });    
 });
 
+
+/*-------------------------------------------------------------------------------
+Retorna as listas dos itens para cadastrar parcelas: bancos, formas de pagamento,
+configuração de cnab e contas financeiras.
+---------------------------------------------------------------------------------
+*/
+router.route('/listacomplementoparcelas').post(function(req, res) {
+    var query = "";
+    var banco = null;
+    var resposta = null;
+    var formaPagamento = null;
+    var contaFinanceira = null;
+    var configuracaoCNAB = null;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    try{
+        resposta = {
+            status: 0,
+            mensagem: [],
+            bancos: [],
+            formasPagamento: [],
+            configuracoesCNAB: [],
+            contasFinanceiras: []
+        }
+
+        sql.close();
+        sql.connect(config, function (err) {
+            if (err){
+                resposta = {
+                    status: -2,
+                    mensagem: ["" + err],
+                    bancos: [],
+                    formasPagamento: [],
+                    configuracoesCNAB: [],
+                    contasFinanceiras: []
+                }
+                res.json(resposta);
+            }
+            else{
+                /* Bancos */
+                var request = new sql.Request();
+                request.input("idempresa",EnterpriseID);
+                request.query("select id,nm_apelido,nm_agencia,nm_conta from banco where id_empresa = @idempresa order by nm_apelido,nm_agencia,nm_conta", function (err, recordset) {
+                    if (err){
+                        resposta = {
+                            status: -3,
+                            mensagem: ["" + err],
+                            bancos: [],
+                            formasPagamento: [],
+                            configuracoesCNAB: [],
+                            contasFinanceiras: []
+                        }
+                        res.json(resposta);
+                    }
+                    else{
+                        var element = recordset.recordsets[0];
+                        for(var i = 0; i < element.length; i++){
+                            banco = {
+                                id: element[i].id,
+                                descricao: element[i].nm_apelido,
+                                agencia: element[i].nm_agencia,
+                                conta: element[i].nm_conta
+                            }
+                            resposta.bancos.push(banco);
+                        }
+                    }
+                })
+                /* Formas de pagamento */
+                var request = new sql.Request();
+                request.query("select id,nm_descricao from dsg_forma_pagamento order by nm_descricao", function (err, recordset) {
+                    if (err){
+                        resposta = {
+                            status: -4,
+                            mensagem: ["" + err],
+                            bancos: [],
+                            formasPagamento: [],
+                            configuracoesCNAB: [],
+                            contasFinanceiras: []
+                        }
+                        res.json(resposta);
+                    }
+                    else{
+                        var element = recordset.recordsets[0];
+                        for(var i = 0; i < element.length; i++){
+                            formaPagamento = {
+                                id: element[i].id,
+                                descricao: element[i].nm_descricao
+                            }
+                            resposta.formasPagamento.push(formaPagamento);
+                        }
+                    }
+                })
+                /* Configurações de CNAB */
+                var request = new sql.Request();
+                request.input("idempresa",EnterpriseID);
+                request.query("select id,nm_descricao from configuracao_cnab where id_empresa = @idempresa order by nm_descricao", function (err, recordset) {
+                    if (err){
+                        resposta = {
+                            status: -5,
+                            mensagem: ["" + err],
+                            bancos: [],
+                            formasPagamento: [],
+                            configuracoesCNAB: [],
+                            contasFinanceiras: []
+                        }
+                        res.json(resposta);
+                    }
+                    else{
+                        var element = recordset.recordsets[0];
+                        for(var i = 0; i < element.length; i++){
+                            configuracaoCNAB = {
+                                id: element[i].id,
+                                descricao: element[i].nm_descricao
+                            }
+                            resposta.configuracoesCNAB.push(configuracaoCNAB);
+                        }
+                    }
+                })
+                /* Contas financeiras */
+                var request = new sql.Request();
+                request.input("idempresa",EnterpriseID);
+                request.query("select id,nm_codigo,nm_descricao from plano_contas_financeiro where id_empresa = @idempresa order by nm_codigo", function (err, recordset) {
+                    if (err){
+                        resposta = {
+                            status: -6,
+                            mensagem: ["" + err],
+                            bancos: [],
+                            formasPagamento: [],
+                            configuracoesCNAB: [],
+                            contasFinanceiras: []
+                        }
+                        res.json(resposta);
+                    }
+                    else{
+                        var element = recordset.recordsets[0];
+                        for(var i = 0; i < element.length; i++){
+                            contaFinanceira = {
+                                id: element[i].id,
+                                codigo: element[i].nm_codigo,
+                                descricao: element[i].nm_descricao
+                            }
+                            resposta.contasFinanceiras.push(contaFinanceira);
+                        }
+                        resposta.status = 1;
+                        resposta.mensagem.push("ok");
+                        res.json(resposta);
+                    }
+                })
+            }
+        })
+    }
+    catch(erro){
+        resposta = {
+            status: -1,
+            mensagem: ["" + erro],
+            bancos: [],
+            formasPagamento: [],
+            configuracoesCNAB: [],
+            contasFinanceiras: []
+        }
+        sql.close();
+        res.json(resposta);
+    }
+})
+
+
 /*------------------------------------------------------------------------------
-Cria uma relação das contas a receber
+Cria uma relação das contas a receber (parcelas)
 --------------------------------------------------------------------------------
 */
 router.route('/listarcontas').post(function(req, res) {
@@ -164,21 +334,20 @@ router.route('/listarcontas').post(function(req, res) {
             titulos: [],
         }
 
-        query += "select ent.id identidade,ent.nm_razaosocial razaosocial,cr.id idtitulo,cr.nm_documento titulo,cr.vl_valor valortitulo,cr.dt_emissao emissao,cr.id_venda idvenda,cr.id_notafiscal idnota,";
-        query += "crp.id idparcela,crp.nr_parcela parcela,crp.dt_data_vencimento vencimento,crp.vl_valor valorparcela,";
+        query += "select ";
+        query += "ent.id identidade,ent.nm_razaosocial razaosocial,";
+        query += "cr.id idtitulo,cr.nm_documento titulo,cr.vl_valor valortitulo,cr.dt_emissao emissao,cr.id_venda idvenda,cr.id_notafiscal idnota,cr.sn_dre dre,";
+        query += "cr.nm_competencia,cr.id_plano_contas_financeiro idcontafinanceira,";
+        query += "crp.id idparcela,crp.nm_documento docparcela,crp.nr_parcela parcela,crp.dt_data_vencimento vencimento,crp.vl_valor valorparcela,crp.id_banco idbanco,";
+        query += "crp.id_configuracao_cnab idconfcnab,crp.id_plano_contas_financeiro idcontafinanceiraparc,crp.id_forma_pagamento idformaparc,crp.sn_fluxocaixa fluxocaixa,";
         query += "baixas.id idbaixa,baixas.dt_data databaixa,baixas.vl_valor valorbaixa,";
-        query += "formas.id_banco idbancorec,formas.id_formapagamento idformarec,formas.nm_documento documentorec,formas.vl_valor valorrec,formas.nm_conta contacli,formas.nm_agencia agenciacli,";
-        query += "dsgforma.nm_descricao formarec,";
-        query += "banco.nm_apelido bancorec,banco.id idbancorec,banco.nm_conta contarec,banco.nm_agencia agenciarec,";
-        query += "dsgbco.id idbcocli,dsgbco.nm_descricao bancocli,";
+        query += "formas.id_banco idbancorec,formas.id_formapagamento idformarec,formas.nm_documento documentorec,formas.vl_valor valorrec,formas.nm_conta contacli,";
+        query += "formas.nm_agencia agenciacli,";
         query += "(select nr_pedido from venda where venda.id = cr.id_venda and venda.id_empresa = @idempresa) nrpedido,";
         query += "(select nm_numeronotafiscal from notafiscal where notafiscal.id = cr.id_notafiscal and notafiscal.id_empresa = @idempresa) nrnota";
         query += " from entidade ent,contas_receber cr,contas_receber_parcelas crp";
         query += " left join contas_receber_baixas baixas on baixas.id_contas_receber_parcela = crp.id and baixas.id_empresa = @idempresa";
         query += " left join contas_receber_baixas_formaspagamento formas on formas.id_contas_receber_baixas = baixas.id and formas.id_empresa = @idempresa";
-        query += " left join dsg_forma_pagamento dsgforma on dsgforma.id = formas.id_formapagamento";
-        query += " left join banco on banco.id = formas.id_banco and banco.id_empresa = @idempresa";
-        query += " left join dsg_banco dsgbco on dsgbco.id = formas.id_dsg_banco";
         query += " where cr.id_empresa = @idempresa";
         query += " and (@pedido is null or cr.id_venda in (select id from venda where venda.nr_pedido = @pedido))";
         query += " and (@notaFiscal is null or cr.id_notafiscal in (select id from notafiscal nota where nota.nm_numeronotafiscal = @notafiscal))";
@@ -187,13 +356,12 @@ router.route('/listarcontas').post(function(req, res) {
         query += " and crp.id_contas_receber = cr.id";
         query += " and (@vencimentoinicial is null or (convert(varchar(8),crp.dt_data_vencimento,112)) >= @vencimentoinicial)";
         query += " and (@vencimentofinal is null or (convert(varchar(8),crp.dt_data_vencimento,112)) <= @vencimentofinal)";
-        query += " order by crp.dt_data_vencimento,crp.vl_valor desc,cr.nm_documento,crp.nr_parcela";
-
+        query += " order by crp.dt_data_vencimento,crp.vl_valor desc,crp.nm_documento,crp.nr_parcela";
 
         sql.close();
         sql.connect(config, function (err) {    
             if (err){
-                resposta.status = -1;
+                resposta.status = -2;
                 resposta.mensagem = [];
                 resposta.mensagem.push("" + err);
                 resposta.titulos = [];
@@ -202,14 +370,14 @@ router.route('/listarcontas').post(function(req, res) {
             else{
                 var request = new sql.Request();
                 request.input("idempresa",EnterpriseID);
-                request.input("identidade",parametros.idEntidade == "" ? null : parametros.idEntidade);
-                request.input("pedido",parametros.pedido == "" ? null : parametros.pedido);
-                request.input("notafiscal",parametros.notaFiscal == "" ? null : parametros.notaFiscal);
-                request.input("vencimentoinicial",parametros.vencimentoInicial == "" ? null : parametros.vencimentoInicial.substring(6,10) + parametros.vencimentoInicial.substring(3,5)  + parametros.vencimentoInicial.substring(0,2));
-                request.input("vencimentofinal",parametros.vencimentoInicial == "" ? null : parametros.vencimentoFinal.substring(6,10) + parametros.vencimentoFinal.substring(3,5)  + parametros.vencimentoFinal.substring(0,2));
+                request.input("identidade",(parametros.idEntidade == "" || parametros.idEntidade == "undefined") ? null : parametros.idEntidade);
+                request.input("pedido",(parametros.pedido == "" || parametros.pedido == "undefined") ? null : parametros.pedido);
+                request.input("notafiscal",(parametros.notaFiscal == "" || parametros.notaFiscal == "undefined") ? null : parametros.notaFiscal);
+                request.input("vencimentoinicial",(parametros.vencimentoInicial == "" || parametros.vencimentoInicial == "undefined") ? null : parametros.vencimentoInicial.substring(6,10) + parametros.vencimentoInicial.substring(3,5)  + parametros.vencimentoInicial.substring(0,2));
+                request.input("vencimentofinal",(parametros.vencimentoFinal == "" || parametros.vencimentoFinal == "undefined") ? null : parametros.vencimentoFinal.substring(6,10) + parametros.vencimentoFinal.substring(3,5)  + parametros.vencimentoFinal.substring(0,2));
                 request.query(query, function (err, recordset) {
                     if (err){
-                        resposta.status = -1;
+                        resposta.status = -3;
                         resposta.mensagem = [];
                         resposta.mensagem.push("" + err);
                         resposta.titulos = [];
@@ -221,20 +389,27 @@ router.route('/listarcontas').post(function(req, res) {
                         while(i < element.length){
                             idParcela = element[i].idparcela;
                             titulo = {
-                                idEntidade : element[i].identidade,
+                                idEntidade : (element[i].identidade == null ? "" : element[i].identidade),
                                 razaoSocial : element[i].razaosocial,
-                                idTitulo : element[i].idtitulo,
+                                idTitulo : (element[i].idtitulo == null ? "" : element[i].idtitulo),
                                 titulo : element[i].titulo,
                                 valorTitulo: element[i].valortitulo,
                                 emissaoTitulo : element[i].emissao,
-                                idParcela : element[i].idparcela,
+                                idParcela : (element[i].idparcela == null ? "" : element[i].idparcela),
                                 parcela : element[i].parcela,
+                                docParcela : element[i].docparcela,
                                 valorParcela : element[i].valorparcela,
                                 vencimentoParcela : element[i].vencimento,
-                                idPedido : element[i].idvenda,
+                                idPedido : (element[i].idvenda == null ? "" : element[i].idvenda),
                                 nrPedido : element[i].nrpedido,
-                                idNotaFiscal : element[i].idnota,
+                                idNotaFiscal : (element[i].idnota == null ? "" : element[i].idnota),
                                 nrNotaFiscal : element[i].nrnota,
+                                idBanco : element[i].idbanco,
+                                idConfCNAB : (element[i].idconfcnab == null ? "" : element[i].idconfcnab),
+                                idContaFinanceira : (element[i].idcontafinanceiraparc == null ? "" : element[i].idcontafinanceiraparc),
+                                idFormaPagamento : (element[i].idformaparc == null ? "" : element[i].idformaparc),
+                                dre : (element[i].dre ? 1 : 0),
+                                fluxoCaixa : (element[i].fluxocaixa ? 1 : 0),
                                 valorBaixas : 0,
                                 baixas : []
                             }
@@ -244,15 +419,10 @@ router.route('/listarcontas').post(function(req, res) {
                                         idBaixa : element[i].idbaixa,
                                         dataBaixa : element[i].databaixa,
                                         valorBaixa : element[i].valorbaixa,
-                                        idBancoRec : element[i].idbancorec,
-                                        bancoRec : element[i].bancorec,
-                                        agenciaRec : element[i].agenciarec,
-                                        contaRec : element[i].contarec,
-                                        idFormaRec : element[i].idformarec,
-                                        formaRec : element[i].formarec,
+                                        idBancoRec : (element[i].idbancorec == null ? "" : element[i].idbancorec),
+                                        idFormaRec : (element[i].idformarec == null ? "" : element[i].idbancorec),
                                         documentoRec : element[i].documentorec,
-                                        idBcoCli : element[i].idbcocli,
-                                        bancoCli : element[i].bancocli,
+                                        idBancoCli : (element[i].idbcocli == null ? "" : element[i].idbcocli),
                                         agenciaCli : element[i].agenciacli,
                                         contaCli : element[i].contacli
                                     }
@@ -316,30 +486,27 @@ router.route('/dadostitulo').post(function(req, res) {
             mensagem: [],
             dadosTitulo: [],
         }
-
+        
         query += "select ";
         query += "cr.id idtitulo,cr.id_entidade identidade,cr.id_venda idvenda,cr.id_notafiscal idnotafiscal,cr.id_parcelamento idparcelamento,";
-        query += "cr.id_banco idbanco,cr.id_formapagamento idformapagamento,cr.id_configuracao_cnab idconfcnab,cr.id_plano_contas_financeiro contafinanceira,";
-        query += "cr.nm_documento titulo,";
-        query += "cr.dt_competência competencia,cr.dt_emissao emissao,cr.vl_valor valortitulo,cr.sn_fluxocaixa fluxocaixa,cr.sn_dre dre,cr.nm_observacao observavao,";
-        query += "crp.id idparcela,crp.id_configuracao_cnab idconfcnabparc,crp.id_plano_contas_financeiro contafinanceira,crp.nr_parcela parcela,";
-        query += "crp.dt_data_vencimento vencimento,crp.vl_valor valorparcela,crp.id_dsg_status_titulo idstatus,";
+        query += "cr.id_plano_contas_financeiro idcontafinanceira,cr.nm_documento titulo,cr.nm_competencia competencia,cr.dt_emissao emissao,";
+        query += "cr.vl_valor valortitulo,cr.sn_dre dre,cr.nm_observacao observacao,";
+        query += "crp.id idparcela,crp.nm_documento documentoparc,crp.id_banco idbanco,crp.id_forma_pagamento idformapagamento,crp.id_configuracao_cnab idconfcnab,crp.id_plano_contas_financeiro idcontafinanceiraparc,";
+        query += "crp.nr_parcela parcela,crp.dt_data_vencimento vencimento,crp.vl_valor valorparcela,crp.id_dsg_status_titulo idstatus,crp.sn_fluxocaixa fluxocaixa,";
+        query += "ent.nm_razaosocial razaosocial,";        
         query += "(select venda.nr_pedido from venda where venda.id = cr.id_venda and venda.id_empresa = @idempresa) pedido,";
-        query += "(select nm_numeronotafiscal from notafiscal where notafiscal.id = cr.id_notafiscal and notafiscal.id_empresa = @idempresa) notafiscal,";
-        query += "baixas.id idbaixa,baixas.id_processo_recebimento idprocesso,baixas.dt_data databaixa,baixas.vl_valor valorbaixa,";
-        query += "formas.id idformarecebimento,formas.id_banco idbancorecebimento,formas.nm_documento documentorecebimento,";
-        query += "formas.id_dsg_banco idbancopagador,formas.nm_conta contapagador,formas.nm_agencia agenciapagador,formas.vl_valor valorrecebimento,";
-        query += "banco.nm_apelido bancoreebimento,banco.nm_conta contarecebimento,banco.nm_agencia agenciarecebimento,";
-        query += "dsgbanco.nm_descricao bancopagador";
-        query += " from contas_receber cr,contas_receber_parcelas crp";
+        query += "(select nm_numeronotafiscal from notafiscal where notafiscal.id = cr.id_notafiscal and notafiscal.id_empresa = @idempresa) notafiscal,";        
+        query += "baixas.id idbaixa,baixas.id_processo_recebimento idprocesso,baixas.dt_data databaixa,baixas.vl_valor valorbaixa,";        
+        query += "formas.id idformarecebimento,formas.id_banco idbancorecebimento,formas.nm_documento documentorecebimento,formas.id_dsg_banco idbancopagador,";
+        query += "formas.nm_conta contapagador,formas.nm_agencia agenciapagador,formas.vl_valor valorrecebimento";
+        query += " from entidade ent,contas_receber cr,contas_receber_parcelas crp";
         query += " left join contas_receber_baixas baixas on baixas.id_contas_receber_parcela = crp.id and baixas.id_empresa = @idempresa";
         query += " left join contas_receber_baixas_formaspagamento formas on formas.id_contas_receber_baixas = baixas.id and formas.id_empresa = @idempresa";
-        query += " left join banco on banco.id = formas.id_banco and banco.id_empresa = @idempresa";
-        query += " left join dsg_banco dsgbanco on dsgbanco.id = formas.id_dsg_banco";
-        query += " where ";
-        query += " cr.id_empresa = @idempresa and (@idtitulo is null or cr.id = @idtitulo)";
-        query += " and";
-        query += " crp.id_empresa = @idempresa and crp.id_contas_receber = cr.id and (@idparcela is null or crp.id = @idparcela)";
+        query += " where cr.id_empresa = @idempresa";
+        query += " and (@idtitulo is null or cr.id = @idtitulo)";
+        query += " and crp.id_empresa = @idempresa and crp.id_contas_receber = cr.id";
+        query += " and (@idparcela is null or crp.id = @idparcela)";
+        query += " and ent.id = cr.id_entidade and ent.id_empresa = @idempresa";
         query += " order by crp.nr_parcela,baixas.dt_data";
 
         sql.close();
@@ -387,18 +554,19 @@ router.route('/dadostitulo').post(function(req, res) {
                                 resposta.dadosTitulo = {
                                     idTitulo : element[i].idtitulo,
                                     idEntidade : element[i].identidade,
+                                    razaoSocial : element[i].razaosocial,
                                     titulo : element[i].titulo,
-                                    valorTitulo: element[i].valortitulo,
-                                    emissaoTitulo : element[i].emissao,
-                                    idPedido : element[i].idvenda,
-                                    pedido : element[i].pedido,
-                                    idNotaFiscal : element[i].idnotafiscal,
-                                    notaFiscal : element[i].notafiscal,
-                                    idParcelamento: element[i].idparcelamento,
-                                    idBanco : element[i].idbanco,
-                                    idFormaPagamento : element[i].idformapagamento,
-                                    idConfCNAB : element[i].idconfcnab,
-                                    idContaFinanceira : element[i].contafinanceira,
+                                    valor: element[i].valortitulo,
+                                    emissao : element[i].emissao,
+                                    competencia : element[i].competencia,
+                                    idPedido : (element[i].idvenda == null ? "" : element[i].idvenda),
+                                    pedido : (element[i].pedido == null ? "" : element[i].pedido),
+                                    idNotaFiscal : (element[i].idnotafiscal == null ? "" : element[i].idnotafiscal),
+                                    notaFiscal : (element[i].notafiscal == null ? "" : element[i].notafiscal),
+                                    idParcelamento: (element[i].idparcelamento == null ? "" : element[i].idparcelamento),
+                                    idContaFinanceira : (element[i].idcontafinanceira == null ? "" : element[i].idcontafinanceira),
+                                    dre : (element[i].dre ? 1 : 0),
+                                    observacao : element[i].observacao,
                                     valorBaixas : 0,
                                     parcelas : []
                                 }
@@ -406,12 +574,16 @@ router.route('/dadostitulo').post(function(req, res) {
                                     idParcela = element[i].idparcela;
                                     parcela = {
                                         idParcela : element[i].idparcela,
-                                        idConfCNAB : element[i].idconfcnabparc,
-                                        idContaFinanceira : element[i].contafinanceira,
+                                        idBanco : (element[i].idbanco == null ? "" : element[i].idbanco),
+                                        idFormaPagamento : (element[i].idformapagamento == null ? "" : element[i].idformapagamento),
+                                        idConfCNAB : (element[i].idconfcnab == null ? "" : element[i].idconfcnab),
+                                        idContaFinanceira : (element[i].idcontafinanceiraparc == null ? "" : element[i].idcontafinanceiraparc),
+                                        documento : element[i].documentoparc,
                                         parcela : element[i].parcela,
                                         vencimento : element[i].vencimento,
                                         valor : element[i].valorparcela,
-                                        idStatus : element[i].idstatus,                                    
+                                        idStatus : (element[i].idstatus == null ? "" : element[i].idstatus),
+                                        fluxoCaixa : (element[i].fluxocaixa ? 1 : 0),
                                         valorBaixas : 0,
                                         baixas : []
                                     }
@@ -432,24 +604,21 @@ router.route('/dadostitulo').post(function(req, res) {
                                                 while(i < element.length && element[i].idbaixa == idBaixa){
                                                     formaRec = {
                                                         idFormaRecebimento : element[i].idformarecebimento,
-                                                        idBanco : element[i].idbancorecebimento,                                                
-                                                        banco : element[i].bancoreebimento,
-                                                        conta : element[i].contarecebimento,
-                                                        agencia :  element[i].agenciarecebimento,
+                                                        idBanco : element[i].idbancorecebimento,
                                                         documento : element[i].documentorecebimento,
-                                                        idDsgBando : element[i].idbancopagador,                                                
-                                                        bancoPagador : element[i].bancopagador,
-                                                        contaPagador : element[i].contapagador,
-                                                        agenciaPagador : element[i].agenciapagador,
+                                                        idDsgBanco : (element[i].idbancopagador == null ? "" : element[i].idbancopagador),
+                                                        contapag: element[i].contapagador,
+                                                        agenciapag: element[i].agenciapagador,
                                                         valor : element[i].valorrecebimento
                                                     }
-                                                    parcela.baixas.push(baixa);
+                                                    baixa.push(formarec);
                                                     i++
                                                 }
                                             }
                                             else{
                                                 i++;
                                             }
+                                            parcela.baixas.push(baixa);
                                         }
                                     }
                                     else{
@@ -488,8 +657,6 @@ router.route('/dadostitulo').post(function(req, res) {
     }
 })
 
-
-
 /*------------------------------------------------------------------------------
 Inclui ou atualiza uma conta com suas parcelas.
 --------------------------------------------------------------------------------
@@ -514,29 +681,26 @@ router.route('/atualizarconta').post(function(req, res) {
 
     try{
         parametros = req.body.parametros;
-        sql.close();
+
         if(parametros.idTitulo == ""){
             parametros.idTitulo = general.guid();
-            query = "insert into contas_receber (id,id_empresa,id_entidade,id_venda,id_notafiscal,id_parcelamento,id_banco,id_formapagamento,id_configuracao_cnab,nm_documento,dt_emissao,dt_competência,vl_valor,sn_fluxocaixa,sn_dre,nm_observacao) values("
+            query = "insert into contas_receber (id,id_empresa,id_entidade,id_venda,id_notafiscal,id_parcelamento,id_plano_contas_financeiro,nm_documento,dt_emissao,nm_competencia,vl_valor,sn_dre,nm_observacao) values("
             query += "'" + parametros.idTitulo + "',";
             query += "'" + EnterpriseID + "',";
             query += "'" + parametros.idEntidade + "',";
             query += "null,";
             query += "null,";
             query += "'" + parametros.idParcelamento + "',";
-            query += "'" + parametros.idBanco + "',";
-            query += "'" + parametros.idFormaPagamento + "',";
-            query += "'" + parametros.idConfCNAB + "',";
+            query += ((parametros.idContaFinanceira == "" || parametros.idContaFinanceira == "undefined") ? "null" : "'" + parametros.idContaFinanceira + "'") + ",";
             query += "'" + parametros.nrTitulo + "',";
             query += "'" + parametros.emissao + "',";
             query += "'" + parametros.competencia  + "',";
             query += parametros.valor.toString().trim() + ",";
-            query += parametros.fluxoCaixa.toString().trim() + ",";
             query += parametros.dre.toString().trim() + ",";
             query += "'" + parametros.observacao + "'";
             query += ")";
 
-            queryItens += "insert into contas_receber_parcelas (id,id_empresa,id_contas_receber,id_plano_contas_financeiro,id_configuracao_cnab,nr_parcela,dt_data_vencimento,vl_valor)";
+            queryItens += "insert into contas_receber_parcelas (id,id_empresa,id_contas_receber,id_Banco,id_forma_pagamento,id_configuracao_cnab,id_plano_contas_financeiro,nr_parcela,nm_documento,sn_fluxocaixa,dt_data_vencimento,vl_valor)";
             queryItens += " values ";
             for(parcela = 0; parcela < parametros.parcelas.length; parcela++){
                 if(parcela > 0)
@@ -547,16 +711,27 @@ router.route('/atualizarconta').post(function(req, res) {
                 queryItens += "'" + parametros.parcelas[parcela].idParcela + "',";
                 queryItens += "'" + EnterpriseID + "',";
                 queryItens += "'" + parametros.idTitulo + "',";
-                queryItens += "'" + parametros.idContaFinanceira + "',";
-                queryItens += "'" + parametros.idConfCNAB + "',";
+                queryItens += (parametros.parcelas[parcela].idBanco == "" ? "null" : "'" + parametros.parcelas[parcela].idBanco + "'") + ",";
+                queryItens += (parametros.parcelas[parcela].idFormaPagamento == "" ? "null" : "'" + parametros.parcelas[parcela].idFormaPagamento + "'") + ",";
+                queryItens += (parametros.parcelas[parcela].idConfCNAB == "" ? "null" : "'" + parametros.parcelas[parcela].idConfCNAB + "'") + ",";
+                queryItens += (parametros.parcelas[parcela].idContaFinanceira == "" ? "null" : "'" + parametros.parcelas[parcela].idContaFinanceira + "'") + ",";
                 queryItens += "'" + parametros.parcelas[parcela].parcela + "',";
+                queryItens += "'" + parametros.parcelas[parcela].documento + "',";
+                queryItens +=  parametros.parcelas[parcela].fluxoCaixa + ",";
                 queryItens += "'" + parametros.parcelas[parcela].vencimento + "',";
                 queryItens += parametros.parcelas[parcela].valor.toString().trim()
                 queryItens += ")";
             }
         }
         else{
-
+            queryItens = "";
+            query += "update contas_receber set " 
+            query += "id_plano_contas_financeiro = " + (parametros.idContaFinanceira == "" ? "null" : "'" + parametros.idContaFinanceira + "'") + ",";
+            query += "nm_competencia = '" + parametros.competencia + "',"
+            query += "sn_dre = " + parametros.dre.toString() + ","
+            query += "nm_observacao = '" + parametros.observacao + "'";
+            query += "where id = '" + parametros.idTitulo + "'";
+            query += " and id_empresa = '" + EnterpriseID + "'";
         }
         
         sql.close();
@@ -583,32 +758,41 @@ router.route('/atualizarconta').post(function(req, res) {
                                 res.json(resposta);
                             }
                             else{
-                                try{
-                                    var request = new sql.Request(transacao);
-                                    request.query(queryItens, function (err, recordset) {
-                                        if (err){
-                                            resposta.status = -4;
-                                            resposta.mensagem = [];
-                                            resposta.mensagem.push("" + err);
-                                            titulo = null;
-                                            transacao.rollback();
-                                            res.json(resposta);
-                                        }
-                                        else{
-                                            resposta.status = 1;
-                                            resposta.mensagem = ["ok"];
-                                            resposta.titulo =  parametros;
-                                            transacao.commit();
-                                            res.json(resposta);
-                                        }
-                                    })
+                                if(queryItens != ""){
+                                    try{
+                                        var request = new sql.Request(transacao);
+                                        request.query(queryItens, function (err, recordset) {
+                                            if (err){
+                                                resposta.status = -4;
+                                                resposta.mensagem = [];
+                                                resposta.mensagem.push("" + err);
+                                                titulo = null;
+                                                transacao.rollback();
+                                                res.json(resposta);
+                                            }
+                                            else{
+                                                resposta.status = 1;
+                                                resposta.mensagem = ["ok"];
+                                                resposta.titulo =  parametros;
+                                                transacao.commit();
+                                                res.json(resposta);
+                                            }
+                                        })                                    
+                                    }
+                                    catch(err){
+                                        resposta.status = -5;
+                                        resposta.mensagem = [];
+                                        resposta.mensagem.push("" + erro);
+                                        titulo = null;
+                                        res.json(resposta);                                    
+                                    }
                                 }
-                                catch(err){
-                                    resposta.status = -5;
-                                    resposta.mensagem = [];
-                                    resposta.mensagem.push("" + erro);
-                                    titulo = null;
-                                    res.json(resposta);                                    
+                                else{
+                                    resposta.status = 1;
+                                    resposta.mensagem = ["ok"];
+                                    resposta.titulo =  parametros;
+                                    transacao.commit();
+                                    res.json(resposta);
                                 }
                             }
                         })
@@ -633,6 +817,26 @@ router.route('/atualizarconta').post(function(req, res) {
     }
 })
 
+/*------------------------------------------------------------------------------
+Verifica se uma conta pode ser excluída.
+--------------------------------------------------------------------------------
+*/
+router.route('/verificarexclusaoconta').post(function(req, res) {
+    var query = "";
+    var resposta = null;
+    var parametros = null;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 1,
+        mensagem: ["ok"]
+    }
+    res.json(resposta);
+})
 
 
 /*------------------------------------------------------------------------------
@@ -735,17 +939,109 @@ router.route('/excluirconta').post(function(req, res) {
     }
 })
 
+
+
+/*------------------------------------------------------------------------------
+Atualiza uma parcela em particular
+--------------------------------------------------------------------------------
+*/
+router.route('/atualizarparcela').post(function(req, res) {
+    var query = "";
+    var queryItens = "";
+    var parcela = 0;
+    var resposta = null;
+    var parametros = null;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+        parcela: null
+    }
+
+    try{
+        parametros = req.body.parametros;
+
+        query += "update contas_receber_parcelas set "
+        query += "id_banco = " + (parametros.idBanco == "" ? "null" : "'" + parametros.idBanco + "'") + ",";
+        query += "id_forma_pagamento = " + (parametros.idFormaPagamento == "" ? "null" : "'" + parametros.idFormaPagamento + "'") + ",";
+        query += "id_configuracao_cnab = " + (parametros.idConfCNAB == "" ? "null" : "'" + parametros.idConfCNAB + "'") + ",";
+        query += "id_plano_contas_financeiro = " + (parametros.idContaFinanceira == "" ? "null" : "'" + parametros.idContaFinanceira + "'") + ",";
+        query += "nr_parcela = '" + parametros.parcela + "',";
+        query += "dt_data_vencimento = '" + parametros.vencimento + "',";
+        query += "vl_valor = " + parametros.valor + ",";
+        query += "nm_documento = '" + parametros.documento + "',";
+        query += "sn_fluxocaixa = " + parametros.fluxoCaixa;
+        query += " where id = '" + parametros.idParcela + "'"
+        query += " and id_empresa = '" + EnterpriseID + "'";
+
+        sql.close();
+        sql.connect(config, function (err) {    
+            if (err){
+                resposta.status = -2;
+                resposta.mensagem = [];
+                resposta.mensagem.push("" + err);
+                parcela = null;
+                res.json(resposta);
+            }
+            else{
+                try{
+                    var transacao = new sql.Transaction();
+                    transacao.begin(err =>{
+                        var request = new sql.Request(transacao);
+                        request.query(query, function (err, recordset) {
+                            if (err){
+                                resposta.status = -3;
+                                resposta.mensagem = [];
+                                resposta.mensagem.push("" + err);
+                                parcela = null;
+                                transacao.rollback();
+                                res.json(resposta);
+                            }
+                            else{
+                                resposta.status = 1;
+                                resposta.mensagem = ["ok"];
+                                resposta.parcela =  parametros;
+                                transacao.commit();
+                                res.json(resposta);                                    
+                                }
+                        })
+                    })
+                }
+                catch(err){
+                    resposta.status = -4;
+                    resposta.mensagem = [];
+                    resposta.mensagem.push("" + erro);
+                    parcela = null;
+                    res.json(resposta);                    
+                }
+            }
+        });
+    }
+    catch(erro){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + erro);
+        titulo = null;
+        res.json(resposta);
+    }
+})
+
+
+
+
 /*------------------------------------------------------------------------------
 Cria as parcelas conforme o tipo de parcelamento.
 --------------------------------------------------------------------------------
 */
 router.route('/criarparcelas').post(function(req, res) {
-    var query = "";
+    var parcela = 0;
     var resposta = null;
-    var titulo = null;
-    var baixa = null;
     var parametros = null;
-    var idParcela = null;
 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
@@ -760,9 +1056,34 @@ router.route('/criarparcelas').post(function(req, res) {
 
     try{
         parametros = req.body.parametros;
+        if(parametros.emissao == null || parametros.emissao == "" || parametros.emissao.indexOf("undefined") >= 0){
+            throw "Data de emissão inválida."
+        }
+        else{
+            if(parametros.idParcelamento == null || parametros.idParcelamento == ""){
+                throw "Parcelamento não definido."
+            }
+        }
 
         funcoesFinanceiro.gerarparcelas(config,EnterpriseID,parametros.idParcelamento,parametros.valor,new Date(parametros.emissao),(function(resposta){
-            res.json(resposta);
+            try{
+                if(resposta.status > 0){
+                    for(parcela = 0; parcela < resposta.parcelas.length; parcela++){
+                        resposta.parcelas[parcela].documento = parametros.documento;
+                        resposta.parcelas[parcela].idContaFinanceira = parametros.idContaFinanceira;
+                        resposta.parcelas[parcela].fluxoCaixa = "Sim";
+                    }
+                }
+               res.json(resposta);
+            }
+            catch(erro){
+                resposta.status = -2;
+                resposta.mensagem = [];
+                resposta.mensagem.push("criarparcelas: " + erro);
+                resposta.parcelas = [];
+                sql.close();
+                res.json(resposta);
+            }
         }));
     }
     catch(erro){
@@ -770,8 +1091,6 @@ router.route('/criarparcelas').post(function(req, res) {
         resposta.mensagem = [];
         resposta.mensagem.push("criarparcelas: " + erro);
         resposta.parcelas = [];
-        sql.close();
         res.json(resposta);
     }
 })
-

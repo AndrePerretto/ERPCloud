@@ -1,12 +1,5 @@
 const prefixoModulo = "Financeiro_";
 
-function truncateDecimal(value,precision){
-    var step = Math.pow(10, precision);
-    var tmp = Math.trunc(step * value);
-    return(tmp / step);
-} 
-
-
 /*------------------------------------------------------------------------------
 Criar parcelas conforme o tipo de parcelamento.
 As parcelas geradas são enviadas para uma "callback".
@@ -34,6 +27,7 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
     var query = "";
     var prefixoFuncao = prefixoModulo + "geraparcelas: "
     var hoje = null
+    var vencimentoReal = null;
     var resposta = null;
     var conexao = null;
     var i = 0;
@@ -44,8 +38,7 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
     var valorSobra = 0;
     var numParcelas = 0;
     var percEntrada = 0;
-    var dias1aParcela = 0;
-    
+    var dias1aParcela = 0;    
     
     try{
         if(valor != 0){
@@ -128,7 +121,16 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
                                             valorSobra = saldo - (valorCheio * numParcelas);
                                         }
                                     }
-                                
+
+                                    if (element.id_mantervencimento == "96C915A3-0BBD-424D-8759-5C07FCE2531B")           //dia útil anterior ao vencimento
+                                        vencimentoReal = diaUtil(dataInicial,true);
+                                    else{
+                                        if (element.id_mantervencimento == "E4AB5D8B-7589-4AF5-BBD9-2959BED09762")          //dia útil posterior
+                                            vencimentoReal = diaUtil(dataInicial,false);
+                                        else                                            
+                                            vencimentoReal = dataInicial;
+                                    }
+
                                     if (entrada > 0){
                                         nrParcela = 1;
                                         parcela = {
@@ -136,7 +138,8 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
                                             valor: entrada,
                                             saldo: entrada,
                                             emissao: new Date(),
-                                            vencimento: new Date(dataInicial)
+                                            vencimento: new Date(dataInicial),
+                                            vencimentoReal: new Date(vencimentoReal)
                                         }
                                         parcelas.push(parcela);
 
@@ -151,12 +154,23 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
                                             valorCheio += valorSobra;
 
                                         nrParcela++;
+                                     
+                                        if (element.id_mantervencimento == "96C915A3-0BBD-424D-8759-5C07FCE2531B")           //dia útil anterior ao vencimento
+                                           vencimentoReal = diaUtil(dataInicial,true);
+                                        else{
+                                            if (element.id_mantervencimento == "E4AB5D8B-7589-4AF5-BBD9-2959BED09762")          //dia útil posterior
+                                                vencimentoReal = diaUtil(dataInicial,false);
+                                            else                                            
+                                                vencimentoReal = dataInicial;
+                                        }
+
                                         parcelas.push({
                                             parcela: nrParcela,
                                             valor: valorCheio,
                                             saldo: valorCheio,
                                             emissao: new Date(),
-                                            vencimento: new Date(dataInicial)
+                                            vencimento: new Date(dataInicial),
+                                            vencimentoReal: new Date(vencimentoReal)
                                         });
                                         
                                         if (element.nr_diavencimento != null && element.nr_diavencimento != 0)
@@ -220,4 +234,76 @@ exports.gerarparcelas = function(config,idEmpresa,idParcelamento,valor,dataInici
         conexao.close();
         callbackf(resposta);
     }
+}
+
+
+/*------------------------------------------------------------------------------
+Procura pelo próximo dia útil referente a data inicial. O dia útil poderá ser 
+a própria data inicial ou posterior ou anterior à ela, conforme o parâmetro 
+"diaAnterior".
+
+Sábados e domingos e feriados não são considerados dias úteis.
+
+Consulta a tabela de feriados - "feriado" - para verificar os dias que são
+feriados.
+
+Parâmetros:
+    dataInicial - objeto tipo data
+    diaAnterior - se "true" busca por dia útil anterior à data inicial
+Retorno:
+    diaUtil: data no formato yyyy-mm-dd
+--------------------------------------------------------------------------------
+*/
+function diaUtil(dataInicial,diaAnterior){
+    var prefixoFuncao = prefixoModulo + "diautil: "
+    var diaUtil = null;
+    var diaValido = false;
+    var resposta = null;
+
+    try{
+        diaUtil = new Date(dataInicial);
+        while(!diaValido){ 
+            //Se sábado ou domingo, passa para a segunda-feira seguinte.
+            if (diaUtil.getDay() == 0)      //domingo
+            {
+                if(diaAnterior)
+                    diaUtil.setDate(diaUtil.getDate() - 2);
+                else
+                    diaUtil.setDate(diaUtil.getDate() + 1);
+                diaValido = true;
+            }
+            else{
+                if (diaUtil.getDay() == 6)      //sábado
+                {
+                    if(diaAnterior)
+                        diaUtil.setDate(diaUtil.getDate() - 1);
+                    else
+                        diaUtil.setDate(diaUtil.getDate() + 2);
+                    
+                    diaValido = true;
+                }
+                else
+                    diaValido = true;
+            }
+        }
+    }
+    catch(erro){
+        resposta = {
+            status: -1,
+            prefixo: prefixoFuncao,
+            mensagem: ["" + erro],
+            parcelas: [],
+        }
+        diaUtil = null;
+    }
+    return(diaUtil);
+}
+
+/*------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+*/
+function truncateDecimal(value,precision){
+    var step = Math.pow(10, precision);
+    var tmp = Math.trunc(step * value);
+    return(tmp / step);
 }
