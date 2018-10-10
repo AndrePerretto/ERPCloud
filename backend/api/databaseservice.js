@@ -1410,7 +1410,7 @@ function createMaster(element, html){
 
 var http = require('http');
 //var jsreport = require('jsreport');
-var jsreport = require('jsreport-core')()
+//var jsreport = require('jsreport-core')()
 
 router.route('/reportOLD/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;

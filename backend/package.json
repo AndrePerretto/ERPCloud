@@ -16,7 +16,6 @@
     "express": "^4.15.2",
     "express-query-int": "^1.0.1",
     "html-pdf": "^2.2.0",
-    "jsreport-core": "^2.2.0",
     "loadash": "0.0.1",
     "mkdirp": "^0.5.1",
     "mongoose": "^4.9.8",
