@@ -340,7 +340,10 @@ function compareObj(a,b) {
 
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function(err, buffer){
                                     //stream.pipe(res);
-                                    res.write(buffer.toString())
+                                    if(buffer){
+                                        res.write(buffer);
+                                    }
+                                    
                                     res.end()
                                 });
                             
