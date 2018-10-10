@@ -53,7 +53,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker";  //"homologa"; //"foodtown";
+        dados = "homologa";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -102,7 +102,7 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker"; //"foodtown";
+        dados = "homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
@@ -190,6 +190,7 @@ function compareObj(a,b) {
       return 1;
     return 0;
 }
+
 
   router.route('/r/:id/:parametros').get(function(req, res) {
     var fs = require('fs');

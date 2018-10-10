@@ -12,6 +12,7 @@
     "async": "^2.5.0",
     "body-parser": "^1.17.1",
     "cheerio": "^1.0.0-rc.2",
+    "eval": "^0.1.2",
     "express": "^4.15.2",
     "express-query-int": "^1.0.1",
     "html-pdf": "^2.2.0",
