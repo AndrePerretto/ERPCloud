@@ -63,6 +63,47 @@ router.route('/*').get(function(req, res, next) {
     });    
 });    
 
+//% servicos/movimentacaoservicos/carregaSubServico 
+
+
+//* servicos/movimentacaoservicos/testeconexao 
+
+router.route('/testeconexao').get(function(req, res) {
+
+sql.close(); 
+ sql.connect(config, function (err) { 
+ var select = "SELECT nm_razaosocial AS 'razao' FROM entidade ";
+ var request = new sql.Request(); 
+ request.query(select, function (err, recordset){
+ if (err) console.log(err) 
+ res.send(recordset);
+});
+});
+
+});
+//% servicos/movimentacaoservicos/testeconexao 
+
+
+
+//* servicos/movimentacaoservicos/carregaSubServico 
+
+router.route('/carregaSubServico/:idProdutos/:idEntidade').get(function(req, res) {
+    var idProdutos = req.param('idProdutos');
+    var idEntidade = req.param('idEntidade');
+    sql.close();
+    sql.connect(config, function (err) {
+        if (err) console.log(err); 
+        var select = "SELECT produtos.id AS 'id', produtos.nm_descricao AS 'desc', (SELECT TOP 1 cliente_servicos.id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'moeda', (SELECT TOP 1 cliente_servicos.vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'precovenda'   FROM produtos_subservicos INNER JOIN produtos ON produtos.id=produtos_subservicos.id_subservicos WHERE produtos_subservicos.id_produtos='" + idProdutos + "'";
+        console.log(select)
+        var request = new sql.Request();
+        request.query(select, function (err, recordset){ 
+            if (err) console.log(err); 
+            res.send(recordset);
+        });
+    });
+});
+//% servicos/movimentacaoservicos/carregaSubServico 
+
 //* servicos/movimentacaoservicos/testesoma 
 
 router.route('/testesoma/:param1/:param2').get(function(req, res) {
@@ -72,24 +113,123 @@ var param2 = req.param('param2');
  res.send(param1 + ' - ' + param2);
 });
 //% servicos/movimentacaoservicos/testesoma 
- 
 
-//* servicos/movimentacaoservicos/carregaSubServico 
+//* servicos/movimentacaoservicos/carregaListaServicos 
 
-router.route('/carregaSubServico/:idProdutos').get(function(req, res) {
-var idProdutos = req.param('idProdutos');
+router.route('/carregaListaServicos/:idEntidade/:dataDe/:dataAte').get(function(req, res) {
+var idEntidade = req.param('idEntidade');
+var dataDe = req.param('dataDe');
+var dataAte = req.param('dataAte');
 
 
-     sql.close();
- sql.connect(config, function (err) {
- if (err) console.log(err); 
- var select = "SELECT produtos.id AS 'id', produtos.nm_descricao AS 'desc', produtos.id_dsg_moeda AS 'moeda' , produtos.vl_precovenda AS 'precovenda'  FROM produtos_subservicos INNER JOIN produtos ON produtos.id=produtos_subservicos.id_subservicos WHERE produtos_subservicos.id_produtos='" + idProdutos + "'";
- var request = new sql.Request();
- request.query(select, function (err, recordset){ 
- if (err) console.log(err); 
- res.send(recordset);
- });
+    var where = ""; 
+    var select = "SELECT newID() AS 'id', "; 
+    select += " entidade.nm_cnpj AS 'cnpj', "; 
+    select += " entidade.nm_razaosocial AS 'razaosocial', "; 
+    select += " FORMAT(SUM(movimentacao_servicos.vl_valor), 'c', 'pt-BR' )  AS 'dt_faturamento', "; 
+    select += " FORMAT(movimentacao_servicos.dt_faturamento, 'd', 'pt-BR' )  AS 'valor', "; 
+    select += " movimentacao_servicos.nm_numero_nfes AS 'numero_nfes', "; 
+    select += " movimentacao_servicos.nm_numero_boleto AS 'numero_boleto' "; 
+    select += " FROM movimentacao_servicos "; 
+    select += " INNER JOIN produtos sub ON sub.id=movimentacao_servicos.id_subservicos "; 
+    select += " INNER JOIN produtos prod ON prod.id=movimentacao_servicos.id_produtos "; 
+    select += " INNER JOIN entidade ON entidade.id=movimentacao_servicos.id_entidade "; 
+    if(idEntidade){ 
+        if(idEntidade != "*"){ 
+            where = " WHERE movimentacao_servicos.id_entidade='" + idEntidade + "' "; 
+        } 
+    } 
+    if(dataDe){ 
+        if(dataDe != "*"){ 
+            dataDe = dataDe.replace("-","/"); 
+            dataDe = dataDe.replace("-","/"); 
+            if(!where){ 
+                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            }else{ 
+                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            } 
+        } 
+    } 
+    if(dataAte){ 
+        if(dataAte != "*"){ 
+            dataAte = dataAte.replace("-","/"); 
+            dataAte = dataAte.replace("-","/"); 
+            if(!where){ 
+                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            }else{ 
+                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            } 
+        } 
+    } 
+
+    select = select + where; 
+    select = select + "  GROUP BY entidade.nm_cnpj, entidade.nm_razaosocial,  movimentacao_servicos.dt_faturamento,  movimentacao_servicos.nm_numero_nfes,  movimentacao_servicos.nm_numero_boleto";
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+         var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+             if (err) console.log(err); 
+             res.send(recordset); 
+        }); 
+     }); 
+
 });
+//% servicos/movimentacaoservicos/carregaListaServicos 
+
+
+
+router.route('/carregaListaComissao/:idEntidade/:dataDe/:dataAte').get(function(req, res) {
+    var idEntidade = req.param('idEntidade');
+    var dataDe = req.param('dataDe');
+    var dataAte = req.param('dataAte');
+
+    var where = ""; 
+    var select = "";
+    select += " SELECT  movimentacao_servicos.id as 'id', FORMAT (movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) as 'dt_emissao', entidade.nm_razaosocial as 'cliente',  ";
+    select += " op.nm_razaosocial as 'operador', produtos.nm_descricao as 'produto', comiss.vl_venda as 'valorvenda', comiss.status as 'status', comiss.vl_comissao as 'valor' ";
+    select += " FROM movimentacao_servicos ";
+    select += " INNER JOIN entidade ON entidade.id=movimentacao_servicos.id_entidade ";
+    select += " INNER JOIN entidade op ON op.id=movimentacao_servicos.id_operador ";
+    select += " INNER JOIN produtos ON produtos.id=movimentacao_servicos.id_produtos ";
+    select += " INNER JOIN comiss ON comiss.id_venda=movimentacao_servicos.id ";
+
+    if(idEntidade){ 
+        if(idEntidade != "*"){ 
+            where = " WHERE movimentacao_servicos.id_entidade='" + idEntidade + "' "; 
+        } 
+    } 
+    if(dataDe){ 
+        if(dataDe != "*"){ 
+            dataDe = dataDe.replace("-","/"); 
+            dataDe = dataDe.replace("-","/"); 
+            if(!where){ 
+                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            }else{ 
+                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            } 
+        } 
+    } 
+    if(dataAte){ 
+        if(dataAte != "*"){ 
+            dataAte = dataAte.replace("-","/"); 
+            dataAte = dataAte.replace("-","/"); 
+            if(!where){ 
+                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            }else{ 
+                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            } 
+        } 
+    } 
+    select = select + where; 
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+         var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+             if (err) console.log(err); 
+             res.send(recordset); 
+        }); 
+     }); 
 
 });
-//% servicos/movimentacaoservicos/carregaSubServico 

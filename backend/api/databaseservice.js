@@ -53,7 +53,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker";  //"homologa"; //"foodtown";
+        dados = "hidrobombas";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -102,7 +102,7 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker"; //"foodtown";
+        dados = "hidrobombas"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
@@ -190,6 +190,7 @@ function compareObj(a,b) {
       return 1;
     return 0;
 }
+
 
   router.route('/r/:id/:parametros').get(function(req, res) {
     var fs = require('fs');
@@ -339,7 +340,10 @@ function compareObj(a,b) {
 
                                 pdf.create(html.topo +  html.detail + html.footer + html.base, options).toBuffer(function(err, buffer){
                                     //stream.pipe(res);
-                                    res.write(buffer)
+                                    if(buffer){
+                                        res.write(buffer);
+                                    }
+                                    
                                     res.end()
                                 });
                             
@@ -1409,7 +1413,7 @@ function createMaster(element, html){
 
 var http = require('http');
 //var jsreport = require('jsreport');
-var jsreport = require('jsreport-core')()
+//var jsreport = require('jsreport-core')()
 
 router.route('/reportOLD/:nome').get(function(req, res) {
     var MongoClient = require('mongodb').MongoClient;
@@ -1724,7 +1728,7 @@ router.route('/findid2/:id/:layoutid').get(function(req, res) {
             }else{
                 select = select.replace("{{id}}", id)
             }
-
+            console.log(select)
             // query to the database and get the records
             request.query(select, function (err, recordset) {  
                 if (err) console.log(err)
@@ -1844,7 +1848,29 @@ router.route('/editGridLine/:id/:filtro').get(function(req, res) {
         if (err) throw err;
         if (result) {
             if (result.length > 0) {
-                select = result[0].findgriddata;                                
+                select = result[0].findgriddata;    
+                 
+                sql.close()   
+    
+                // connect to your database
+                sql.connect(config, function (err) {    
+                    if (err) console.log(err);
+                     
+                    // create Request object
+                    var request = new sql.Request();
+                    
+                    select = select.replace("{{id}}", filtro)
+                    console.log(select) 
+                     // query to the database and get the records
+                    request.query(select, function (err, recordset) {            
+                        if (err) {
+                            console.log(err)
+                            res.send(err)
+                        }
+                        // send records as a response 
+                        res.send(recordset)            
+                    });
+                });                           
             }
         }
         
@@ -1852,28 +1878,7 @@ router.route('/editGridLine/:id/:filtro').get(function(req, res) {
       });
     });
 
-    sql.close()
-    
-    console.log(select)
-    // connect to your database
-    sql.connect(config, function (err) {    
-        if (err) console.log(err);
-         
-        // create Request object
-        var request = new sql.Request();
-        
-        select = select.replace("{{id}}", filtro)
-
-         // query to the database and get the records
-        request.query(select, function (err, recordset) {            
-            if (err) {
-                console.log(err)
-                res.send(err)
-            }
-            // send records as a response 
-            res.send(recordset)            
-        });
-    });        
+          
 });
 
 function incremento(submit, callback){
@@ -2459,8 +2464,35 @@ router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
                 select = result[0].autocompleteChange;
             }
         }
-       
+        console.log(result)
         db.close();
+        //if (sql) {
+        sql.close()
+        // connect to your database
+        sql.connect(config, function (err) {    
+            if (err) console.log(err);
+
+            // create Request object
+            var request = new sql.Request();  
+            if (select) {            
+                select = select.replace("{{id}}", id)
+            }    
+            
+            // query to the database and get the records
+            request.query(select, function (err, recordset) {            
+                if (err) console.log(err)
+            
+                if (recordset) {
+                    if (recordset.recordsets) {
+                        if (recordset.recordsets.length > 0) {
+                            // send records as a response
+                            res.send(recordset.recordsets[0]);
+                        }
+                    }
+                }           
+            });
+        });    
+     //}
       });
     });
 
@@ -3360,6 +3392,7 @@ router.route('/menucustom/:idusuario').get(function(req, res) {
 
 
 router.route('/createCustomJS').get(function(req, res) {
+    console.log("createCustomJS");
     var fs = require('fs');   
     var MongoClient = require('mongodb').MongoClient;
 
