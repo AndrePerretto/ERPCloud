@@ -161,6 +161,15 @@ router.route('/listacomplementoparcelas').post(function(req, res) {
             contasFinanceiras: []
         }
 
+        query += "select 'banco' tipo,id idelemento,nm_apelido descricao,'' classe,nm_agencia agencia,nm_conta conta from banco where id_empresa = @idempresa"; 
+        query += " union all ";
+        query += "select 'forma' tipo,id idelemento,nm_descricao descricao,nm_nomeclasse classe,'' agencia,'' conta from dsg_forma_pagamento";
+        query += " union all ";
+        query += "select 'conf' tipo,id idelemento,nm_descricao descricao,'' classe,'' agencia,'' conta from configuracao_cnab where id_empresa = @idempresa";
+        query += " union all "
+        query += "select 'conta' tipo,id idelemento,nm_descricao descricao,nm_codigo classe,'' agencia,'' conta from plano_contas_financeiro where id_empresa = @idempresa";
+        query += " order by tipo,classe,descricao,agencia,conta";
+
         sql.close();
         sql.connect(config, function (err) {
             if (err){
@@ -175,10 +184,9 @@ router.route('/listacomplementoparcelas').post(function(req, res) {
                 res.json(resposta);
             }
             else{
-                /* Bancos */
                 var request = new sql.Request();
                 request.input("idempresa",EnterpriseID);
-                request.query("select id,nm_apelido,nm_agencia,nm_conta from banco where id_empresa = @idempresa order by nm_apelido,nm_agencia,nm_conta", function (err, recordset) {
+                request.query(query, function (err, recordset) {
                     if (err){
                         resposta = {
                             status: -3,
@@ -193,94 +201,43 @@ router.route('/listacomplementoparcelas').post(function(req, res) {
                     else{
                         var element = recordset.recordsets[0];
                         for(var i = 0; i < element.length; i++){
-                            banco = {
-                                id: element[i].id,
-                                descricao: element[i].nm_apelido,
-                                agencia: element[i].nm_agencia,
-                                conta: element[i].nm_conta
+                            switch(element[i].tipo){
+                                case "banco":
+                                    banco = {
+                                        id: element[i].idelemento,
+                                        descricao: element[i].descricao,
+                                        agencia: element[i].agencia,
+                                        conta: element[i].conta
+                                    }
+                                    resposta.bancos.push(banco);
+                                    break;
+                                case "forma":
+                                    formaPagamento = {
+                                        id: element[i].idelemento,
+                                        descricao: element[i].descricao,
+                                        classe: element[i].classe
+                                    }
+                                    resposta.formasPagamento.push(formaPagamento);
+                                    break;
+                                case "conf":
+                                    configuracaoCNAB = {
+                                        id: element[i].idelemento,
+                                        descricao: element[i].descricao
+                                    }
+                                    resposta.configuracoesCNAB.push(configuracaoCNAB);
+                                    break;
+                                case "conta": 
+                                    contaFinanceira = {
+                                        id: element[i].idelemento,
+                                        codigo: element[i].classe,
+                                        descricao: element[i].descricao
+                                    }
+                                    resposta.contasFinanceiras.push(contaFinanceira);
+                                    break;
                             }
-                            resposta.bancos.push(banco);
-                        }
-                    }
-                })
-                /* Formas de pagamento */
-                var request = new sql.Request();
-                request.query("select id,nm_descricao from dsg_forma_pagamento order by nm_descricao", function (err, recordset) {
-                    if (err){
-                        resposta = {
-                            status: -4,
-                            mensagem: ["" + err],
-                            bancos: [],
-                            formasPagamento: [],
-                            configuracoesCNAB: [],
-                            contasFinanceiras: []
-                        }
-                        res.json(resposta);
-                    }
-                    else{
-                        var element = recordset.recordsets[0];
-                        for(var i = 0; i < element.length; i++){
-                            formaPagamento = {
-                                id: element[i].id,
-                                descricao: element[i].nm_descricao
-                            }
-                            resposta.formasPagamento.push(formaPagamento);
-                        }
-                    }
-                })
-                /* Configurações de CNAB */
-                var request = new sql.Request();
-                request.input("idempresa",EnterpriseID);
-                request.query("select id,nm_descricao from configuracao_cnab where id_empresa = @idempresa order by nm_descricao", function (err, recordset) {
-                    if (err){
-                        resposta = {
-                            status: -5,
-                            mensagem: ["" + err],
-                            bancos: [],
-                            formasPagamento: [],
-                            configuracoesCNAB: [],
-                            contasFinanceiras: []
-                        }
-                        res.json(resposta);
-                    }
-                    else{
-                        var element = recordset.recordsets[0];
-                        for(var i = 0; i < element.length; i++){
-                            configuracaoCNAB = {
-                                id: element[i].id,
-                                descricao: element[i].nm_descricao
-                            }
-                            resposta.configuracoesCNAB.push(configuracaoCNAB);
-                        }
-                    }
-                })
-                /* Contas financeiras */
-                var request = new sql.Request();
-                request.input("idempresa",EnterpriseID);
-                request.query("select id,nm_codigo,nm_descricao from plano_contas_financeiro where id_empresa = @idempresa order by nm_codigo", function (err, recordset) {
-                    if (err){
-                        resposta = {
-                            status: -6,
-                            mensagem: ["" + err],
-                            bancos: [],
-                            formasPagamento: [],
-                            configuracoesCNAB: [],
-                            contasFinanceiras: []
-                        }
-                        res.json(resposta);
-                    }
-                    else{
-                        var element = recordset.recordsets[0];
-                        for(var i = 0; i < element.length; i++){
-                            contaFinanceira = {
-                                id: element[i].id,
-                                codigo: element[i].nm_codigo,
-                                descricao: element[i].nm_descricao
-                            }
-                            resposta.contasFinanceiras.push(contaFinanceira);
                         }
                         resposta.status = 1;
-                        resposta.mensagem.push("ok");
+                        resposta.mensagem = ["ok"];
                         res.json(resposta);
                     }
                 })
@@ -507,7 +464,7 @@ router.route('/dadostitulo').post(function(req, res) {
         query += " and crp.id_empresa = @idempresa and crp.id_contas_receber = cr.id";
         query += " and (@idparcela is null or crp.id = @idparcela)";
         query += " and ent.id = cr.id_entidade and ent.id_empresa = @idempresa";
-        query += " order by crp.nr_parcela,baixas.dt_data";
+        query += " order by replicate(' ',10 - len(crp.nr_parcela)) + rtrim(crp.nr_parcela),baixas.dt_data";
 
         sql.close();
         sql.connect(config, function (err) {    
@@ -522,7 +479,7 @@ router.route('/dadostitulo').post(function(req, res) {
             else{
                 var request = new sql.Request();
                 request.input("idempresa",EnterpriseID);
-                request.input("idtitulo",parametros.idTitulo);
+                request.input("idtitulo",parametros.idTitulo == "" ? null : parametros.idTitulo);
                 request.input("idparcela",parametros.idParcela == "" ? null : parametros.idParcela);
                 request.query(query, function (err, recordset) {
                     try{
@@ -598,7 +555,7 @@ router.route('/dadostitulo').post(function(req, res) {
                                                 formasRecebimento : []
                                             }
                                             parcela.valorBaixas += element[i].valorbaixa;
-                                            titulo.valorBaixas += element[i].valorbaixa;
+                                            resposta.dadosTitulo.valorBaixas += element[i].valorbaixa;
 
                                             if(element[i].idformarecebimento != null){
                                                 while(i < element.length && element[i].idbaixa == idBaixa){
@@ -607,11 +564,11 @@ router.route('/dadostitulo').post(function(req, res) {
                                                         idBanco : element[i].idbancorecebimento,
                                                         documento : element[i].documentorecebimento,
                                                         idDsgBanco : (element[i].idbancopagador == null ? "" : element[i].idbancopagador),
-                                                        contapag: element[i].contapagador,
-                                                        agenciapag: element[i].agenciapagador,
+                                                        contaPag: element[i].contapagador,
+                                                        agenciaPag: element[i].agenciapagador,
                                                         valor : element[i].valorrecebimento
                                                     }
-                                                    baixa.push(formarec);
+                                                    baixa.formasRecebimento.push(formaRec);
                                                     i++
                                                 }
                                             }
@@ -640,7 +597,7 @@ router.route('/dadostitulo').post(function(req, res) {
                             mensagem: ["" + err],
                             dadosTitulo: null
                         }
-
+                        res.json(resposta);
                     }
                 })
             }
@@ -817,6 +774,749 @@ router.route('/atualizarconta').post(function(req, res) {
     }
 })
 
+
+/*------------------------------------------------------------------------------
+Registra o recebimento de uma conta
+--------------------------------------------------------------------------------
+*/
+router.route('/realizarrecebimento').post(function(req, res) {
+    var query = "";
+    var queryBaixa = "";
+    var resposta = null;
+    var parametros = null;
+    var formasPagamento = require("./formaspagamento");
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 1,
+        mensagem: [],
+        titulo: null
+    }
+    try{
+        parametros = req.body.parametros;
+
+        parametros.data = parametros.dataRecebimento;        
+        
+        /* Validando os dados */        
+        resposta = formasPagamento.validarDados(parametros);
+
+        if(resposta.status <= 0){
+            resposta.titulo = null;
+            res.json(resposta);
+        }
+        else{
+            query += "select cr.id idconta,parc.nm_documento documento,parc.nr_parcela parcela,ent.nm_razaosocial razaosocial"
+            query += " from contas_receber_parcelas parc,contas_receber cr,entidade ent"
+            query += " where parc.id = '" + parametros.idTitulo + "'";
+            query += " and parc.id_empresa = '" + EnterpriseID + "'";
+            query += " and cr.id = parc.id_contas_receber and cr.id_empresa = '" + EnterpriseID + "'";
+            query += " and ent.id = cr.id_entidade and ent.id_empresa = '" + EnterpriseID + "'";
+
+            sql.close();
+            sql.connect(config, function (err) {    
+                if (err){
+                    resposta.status = -2;
+                    resposta.mensagem = [];
+                    resposta.mensagem.push("" + err);
+                    resposta.titulo = null;
+                    res.json(resposta);
+                }
+                else{
+                    try{
+                        var request = new sql.Request();
+                        request.query(query, function (err, recordset) {
+                            if (err){
+                                resposta.status = -3;
+                                resposta.mensagem = [];
+                                resposta.mensagem.push("" + err);
+                                resposta.titulo = null;
+                                res.json(resposta);
+                            }
+                            else{
+                                try{
+                                    var element = recordset.recordsets[0];
+                                    var descricao = "";
+
+                                    descricao = "Recebimento do documento " + element[0].documento.trim() + "/" + element[0].parcela;
+                                    descricao += " (" + element[0].razaosocial.trim() + ")";
+
+                                    parametros.idBaixa = general.guid();
+                                    parametros.idBaixaProcesso = general.guid();
+                                    parametros.idBaixaForma = general.guid();
+                                    parametros.idMovimento = general.guid();
+                        
+                                    queryBaixa += " update contas_receber_parcelas set ";
+                                    queryBaixa += " id_banco = '" + parametros.idBanco + "',";
+                                    queryBaixa += " id_forma_pagamento = '" + parametros.idFormaPagamento + "'"
+                                    queryBaixa += " where id = '" + parametros.idTitulo + "'"
+                                    queryBaixa += " and id_empresa = '" + EnterpriseID + "'";
+                                    queryBaixa += "; ";
+                                    
+                                    queryBaixa += "insert into contas_receber_baixas (id,id_empresa,id_contas_receber_parcela,id_processo_recebimento,dt_data,vl_valor) values (";
+                                    queryBaixa += "'" + parametros.idBaixa + "',";
+                                    queryBaixa += "'" + EnterpriseID + "',";
+                                    queryBaixa += "'" + parametros.idTitulo + "',";
+                                    queryBaixa += "'" + parametros.idBaixaProcesso + "',";
+                                    queryBaixa += "'" + parametros.dataRecebimento + "',";
+                                    queryBaixa += parametros.valor;
+                                    queryBaixa += "); ";
+                        
+                                    queryBaixa += "insert into contas_receber_baixas_formaspagamento (id,id_empresa,id_processo_recebimento,id_contas_receber_baixas,id_formapagamento,id_banco,id_movimento,nm_documento,id_dsg_banco,nm_conta,nm_agencia,vl_valor) values (";
+                                    queryBaixa += "'" + parametros.idBaixaForma + "',";
+                                    queryBaixa += "'" + EnterpriseID + "',";
+                                    queryBaixa += "'" + parametros.idBaixaProcesso + "',";
+                                    queryBaixa += "'" + parametros.idBaixa + "',";
+                                    queryBaixa += "'" + parametros.idFormaPagamento + "',";
+                                    queryBaixa += "'" + parametros.idBanco + "',";
+                                    queryBaixa += "'" + parametros.idMovimento + "',";
+                                    queryBaixa += "'" + parametros.documento + "',";
+                                    queryBaixa += (parametros.idBancoOrig == "" ? "null" : "'" + parametros.idBancoOrig + "'") + ",";
+                                    queryBaixa += "'" + parametros.contaOrig + "',";
+                                    queryBaixa += "'" + parametros.agenciaOrig + "',";
+                                    queryBaixa += parametros.valor;
+                                    queryBaixa += "); ";
+                                    
+                                    queryBaixa += "insert into movimentacao_bancaria (id,id_empresa,id_processo_recebimento,id_dsg_banco,nm_agencia,nm_conta,id_banco,dt_data,vl_valor,nm_tipo_movimentacao,nm_descricao,nm_documento,sn_conciliado) values ("
+                                    queryBaixa += "'" + parametros.idMovimento + "',";
+                                    queryBaixa += "'" + EnterpriseID + "',";
+                                    queryBaixa += "'" + parametros.idBaixaProcesso + "',";
+                                    queryBaixa += (parametros.idBancoOrig == "" ? "null" : "'" + parametros.idBancoOrig + "'") + ",";
+                                    queryBaixa += "'" + parametros.agenciaOrig + "',";
+                                    queryBaixa += "'" + parametros.contaOrig + "',";
+                                    queryBaixa += "'" + parametros.idBanco + "',";
+                                    queryBaixa += "'" + parametros.dataRecebimento + "',";
+                                    queryBaixa += parametros.valor + ",";
+                                    queryBaixa += "'E',";
+                                    queryBaixa += "'" + descricao + "',";
+                                    queryBaixa += "'" + parametros.documento + "',";
+                                    queryBaixa += "0";
+                                    queryBaixa += "); ";
+
+                                    var transacao = new sql.Transaction();
+                                    transacao.begin(err =>{
+                                        try{
+                                            var request = new sql.Request(transacao);
+                                            request.query(queryBaixa, function (err, recordset) {
+                                                if (err){
+                                                    resposta.status = -4;
+                                                    resposta.mensagem = [];
+                                                    resposta.mensagem.push("" + err);
+                                                    resposta.titulo = null;
+                                                    transacao.rollback();
+                                                    res.json(resposta);
+                                                }
+                                                else{
+                                                    resposta.status = 1;
+                                                    resposta.mensagem = ["ok"];
+                                                    resposta.titulo =  parametros;
+                                                    transacao.commit();
+                                                    res.json(resposta);
+                                                }
+                                            })
+                                        }
+                                        catch(err){
+                                            resposta.status = -5;
+                                            resposta.mensagem = [];
+                                            resposta.mensagem.push("" + err);
+                                            resposta.titulo = null;
+                                            res.json(resposta);                                    
+                                        }
+                                    })
+                                }
+                                catch(err){
+                                    resposta.status = -6;
+                                    resposta.mensagem = [];
+                                    resposta.mensagem.push("" + err);
+                                    resposta.titulo = null;
+                                    res.json(resposta);                                    
+                                }
+                            }
+                        })
+                    }
+                    catch(err){
+                        resposta.status = -7;
+                        resposta.mensagem = [];
+                        resposta.mensagem.push("" + err);
+                        resposta.titulo = null;
+                        res.json(resposta);                                    
+                    }
+                }
+            })
+        }
+    }
+    catch(err){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + err);
+        resposta.titulo = null;
+        res.json(resposta);
+    }
+})
+
+
+/*------------------------------------------------------------------------------
+Cancela o recebimento de uma conta
+--------------------------------------------------------------------------------
+*/
+router.route('/cancelarrecebimento').post(function(req, res) {
+    var query = "";
+    var queryBaixa = "";
+    var resposta = null;
+    var parametros = null;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+        baixa: null
+    }
+
+    try{
+        parametros = req.body.parametros;
+
+        query = "select id,id_contas_receber_parcela,id_processo_recebimento,dt_data,vl_valor from contas_receber_baixas"
+        query += " where id = @idbaixa and id_empresa = @idempresa"
+
+        sql.close();
+        sql.connect(config, function (err) {    
+            if (err){
+                resposta.status = -2;
+                resposta.mensagem = [];
+                resposta.mensagem.push("" + err);
+                resposta.baixa = null;
+                res.json(resposta);
+            }
+            else{
+                try{
+                    var request = new sql.Request();
+                    request.input("idempresa",EnterpriseID);
+                    request.input("idbaixa",parametros.idBaixa);
+                    request.query(query, function (err, recordset) {
+                        if (err){
+                            resposta.status = -3;
+                            resposta.mensagem = [];
+                            resposta.mensagem.push("" + err);
+                            resposta.baixa = null;
+                            res.json(resposta);
+                        }
+                        else{
+                            try{
+                                var element = recordset.recordsets[0];
+                                resposta.baixa = {
+                                    idBaixa: element[0].id,
+                                    idParcela: element[0].id_contas_receber_parcela,
+                                    idProcesso: element[0].id_processo_recebimento,
+                                    data: element[0].dt_data,
+                                    valor: element[0].vl_valor
+                                }
+                                query += " delete movimentacao_bancaria where id in (select id_movimento from contas_receber_baixas_formaspagamento where id_contas_receber_baixas = @idbaixa and id_empresa = @idempresa); ";
+                                query += "delete contas_receber_baixas_formaspagamento where id_contas_receber_baixas = @idbaixa and id_empresa = @idempresa; ";
+                                query += " delete contas_receber_baixas where id = @idbaixa and id_empresa = @idempresa;";            
+                                var transacao = new sql.Transaction();
+                                transacao.begin(err =>{
+                                    try{
+                                        var request = new sql.Request(transacao);
+                                        request.input("idempresa",EnterpriseID);
+                                        request.input("idbaixa",parametros.idBaixa);
+                                        request.query(query, function (err, recordset) {
+                                            if (err){
+                                                resposta.status = -4;
+                                                resposta.mensagem = [];
+                                                resposta.mensagem.push("" + err);
+                                                resposta.baixa = null;
+                                                transacao.rollback();
+                                                res.json(resposta);
+                                            }
+                                            else{
+                                                resposta.status = 1;
+                                                resposta.mensagem = ["ok"];
+                                                transacao.commit();
+                                                res.json(resposta);           
+                                            }
+                                        })
+                                    }
+                                    catch(err){
+                                        resposta.status = -5;
+                                        resposta.mensagem = [];
+                                        resposta.mensagem.push("" + err);
+                                        resposta.baixa = null;
+                                        res.json(resposta);                                    
+                                    }
+                                })
+                            }
+                            catch(err){
+                                resposta.status = -7;
+                                resposta.mensagem = [];
+                                resposta.mensagem.push("" + err);
+                                resposta.baixa = null;
+                                res.json(resposta);                                    
+                            }
+                        }
+                    })
+                }
+                catch(err){
+                    resposta.status = -6;
+                    resposta.mensagem = [];
+                    resposta.mensagem.push("" + err);
+                    resposta.baixa = null;
+                    res.json(resposta);                                    
+                }
+            }
+        })
+    }
+    catch(erro){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + erro);
+        baixa = null;
+        res.json(resposta);
+    }
+})
+
+/*------------------------------------------------------------------------------
+Registra o recebimento de várias contas
+--------------------------------------------------------------------------------
+*/
+router.route('/realizarmultirecebimento').post(function(req, res) {
+    var query = "";
+    var resposta = null;
+    var validacaoForma = null;
+    var tituloBaixado = null;
+    var tituloRecusado = null;
+    var parametros = null;
+    var parcela = 0;
+    var mensagem = 0;
+    var dadosFormaPagamento = null;    
+    var formasPagamento = require("./formaspagamento");
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+        titulosBaixados: [],
+        titulosRecusados: []
+    }
+    try{
+        parametros = req.body.parametros;
+        for(parcela = 0; parcela < parametros.listaParcelas.length; parcela++){
+            query += "select cr.id idconta,parc.id idparcela,parc.nm_documento documento,parc.nr_parcela parcela,parc.id_banco idbanco,parc.id_forma_pagamento idformapagamento,parc.vl_valor valorparcela,ent.nm_razaosocial razaosocial,"
+            query += "(select sum(baixas.vl_valor) from contas_receber_baixas baixas where baixas.id_contas_receber_parcela = parc.id and baixas.id_empresa = '" + EnterpriseID + "')  totalbaixas";
+            query += " from contas_receber_parcelas parc,contas_receber cr,entidade ent"
+            query += " where parc.id = '" + parametros.listaParcelas[parcela] + "'";
+            query += " and parc.id_empresa = '" + EnterpriseID + "'";
+            query += " and cr.id = parc.id_contas_receber and cr.id_empresa = '" + EnterpriseID + "'";
+            query += " and ent.id = cr.id_entidade and ent.id_empresa = '" + EnterpriseID + "'; ";
+        }
+        sql.close();
+        sql.connect(config, function (err) {    
+            if (err){
+                resposta.status = -2;
+                resposta.mensagem = [];
+                resposta.mensagem.push("" + err);
+                resposta.titulosBaixados = [];
+                resposta.titulosRecusados = [];
+                res.json(resposta);
+            }
+            else{
+                try{
+                    var request = new sql.Request();
+                    request.query(query, function (err, recordset) {
+                        if (err){
+                            resposta.status = -3;
+                            resposta.mensagem = [];
+                            resposta.mensagem.push("" + err);
+                            resposta.titulosBaixados = [];
+                            resposta.titulosRecusados = [];
+                            res.json(resposta);
+                        }
+                        else{
+                            try{
+                                var elementos = 0;
+                                var element = null;
+                                var descricao = "";
+                                var queryParcela = "";
+                                var queryBaixa = "";
+                                var idBaixa = null;
+                                var idBaixaProcesso = null;
+                                var idBaixaForma = null;
+                                var idBanco = null;
+                                var idMovimento = null;
+                                var dataRecebimento = null;
+                                var transacao = null;
+
+                                for(elementos = 0; elementos < recordset.recordsets.length; elementos++){
+                                    element = recordset.recordsets[elementos];
+
+                                    tituloRecusado = {
+                                        clifor: element[0].razaosocial,
+                                        titulo: element[0].documento.trim() + "/" + element[0].parcela,
+                                        mensagem: []
+                                    }
+
+                                    queryParcela = "";
+                                    
+                                    descricao = "Recebimento do documento " + element[0].documento.trim() + "/" + element[0].parcela;
+                                    descricao += " (" + element[0].razaosocial.trim() + ")";
+
+                                    idBaixa = general.guid();
+                                    idBaixaProcesso = general.guid();
+                                    idBaixaForma = general.guid();
+                                    idMovimento = general.guid();
+                                    idBanco = parametros.idBanco;
+                                    idFormaPagamento = parametros.idFormaPagamento;
+
+                                    if(parametros.dataRecebimento == "")
+                                        dataRecebimento = new Date();
+                                    else
+                                        dataRecebimento = new Date(parametros.dataRecebimento);
+                                    
+                                    if(parametros.idBanco != ""){
+                                        idBanco = parametros.idBanco;
+                                        queryParcela += " id_banco = '" + idBanco + "'";
+                                    }
+                                    else{
+                                        idBanco = element[0].idbanco == null ? "" : element[0].idbanco;
+                                    }
+                                    
+                                    if(parametros.idFormaPagamento != ""){
+                                        idFormaPagamento = parametros.idFormaPagamento;
+                                        if(queryParcela != "")
+                                            queryParcela += ",";
+                                        queryParcela += " id_forma_pagamento = '" + idFormaPagamento + "'";
+                                    }
+                                    else{
+                                        idFormaPagamento = element[0].idformapagamento == null ? "" : element[0].idformapagamento;
+                                    }
+
+                                    if(queryParcela != ""){
+                                        queryBaixa += " update contas_receber_parcelas set ";
+                                        queryBaixa += queryParcela;
+                                        queryBaixa += " where id = '" + element[0].idparcela + "'"
+                                        queryBaixa += " and id_empresa = '" + EnterpriseID + "'";
+                                        queryBaixa += "; ";
+                                    }
+
+                                    if(element[0].totalbaixas != null && parseFloat(element[0].totalbaixas) != 0)
+                                        tituloRecusado.mensagem.push("Este título já foi recebido.");
+                                    else{
+                                        dadosFormaPagamento = {
+                                            idBanco: idBanco,
+                                            data: dataRecebimento.toISOString(),
+                                            documento: parametros.documento,
+                                            idFormaPagamento: idFormaPagamento,
+                                            valor: parametros.valor,
+                                            idBancoOrig: parametros.idBancoOrig,
+                                            agenciaOrig: parametros.agenciaOrig,
+                                            contaOrig: parametros.contaOrig
+                                        }
+                                        validacaoForma = formasPagamento.validarDados(dadosFormaPagamento);
+                                        if(validacaoForma.status <= 0){
+                                            for(mensagem = 0; mensagem < validacaoForma.mensagem.length; mensagem++){
+                                                tituloRecusado.mensagem.push(validacaoForma.mensagem[mensagem]);
+                                            }
+                                        }
+                                    }
+
+                                    if(tituloRecusado.mensagem.length == 0){                                    
+                                        queryBaixa += "insert into contas_receber_baixas (id,id_empresa,id_contas_receber_parcela,id_processo_recebimento,dt_data,vl_valor) values (";
+                                        queryBaixa += "'" + idBaixa + "',";
+                                        queryBaixa += "'" + EnterpriseID + "',";
+                                        queryBaixa += "'" + element[0].idparcela + "',";
+                                        queryBaixa += "'" + idBaixaProcesso + "',";
+                                        queryBaixa += "'" + dataRecebimento.toISOString() + "',";
+                                        queryBaixa += element[0].valorparcela;
+                                        queryBaixa += "); ";
+                            
+                                        queryBaixa += "insert into contas_receber_baixas_formaspagamento (id,id_empresa,id_processo_recebimento,id_contas_receber_baixas,id_formapagamento,id_banco,id_movimento,nm_documento,id_dsg_banco,nm_conta,nm_agencia,vl_valor) values (";
+                                        queryBaixa += "'" + idBaixaForma + "',";
+                                        queryBaixa += "'" + EnterpriseID + "',";
+                                        queryBaixa += "'" + idBaixaProcesso + "',";
+                                        queryBaixa += "'" + idBaixa + "',";
+                                        queryBaixa += "'" + idFormaPagamento + "',";
+                                        queryBaixa += "'" + idBanco + "',";
+                                        queryBaixa += "'" + idMovimento + "',";
+                                        queryBaixa += "'" + parametros.documento + "',";
+                                        queryBaixa += (parametros.idBancoOrig == "" ? "null" : "'" + parametros.idBancoOrig + "'") + ",";
+                                        queryBaixa += "'" + parametros.contaOrig + "',";
+                                        queryBaixa += "'" + parametros.agenciaOrig + "',";
+                                        queryBaixa += element[0].valorparcela;
+                                        queryBaixa += "); ";
+                                        
+                                        queryBaixa += "insert into movimentacao_bancaria (id,id_empresa,id_processo_recebimento,id_dsg_banco,nm_agencia,nm_conta,id_banco,dt_data,vl_valor,nm_tipo_movimentacao,nm_descricao,nm_documento,sn_conciliado) values ("
+                                        queryBaixa += "'" + idMovimento + "',";
+                                        queryBaixa += "'" + EnterpriseID + "',";
+                                        queryBaixa += "'" + idBaixaProcesso + "',";
+                                        queryBaixa += (parametros.idBancoOrig == "" ? "null" : "'" + parametros.idBancoOrig + "'") + ",";
+                                        queryBaixa += "'" + parametros.agenciaOrig + "',";
+                                        queryBaixa += "'" + parametros.contaOrig + "',";
+                                        queryBaixa += "'" + idBanco + "',";
+                                        queryBaixa += "'" + dataRecebimento.toISOString() + "',";
+                                        queryBaixa += element[0].valorparcela    + ",";
+                                        queryBaixa += "'E',";
+                                        queryBaixa += "'" + descricao + "',";
+                                        queryBaixa += "'" + parametros.documento + "',";
+                                        queryBaixa += "0";
+                                        queryBaixa += "); ";
+
+                                        tituloBaixado = {
+                                            idParcela: element[0].idparcela,
+                                            valorBaixa: element[0].valorparcela,
+                                            documento: parametros.documento,
+                                            dataBaixa: dataRecebimento.toISOString(),
+                                            idBanco: idBanco,
+                                            idFormaPagamento: idFormaPagamento
+                                        }
+                                        resposta.titulosBaixados.push(tituloBaixado);
+                                    }
+                                    else{
+                                        resposta.titulosRecusados.push(tituloRecusado);
+                                    }
+                                }
+                                transacao = new sql.Transaction();
+                                transacao.begin(err =>{
+                                    try{
+                                        var request = new sql.Request(transacao);
+                                        request.query(queryBaixa, function (err, recordset) {
+                                            if (err){
+                                                resposta.status = -4;
+                                                resposta.mensagem = [];
+                                                resposta.mensagem.push("" + err);
+                                                resposta.titulosRecusados = [];
+                                                resposta.titulosBaixados = [];
+                                                transacao.rollback();
+                                                res.json(resposta);
+                                            }
+                                            else{
+                                                resposta.status = 1;
+                                                if(resposta.titulosRecusados.length > 0){
+                                                    resposta.mensagem = ["Alguns títulos não puderam ser baixados."];
+                                                }
+                                                else{
+                                                    resposta.mensagem = ["ok"];
+                                                }
+                                                transacao.commit();
+                                                res.json(resposta);
+                                            }
+                                        })
+                                    }
+                                    catch(err){
+                                        resposta.status = -5;
+                                        resposta.mensagem = [];
+                                        resposta.mensagem.push("" + err);
+                                        resposta.titulosBaixados = [];
+                                        resposta.titulosRecusados = [];
+                                        res.json(resposta);                                    
+                                    }
+                                })
+                            }
+                            catch(err){
+                                resposta.status = -7;
+                                resposta.mensagem = [];
+                                resposta.mensagem.push("" + err);
+                                resposta.titulosBaixados = [];
+                                resposta.titulosRecusados = [];
+                                res.json(resposta);                                    
+                            }
+                        }
+                    })
+                }
+                catch(err){
+                    resposta.status = -6;
+                    resposta.mensagem = [];
+                    resposta.mensagem.push("" + err);
+                    resposta.titulosBaixados = [];
+                    resposta.titulosRecusados = [];
+                    res.json(resposta);                                    
+                }
+            }
+        })
+    }
+    catch(err){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + err);
+        resposta.titulosBaixados = [];
+        resposta.titulosRecusados = [];
+        res.json(resposta);
+    }
+})
+
+
+
+/*------------------------------------------------------------------------------
+Cancela o recebimento de várias contas
+--------------------------------------------------------------------------------
+*/
+router.route('/cancelarmultirecebimento').post(function(req, res) {
+    var query = "";
+    var resposta = null;
+    var recebimentoCancelado = null;
+    var tituloRecusado = null;
+    var parametros = null;
+    var parcela = 0;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+        recebimentoCancelado: [],
+        titulosRecusados: []
+    }
+    try{
+        parametros = req.body.parametros;
+        for(parcela = 0; parcela < parametros.listaParcelas.length; parcela++){
+            query += "select cr.id idconta,parc.id idparcela,parc.nm_documento documento,parc.nr_parcela parcela,parc.vl_valor valorparcela,ent.nm_razaosocial razaosocial,"
+            query += "(select sum(baixas.vl_valor) from contas_receber_baixas baixas where baixas.id_contas_receber_parcela = parc.id and baixas.id_empresa = '" + EnterpriseID + "')  totalbaixas";
+            query += " from contas_receber_parcelas parc,contas_receber cr,entidade ent"
+            query += " where parc.id = '" + parametros.listaParcelas[parcela] + "'";
+            query += " and parc.id_empresa = '" + EnterpriseID + "'";
+            query += " and cr.id = parc.id_contas_receber and cr.id_empresa = '" + EnterpriseID + "'";
+            query += " and ent.id = cr.id_entidade and ent.id_empresa = '" + EnterpriseID + "'; ";
+        }
+        sql.close();
+        sql.connect(config, function (err) {    
+            if (err){
+                resposta.status = -2;
+                resposta.mensagem = [];
+                resposta.mensagem.push("" + err);
+                resposta.recebimentoCancelado = [];
+                resposta.titulosRecusados = [];
+                res.json(resposta);
+            }
+            else{
+                try{
+                    var request = new sql.Request();
+                    request.query(query, function (err, recordset) {
+                        if (err){
+                            resposta.status = -3;
+                            resposta.mensagem = [];
+                            resposta.mensagem.push("" + err);
+                            resposta.recebimentoCancelado = [];
+                            resposta.titulosRecusados = [];
+                            res.json(resposta);
+                        }
+                        else{
+                            try{
+                                var elementos = 0;
+                                var element = null;
+                                var queryBaixa = "";
+                                var transacao = null;
+
+                                for(elementos = 0; elementos < recordset.recordsets.length; elementos++){
+                                    element = recordset.recordsets[elementos];
+
+                                    tituloRecusado = {
+                                        clifor: element[0].razaosocial,
+                                        titulo: element[0].documento.trim() + "/" + element[0].parcela,
+                                        mensagem: []
+                                    }                                    
+
+                                    if(element[0].totalbaixas == null)
+                                        tituloRecusado.mensagem.push("Parcela não possui recebimento registrado.");
+
+                                    if(tituloRecusado.mensagem.length == 0){
+                                        queryBaixa += "delete movimentacao_bancaria where id_empresa = @idempresa and  id_processo_recebimento = (select id_processo_recebimento from contas_receber_baixas where id_empresa = @idempresa and id_contas_receber_parcela = '" + element[0].idparcela + "'); ";
+                                        queryBaixa += "delete contas_receber_baixas_formaspagamento where id_empresa = @idempresa and id_processo_recebimento = (select id_processo_recebimento from contas_receber_baixas where id_empresa = @idempresa and id_contas_receber_parcela =  '" + element[0].idparcela + "'); ";
+                                        queryBaixa += "delete contas_receber_baixas where id_empresa = @idempresa and id_contas_receber_parcela =  '" + element[0].idparcela + "'; ";
+
+                                        recebimentoCancelado = {
+                                            idParcela: element[0].idparcela,
+                                            valorBaixa: element[0].valorparcela,
+                                        }
+
+                                        resposta.recebimentoCancelado.push(recebimentoCancelado);
+                                    }
+                                    else{
+                                        resposta.titulosRecusados.push(tituloRecusado);
+                                    }
+                                }
+                                transacao = new sql.Transaction();
+                                transacao.begin(err =>{
+                                    try{
+                                        var request = new sql.Request(transacao);
+                                        request.input("idempresa",EnterpriseID);
+                                        request.query(queryBaixa, function (err, recordset) {
+                                            if (err){
+                                                resposta.status = -4;
+                                                resposta.mensagem = [];
+                                                resposta.mensagem.push("" + err);
+                                                resposta.titulosRecusados = [];
+                                                resposta.recebimentoCancelado = [];
+                                                transacao.rollback();
+                                                res.json(resposta);
+                                            }
+                                            else{
+                                                resposta.status = 1;
+                                                if(resposta.titulosRecusados.length > 0){
+                                                    resposta.mensagem = ["Alguns recebimento não puderam ser cancelados."];
+                                                }
+                                                else{
+                                                    resposta.mensagem = ["ok"];
+                                                }
+                                                transacao.commit();
+                                                res.json(resposta);
+                                            }
+                                        })
+                                    }
+                                    catch(err){
+                                        resposta.status = -5;
+                                        resposta.mensagem = [];
+                                        resposta.mensagem.push("" + err);
+                                        resposta.recebimentoCancelado = [];
+                                        resposta.titulosRecusados = [];
+                                        res.json(resposta);                                    
+                                    }
+                                })
+                            }
+                            catch(err){
+                                resposta.status = -7;
+                                resposta.mensagem = [];
+                                resposta.mensagem.push("" + err);
+                                resposta.recebimentoCancelado = [];
+                                resposta.titulosRecusados = [];
+                                res.json(resposta);                                    
+                            }
+                        }
+                    })
+                }
+                catch(err){
+                    resposta.status = -6;
+                    resposta.mensagem = [];
+                    resposta.mensagem.push("" + err);
+                    resposta.recebimentoCancelado = [];
+                    resposta.titulosRecusados = [];
+                    res.json(resposta);                                    
+                }
+            }
+        })
+    }
+    catch(err){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + err);
+        resposta.recebimentoCancelado = [];
+        resposta.titulosRecusados = [];
+        res.json(resposta);
+    }
+})
+
+
 /*------------------------------------------------------------------------------
 Verifica se uma conta pode ser excluída.
 --------------------------------------------------------------------------------
@@ -855,11 +1555,23 @@ router.route('/excluirconta').post(function(req, res) {
 
     resposta = {
         status: 0,
-        mensagem: []
+        mensagem: [],
+        documento: null
     }
 
     try{
         parametros = req.body.parametros;
+
+        query += "select cr.id,cr.nm_documento,ent.nm_razaosocial from contas_receber cr,entidade ent";
+        query += " where cr.id_empresa = '" + EnterpriseID + "'";
+        query += " and cr.id = '" + parametros.idTitulo + "'";      
+        query += " and ent.id = cr.id_entidade; ";
+
+        query += "delete contas_receber_parcelas where id_empresa = '" + EnterpriseID + "'";
+        query += " and id_contas_receber = '" + parametros.idTitulo + "'; ";
+        
+        query += "delete contas_receber where id_empresa = '" + EnterpriseID + "'";
+        query += " and id = '" + parametros.idTitulo + "'";
 
         sql.close();
         sql.connect(config, function (err) {    
@@ -867,7 +1579,7 @@ router.route('/excluirconta').post(function(req, res) {
                 resposta.status = -1;
                 resposta.mensagem = [];
                 resposta.mensagem.push("" + err);
-                titulo = null;
+                resposta.documento = null;
                 sql.close();
                 res.json(resposta);
             }
@@ -876,45 +1588,35 @@ router.route('/excluirconta').post(function(req, res) {
                     var transacao = new sql.Transaction();
                     transacao.begin(err =>{
                         var request = new sql.Request(transacao);
-                        query = "delete contas_receber_parcelas where id_empresa = '" + EnterpriseID + "'";
-                        query += " and id_contas_receber = '" + parametros.idTitulo + "'";
                         request.query(query, function (err, recordset) {
                             if (err){
                                 resposta.status = -2;
                                 resposta.mensagem = [];
                                 resposta.mensagem.push("" + err);
+                                resposta.documento = null;
                                 transacao.rollback();
                                 res.json(resposta);
                             }
                             else{
                                 try{
-                                    query = "delete contas_receber where id_empresa = '" + EnterpriseID + "'";
-                                    query += " and id = '" + parametros.idTitulo + "'";
-                                    var request = new sql.Request(transacao);
-                                    request.query(query, function (err, recordset) {
-                                        if (err){
-                                            resposta.status = -3;
-                                            resposta.mensagem = [];
-                                            resposta.mensagem.push("" + err);
-                                            transacao.rollback();
-                                            res.json(resposta);
-                                        }
-                                        else{
-                                            resposta.status = 1;
-                                            resposta.mensagem = ["ok"];
-                                            resposta.titulo =  parametros;
-                                            transacao.commit();
-                                            res.json(resposta);
-                                        }
-                                    })
+                                    var element = recordset.recordsets[0];
+                                    resposta.status = 1
+                                    resposta.mensagem = ["ok"];
+                                    resposta.documento = {
+                                        idTitulo: element[0].id,
+                                        documento: element[0].nm_documento,
+                                        entidade: element[0].nm_razaosocial
+                                    }
+                                    transacao.commit();
+                                    res.json(resposta);
                                 }
                                 catch(err){
-                                    resposta.status = -5;
+                                    resposta.status = -3;
                                     resposta.mensagem = [];
                                     resposta.mensagem.push("" + err);
+                                    resposta.documento = null;
                                     transacao.rollback();
-                                    res.json(resposta);
-                
+                                    res.json(resposta);                
                                 }
                             }
                         })
@@ -924,9 +1626,9 @@ router.route('/excluirconta').post(function(req, res) {
                     resposta.status = -4;
                     resposta.mensagem = [];
                     resposta.mensagem.push("" + err);
+                    resposta.documento = null;
                     transacao.rollback();
                     res.json(resposta);
-
                 }
             }
         });
@@ -934,6 +1636,7 @@ router.route('/excluirconta').post(function(req, res) {
     catch(erro){
         resposta.status = -1;
         resposta.mensagem = [];
+        resposta.documento = null;
         resposta.mensagem.push("" + erro);
         res.json(resposta);
     }
