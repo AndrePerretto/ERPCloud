@@ -116,10 +116,12 @@ var param2 = req.param('param2');
 
 //* servicos/movimentacaoservicos/carregaListaServicos 
 
-router.route('/carregaListaServicos/:idEntidade/:dataDe/:dataAte').get(function(req, res) {
+router.route('/carregaListaServicos/:idEntidade/:dataDe/:dataAte/:fat/:bol').get(function(req, res) {
 var idEntidade = req.param('idEntidade');
 var dataDe = req.param('dataDe');
 var dataAte = req.param('dataAte');
+var fat = req.param('fat');
+var bol = req.param('bol');
 
 
     var where = ""; 
@@ -144,9 +146,9 @@ var dataAte = req.param('dataAte');
             dataDe = dataDe.replace("-","/"); 
             dataDe = dataDe.replace("-","/"); 
             if(!where){ 
-                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+                where += " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
             }else{ 
-                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+                where += " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
             } 
         } 
     } 
@@ -155,15 +157,49 @@ var dataAte = req.param('dataAte');
             dataAte = dataAte.replace("-","/"); 
             dataAte = dataAte.replace("-","/"); 
             if(!where){ 
-                where = " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+                where += " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
             }else{ 
-                where = " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+                where += " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
             } 
         } 
     } 
+    if(fat){ 
+        if(fat == "true"){ 
+            if(!where){ 
+                where += " WHERE movimentacao_servicos.nm_numero_nfes  IS NOT NULL "; 
+            }else{ 
+                where += " AND  movimentacao_servicos.nm_numero_nfes  IS NOT NULL "; 
+            } 
+        }else{
+            if(!where){ 
+                where += " WHERE movimentacao_servicos.nm_numero_nfes  IS  NULL "; 
+            }else{ 
+                where += " AND  movimentacao_servicos.nm_numero_nfes  IS  NULL "; 
+            } 
+        }
+    } 
+    if(bol){ 
+        if(bol == "true"){ 
+            if(!where){ 
+                where += " WHERE movimentacao_servicos.nm_numero_boleto  IS NOT NULL "; 
+            }else{ 
+                where += " AND  movimentacao_servicos.nm_numero_boleto  IS NOT NULL "; 
+            } 
+        } 
+    } else{
+        if(bol == "true"){ 
+            if(!where){ 
+                where += " WHERE movimentacao_servicos.nm_numero_boleto  IS  NULL "; 
+            }else{ 
+                where += " AND  movimentacao_servicos.nm_numero_boleto  IS  NULL "; 
+            } 
+        } 
+
+    }
 
     select = select + where; 
     select = select + "  GROUP BY entidade.nm_cnpj, entidade.nm_razaosocial,  movimentacao_servicos.dt_faturamento,  movimentacao_servicos.nm_numero_nfes,  movimentacao_servicos.nm_numero_boleto";
+    
     sql.close(); 
     sql.connect(config, function (err) { 
         if (err) console.log(err); 
@@ -232,4 +268,124 @@ router.route('/carregaListaComissao/:idEntidade/:dataDe/:dataAte').get(function(
         }); 
      }); 
 
+});
+
+
+
+
+router.route('/carregaListaDetalhesServicos/:dataDe/:dataAte/:cliente/:cnpj/:dtfat/:nfse/:bol').get(function(req, res) {
+    var cliente = req.param('cliente');
+    var dataDe = req.param('dataDe');
+    var dataAte = req.param('dataAte');
+    var cnpj = req.param('cnpj');
+    var dtfat = req.param('dtfat');
+    var nfse = req.param('nfse');
+    var bol = req.param('bol');
+    
+    var where = ""; 
+    var select = "SELECT newID() AS 'id', "; 
+    select += " movimentacao_servicos.nm_documento AS 'doc', "; 
+    select += " FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) AS 'data', "; 
+    select += " entidade.nm_razaosocial AS 'razaosocial', "; 
+    select += " (prod.nm_descricao + ' - ' + sub.nm_descricao) AS 'prodSub', "; 
+    select += " FORMAT(movimentacao_servicos.vl_valor, 'c', 'pt-BR' )  AS 'valor'  "; 
+    select += " FROM movimentacao_servicos "; 
+    select += " INNER JOIN produtos sub ON sub.id=movimentacao_servicos.id_subservicos "; 
+    select += " INNER JOIN produtos prod ON prod.id=movimentacao_servicos.id_produtos "; 
+    select += " INNER JOIN entidade ON entidade.id=movimentacao_servicos.id_entidade "; 
+    if(cliente != "-"){ 
+        where = " WHERE entidade.nm_razaosocial='" + cliente + "' "; 
+    }
+
+    if(cnpj != "-"){ 
+        if(!where){ 
+            where += " WHERE entidade.nm_cnpj = '" + cnpj + "' "; 
+        }else{ 
+            where += " AND entidade.nm_cnpj = '" + cnpj + "' "; 
+        } 
+    }else{
+        if(!where){ 
+            where += " WHERE entidade.nm_cnpj IS NULL "; 
+        }else{ 
+            where += " AND entidade.nm_cnpj IS NULL  "; 
+        } 
+    }
+
+    if(dtfat != "-"){ 
+        dtfat = dtfat.replace("-","/"); 
+        dtfat = dtfat.replace("-","/");
+        if(!where){ 
+            where += " WHERE FORMAT(movimentacao_servicos.dt_faturamento, 'd', 'pt-BR' ) = '" + dtfat + "' "; 
+        }else{ 
+            where += " AND FORMAT(movimentacao_servicos.dt_faturamento, 'd', 'pt-BR' ) = '" + dtfat + "' "; 
+        } 
+    }else{
+        if(!where){ 
+            where += " WHERE movimentacao_servicos.dt_faturamento IS NULL "; 
+        }else{ 
+            where += " AND movimentacao_servicos.dt_faturamento IS NULL  "; 
+        } 
+    }
+    
+    if(nfse != "-"){ 
+        if(!where){ 
+            where += " WHERE movimentacao_servicos.nm_numero_nfes = '" + nfse + "' "; 
+        }else{ 
+            where += " AND movimentacao_servicos.nm_numero_nfes = '" + nfse + "' "; 
+        } 
+    }else{
+        if(!where){ 
+            where += " WHERE movimentacao_servicos.nm_numero_nfes IS NULL "; 
+        }else{ 
+            where += " AND movimentacao_servicos.nm_numero_nfes IS NULL  "; 
+        } 
+    }
+    
+    if(bol != "-"){  
+        if(!where){ 
+            where += " WHERE movimentacao_servicos.nm_numero_boleto = '" + bol + "' "; 
+        }else{ 
+            where += " AND movimentacao_servicos.nm_numero_boleto = '" + bol + "' "; 
+        } 
+    }else{
+        if(!where){ 
+            where += " WHERE movimentacao_servicos.nm_numero_boleto IS NULL "; 
+        }else{ 
+            where += " AND movimentacao_servicos.nm_numero_boleto IS NULL  "; 
+        } 
+    }
+    if(dataDe){ 
+        if(dataDe != "*"){ 
+            dataDe = dataDe.replace("-","/"); 
+            dataDe = dataDe.replace("-","/"); 
+            if(!where){ 
+                where += " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            }else{ 
+                where += " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) >= '" + dataDe + "' "; 
+            } 
+        } 
+    } 
+    if(dataAte){ 
+        if(dataAte != "*"){ 
+            dataAte = dataAte.replace("-","/"); 
+            dataAte = dataAte.replace("-","/"); 
+            if(!where){ 
+                where += " WHERE FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            }else{ 
+                where += " AND FORMAT(movimentacao_servicos.dt_emissao, 'd', 'pt-BR' ) <= '" + dataAte + "' "; 
+            } 
+        } 
+    } 
+
+    select = select + where; 
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+                if (err) console.log(err);
+
+                res.send(recordset); 
+        }); 
+    }); 
 });

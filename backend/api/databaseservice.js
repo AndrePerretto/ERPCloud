@@ -53,7 +53,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "hidrobombas";  //"homologa"; //"foodtown";
+        dados = "broker";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -102,7 +102,7 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "hidrobombas"; //"foodtown";
+        dados = "broker"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
@@ -2464,7 +2464,7 @@ router.route('/RenderAutoComplete/:filter/:controlid').get(function(req, res) {
                 select = result[0].autocompleteChange;
             }
         }
-        console.log(result)
+        console.log(select)
         db.close();
         //if (sql) {
         sql.close()
