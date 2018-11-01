@@ -525,6 +525,18 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             openData(dados, layoutID, tabGenID);
         }
 
+        var tipoData = $("[data-nativedatatype='Data'][value!='']")
+        var hoje = new Date();
+        var dia = hoje.getDate().toString();
+        var mes = hoje.getMonth();
+        var ano = hoje.getFullYear();
+
+        if(dia.length == 1)
+            dia = "0" + dia;
+        for(var i = 0; i < tipoData.length; i++){
+            $(tipoData[i]).val( dia + "/" + (mes + 1) + "/" + ano);
+        }
+
     }});
     return tabGenID;
 }
