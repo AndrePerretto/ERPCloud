@@ -537,6 +537,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         for(var i = 0; i < tipoData.length; i++){
             $(tipoData[i]).val( dia + "/" + (mes + 1) + "/" + ano);
         }
+        $(".wizard-buttons").addClass("hidden");
 
     }});
     return tabGenID;
