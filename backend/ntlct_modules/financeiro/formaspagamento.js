@@ -11,9 +11,9 @@ Parâmetros
         documento: compravante da operação
         idFormaPagamento: id da forma de pagamento
         valor: valor da operação
-        idBancoOrig: id do banco que originou a operação
-        agenciaOrig: agência do banco que originou a operação
-        contaOrig: conta do banco que originou a operação
+        idBancoOper: id do banco da operação
+        agenciaOper: agência do banco da operação
+        contaOper: conta do banco da operação
     }
 Retorno:
     resposta = {
@@ -95,19 +95,21 @@ function validarDadosCheque(formaPagamento,resposta){
             resposta.mensagem.push("Número de cheque inválido.")
         }
 
-        if(formaPagamento.idBancoOrig == null  || formaPagamento.idBancoOrig.indexOf("undefined") >= 0|| formaPagamento.idBancoOrig == ""){
-            resposta.status = 0;
-            resposta.mensagem.push("Banco do cheque não foi informado.")
-        }
+        if(formaPagamento.tipoMovimento == "C"){
+            if(formaPagamento.idBancoOper == null  || formaPagamento.idBancoOper.indexOf("undefined") >= 0|| formaPagamento.idBancoOper == ""){
+                resposta.status = 0;
+                resposta.mensagem.push("Banco do cheque não foi informado.")
+            }
 
-        if(formaPagamento.agenciaOrig == null || formaPagamento.agenciaOrig.indexOf("undefined") >= 0 || formaPagamento.agenciaOrig == ""){
-            resposta.status = 0;
-            resposta.mensagem.push("Agência bancária do cheque não foi informada.")
-        }
+            if(formaPagamento.agenciaOper == null || formaPagamento.agenciaOper.indexOf("undefined") >= 0 || formaPagamento.agenciaOper == ""){
+                resposta.status = 0;
+                resposta.mensagem.push("Agência bancária do cheque não foi informada.")
+            }
 
-        if(formaPagamento.contaOrig == null  || formaPagamento.contaOrig.indexOf("undefined") >= 0|| formaPagamento.contaOrig == ""){
-            resposta.status = 0;
-            resposta.mensagem.push("Conta bancária do cheque não foi informada.")
+            if(formaPagamento.contaOper == null  || formaPagamento.contaOper.indexOf("undefined") >= 0|| formaPagamento.contaOper == ""){
+                resposta.status = 0;
+                resposta.mensagem.push("Conta bancária do cheque não foi informada.")
+            }
         }
     }
     catch(erro){
@@ -126,19 +128,19 @@ function validarDadosCheque(formaPagamento,resposta){
 */
 function validarDadosTransferencia(formaPagamento,resposta){
     try{
-        if(formaPagamento.idBancoOrig == null || formaPagamento.idBancoOrig.indexOf("undefined") >= 0|| formaPagamento.idBancoOrig == ""){
+        if(formaPagamento.idBancoOper == null || formaPagamento.idBancoOper.indexOf("undefined") >= 0|| formaPagamento.idBancoOper == ""){
             resposta.status = 0;
-            resposta.mensagem.push("Banco para  transferência não foi informado.")
+            resposta.mensagem.push("Banco da transferência não foi informado.")
         }
 
-        if(formaPagamento.agenciaOrig == null || formaPagamento.agenciaOrig.indexOf("undefined") >= 0 || formaPagamento.agenciaOrig == ""){
+        if(formaPagamento.agenciaOper == null || formaPagamento.agenciaOper.indexOf("undefined") >= 0 || formaPagamento.agenciaOper == ""){
             resposta.status = 0;
-            resposta.mensagem.push("Agência bancária para transferência não foi informada.")
+            resposta.mensagem.push("Agência bancária da transferência não foi informada.")
         }
 
-        if(formaPagamento.contaOrig == null || formaPagamento.contaOrig.indexOf("undefined") >= 0|| formaPagamento.contaOrig == ""){
+        if(formaPagamento.contaOper == null || formaPagamento.contaOper.indexOf("undefined") >= 0|| formaPagamento.contaOper == ""){
             resposta.status = 0;
-            resposta.mensagem.push("Conta bancária para transferência não foi informada.")
+            resposta.mensagem.push("Conta bancária da transferência não foi informada.")
         }
     }
     catch(erro){

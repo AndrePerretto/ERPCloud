@@ -17,7 +17,8 @@ module.exports = function(server) {
     const ReportsService = require('../api/reportsservice')
     ReportsService.register(router, '/reports')
     
-    const Financeiro = require('../ntlct_modules/financeiro/contasreceber')
     const Faturamento = require('../ntlct_modules/faturamento/configuracao_ncm')
+    const ContasReceber = require('../ntlct_modules/financeiro/contasreceber')
+    const ContasPagar = require('../ntlct_modules/financeiro/contaspagar')
     const movimentacaoservicos = require('../custom_modules/broker/servicos/movimentacaoservicos')
 }

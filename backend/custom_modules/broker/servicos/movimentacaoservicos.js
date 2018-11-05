@@ -282,6 +282,8 @@ router.route('/carregaListaDetalhesServicos/:dataDe/:dataAte/:cliente/:cnpj/:dtf
     var nfse = req.param('nfse');
     var bol = req.param('bol');
     
+    cnpj = cnpj.replace("(*_*)","/");
+
     var where = ""; 
     var select = "SELECT newID() AS 'id', "; 
     select += " movimentacao_servicos.nm_documento AS 'doc', "; 
