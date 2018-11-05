@@ -18,5 +18,6 @@ module.exports = function(server) {
     ReportsService.register(router, '/reports')
     
     const Financeiro = require('../ntlct_modules/financeiro/contasreceber')
+    const Faturamento = require('../ntlct_modules/faturamento/configuracao_ncm')
     const movimentacaoservicos = require('../custom_modules/broker/servicos/movimentacaoservicos')
 }

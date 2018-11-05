@@ -524,6 +524,7 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             var dados = "&Filtro=*"
             openData(dados, layoutID, tabGenID);
         }
+        $(".wizard-buttons").addClass("hidden");
 
     }});
     return tabGenID;
