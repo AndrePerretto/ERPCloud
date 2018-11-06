@@ -245,7 +245,7 @@ router.route('/listarcontas').post(function(req, res) {
     }
 
     try{
-        parametros = JSON.parse(req.body.parametros);    
+        parametros = JSON.parse(req.body.parametros); 
 
         resposta = {
             status: 0,
@@ -268,8 +268,8 @@ router.route('/listarcontas').post(function(req, res) {
         query += " left join contas_receber_baixas baixas on baixas.id_contas_receber_parcela = crp.id and baixas.id_empresa = @idempresa";
         query += " left join contas_receber_baixas_formaspagamento formas on formas.id_contas_receber_baixas = baixas.id and formas.id_empresa = @idempresa";
         query += " where cr.id_empresa = @idempresa";
-        query += " and (@pedido is null or cr.id_venda in (select id from venda where venda.nr_pedido = @pedido))";
-        query += " and (@notaFiscal is null or cr.id_notafiscal in (select id from notafiscal nota where nota.nm_numeronotafiscal = @notafiscal))";
+        query += " and (@pedido is null or cr.id_venda = @pedido)";
+        query += " and (@notaFiscal is null or cr.id_notafiscal = @notafiscal)";
         query += " and (@identidade is null or cr.id_entidade = @identidade)";
         query += " and ent.id = cr.id_entidade";
         query += " and crp.id_contas_receber = cr.id";
@@ -576,6 +576,123 @@ router.route('/dadostitulo').post(function(req, res) {
     }
 })
 
+
+
+/*------------------------------------------------------------------------------
+Criar as parcelas a partir do pedido de vendas.
+--------------------------------------------------------------------------------
+*/
+router.route('/gerarparcelasvenda').post(function(req, res) {
+    var query = "";
+    var nrParcela = 0;
+    var total = 0;
+    var parcela = null;
+    var resposta = null;
+    var parametros = null;
+    var titulo = null;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,contenttype'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
+
+    parametros = req.body.parametros;
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+    }
+
+    try{
+        query += "select id_entidade,nr_pedido,dt_emissao,id_parcelamento,id_configuracao_cnab,id from venda";
+        query += "where id_empresa = '" + EnterpriseID + "'";
+        query += " and id = '" + parametros.idVenda + "'; ";
+
+        query += " select id,vl_valor,dt_vencimento from venda_titulos";
+        query += " where id_empresa = '" + EnterpriseID + "'";
+        query += " and id_venda = '" + parametros.idVenda + "'";
+        query += " order by dt_vencimento";
+        
+        sql.close();
+        sql.connect(config, function (err) {
+            if (err){
+                resposta = {
+                    status: -2,
+                    mensagem: ["" + err],
+                }
+                res.json(resposta);
+            }
+            else{
+                var request = new sql.Request();
+                request.input("idempresa",EnterpriseID);
+                request.query(query, function (err, recordset) {
+                    if (err){
+                        resposta = {
+                            status: -3,
+                            mensagem: ["" + err],
+                        }
+                        res.json(resposta);
+                    }
+                    else{
+                        var venda = recordset.recordsets[0][0];
+                        var titulosVenda = recordset.recordsets[1];
+                        var i = 0;
+
+                        titulo = {
+                            idEmpresa: EnterpriseID,
+                            idUsuario: parametros.idUsuario,
+                            idTitulo: "",
+                            idEntidade: venda.id_entidade,
+                            idPedido: parametros.idVenda,
+                            idNotaFiscal: "",
+                            nrTitulo: venda.nr_pedido,
+                            emissao: venda.dt_emissao,
+                            competencia: "",
+                            valor: "",
+                            idContaFinanceira: "",
+                            idParcelamento: "",
+                            observacao: "",
+                            dre: 0,
+                            parcelas: []
+                        };
+                        
+                        for(i = 0; i < titulosVenda.length; i++){
+                            parcela = {
+                                idParcela: "",
+                                documento: venda.nr_pedido,
+                                parcela: nrParcela,
+                                vencimento: titulosVenda[i].dt_vencimento,
+                                valor: titulosVenda[i].vl_valor,
+                                idBanco: "",
+                                idFormaPagamento: venda.id_parcelamento,
+                                idConfCNAB: venda.id_configuracao_cnab,
+                                idContaFinanceira: "",
+                                fluxoCaixa: ""
+                            };
+                            total += parseFloat(titulosVenda[i].vl_valor);
+                            titulo.parcelas.push(parcela);
+                        }
+                        
+                        titulo.valor = total;
+
+                        funAtualizarContas(titulo,(function(repostacallback){
+                            res.json(repostacallback);
+                        }));
+                    }
+                })
+            }
+        })
+    }
+    catch(erro){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + erro);
+        titulo = null;
+        res.json(resposta);
+    }
+})
+
+
 /*------------------------------------------------------------------------------
 Inclui ou atualiza uma conta com suas parcelas.
 --------------------------------------------------------------------------------
@@ -601,14 +718,46 @@ router.route('/atualizarconta').post(function(req, res) {
     try{
         parametros = req.body.parametros;
 
+        funAtualizarConta(parametros,(function(repostacallback){
+            res.json(repostacallback);
+        }));
+    }
+    catch(erro){
+        resposta.status = -1;
+        resposta.mensagem = [];
+        resposta.mensagem.push("" + erro);
+        titulo = null;
+        res.json(resposta);
+    }
+})
+
+
+
+/*------------------------------------------------------------------------------
+Inclui ou atualiza uma conta com suas parcelas.
+--------------------------------------------------------------------------------
+*/
+function funAtualizarConta(parametros,callbackf) {
+    var query = "";
+    var queryItens = "";
+    var parcela = 0;
+    var resposta = null;
+
+    resposta = {
+        status: 0,
+        mensagem: [],
+        titulo: null
+    }
+
+    try{
         if(parametros.idTitulo == ""){
             parametros.idTitulo = general.guid();
             query = "insert into contas_receber (id,id_empresa,id_entidade,id_venda,id_notafiscal,id_parcelamento,id_plano_contas_financeiro,nm_documento,dt_emissao,nm_competencia,vl_valor,sn_dre,nm_observacao) values("
             query += "'" + parametros.idTitulo + "',";
             query += "'" + EnterpriseID + "',";
             query += "'" + parametros.idEntidade + "',";
-            query += "null,";
-            query += "null,";
+            query += ((parametros.idPedido == "" || parametros.idPedido == "undefined") ? "null" : "'" + parametros.idPedido + "'") + ",";
+            query += ((parametros.idNotaFiscal == "" || parametros.idNotaFiscal == "undefined") ? "null" : "'" + parametros.idNotaFiscal + "'") + ",";
             query += "'" + parametros.idParcelamento + "',";
             query += ((parametros.idContaFinanceira == "" || parametros.idContaFinanceira == "undefined") ? "null" : "'" + parametros.idContaFinanceira + "'") + ",";
             query += "'" + parametros.nrTitulo + "',";
@@ -646,6 +795,8 @@ router.route('/atualizarconta').post(function(req, res) {
             queryItens = "";
             query += "update contas_receber set " 
             query += "id_plano_contas_financeiro = " + (parametros.idContaFinanceira == "" ? "null" : "'" + parametros.idContaFinanceira + "'") + ",";
+            query += "id_venda = " +  ((parametros.idPedido == "" || parametros.idPedido == "undefined") ? "null" : "'" + parametros.idPedido + "'") + ",";
+            query += "id_notafiscal = " + ((parametros.idNotaFiscal == "" || parametros.idNotaFiscal == "undefined") ? "null" : "'" + parametros.idNotaFiscal + "'") + ",";
             query += "nm_competencia = '" + parametros.competencia + "',"
             query += "sn_dre = " + parametros.dre.toString() + ","
             query += "nm_observacao = '" + parametros.observacao + "'";
@@ -659,8 +810,8 @@ router.route('/atualizarconta').post(function(req, res) {
                 resposta.status = -2;
                 resposta.mensagem = [];
                 resposta.mensagem.push("" + err);
-                titulo = null;
-                res.json(resposta);
+                resposta.titulo = null;
+                callbackf(resposta);
             }
             else{
                 try{
@@ -672,9 +823,9 @@ router.route('/atualizarconta').post(function(req, res) {
                                 resposta.status = -3;
                                 resposta.mensagem = [];
                                 resposta.mensagem.push("" + err);
-                                titulo = null;
+                                resposta.titulo = null;
                                 transacao.rollback();
-                                res.json(resposta);
+                                callbackf(resposta);
                             }
                             else{
                                 if(queryItens != ""){
@@ -687,14 +838,14 @@ router.route('/atualizarconta').post(function(req, res) {
                                                 resposta.mensagem.push("" + err);
                                                 titulo = null;
                                                 transacao.rollback();
-                                                res.json(resposta);
+                                                callbackf(resposta);
                                             }
                                             else{
                                                 resposta.status = 1;
                                                 resposta.mensagem = ["ok"];
                                                 resposta.titulo =  parametros;
                                                 transacao.commit();
-                                                res.json(resposta);
+                                                callbackf(resposta);
                                             }
                                         })                                    
                                     }
@@ -702,8 +853,8 @@ router.route('/atualizarconta').post(function(req, res) {
                                         resposta.status = -5;
                                         resposta.mensagem = [];
                                         resposta.mensagem.push("" + erro);
-                                        titulo = null;
-                                        res.json(resposta);                                    
+                                        resposta.titulo = null;                            
+                                        callbackf(resposta);
                                     }
                                 }
                                 else{
@@ -711,7 +862,7 @@ router.route('/atualizarconta').post(function(req, res) {
                                     resposta.mensagem = ["ok"];
                                     resposta.titulo =  parametros;
                                     transacao.commit();
-                                    res.json(resposta);
+                                    callbackf(resposta);
                                 }
                             }
                         })
@@ -721,8 +872,8 @@ router.route('/atualizarconta').post(function(req, res) {
                     resposta.status = -6;
                     resposta.mensagem = [];
                     resposta.mensagem.push("" + erro);
-                    titulo = null;
-                    res.json(resposta);                    
+                    resposta.titulo = null;
+                    callbackf(resposta);
                 }
             }
         });
@@ -731,10 +882,10 @@ router.route('/atualizarconta').post(function(req, res) {
         resposta.status = -1;
         resposta.mensagem = [];
         resposta.mensagem.push("" + erro);
-        titulo = null;
-        res.json(resposta);
+        resposta.titulo = null;
+        callbackf(resposta);
     }
-})
+}
 
 
 /*------------------------------------------------------------------------------
