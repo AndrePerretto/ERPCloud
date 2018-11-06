@@ -537,8 +537,9 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         for(var i = 0; i < tipoData.length; i++){
             $(tipoData[i]).val( dia + "/" + (mes + 1) + "/" + ano);
         }
-        $(".wizard-buttons").addClass("hidden");
-
+        $(".wizard-buttons").removeClass("hidden");
+        $(".wizard-buttons [data-wizard='back']").addClass("hidden");
+        $(".wizard-buttons .pull-right:contains('Próximo')").addClass("hidden");
     }});
     return tabGenID;
 }
