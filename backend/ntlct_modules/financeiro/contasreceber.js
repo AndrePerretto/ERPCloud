@@ -675,9 +675,18 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                         
                         titulo.valor = total;
 
-                        funAtualizarContas(titulo,(function(repostacallback){
-                            res.json(repostacallback);
-                        }));
+                        if(total > 0){
+                            funAtualizarContas(titulo,(function(repostacallback){
+                                res.json(repostacallback);
+                            }));
+                        }
+                        else{
+                            resposta = {
+                                status = 0,
+                                mensagem = ["Não foram geradas parcelas para esta venda"]
+                            }
+                            res.json(reposta);
+                        }
                     }
                 })
             }
