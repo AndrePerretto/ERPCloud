@@ -679,7 +679,7 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                         }
                         else{
                             resposta = {
-                                status:0,
+                                status: 0,
                                 mensagem: ["Não foram geradas parcelas para esta venda"],
                                 titulo: null
                             }
