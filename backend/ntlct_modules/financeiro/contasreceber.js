@@ -598,11 +598,6 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
 
     parametros = req.body.parametros;
 
-    resposta = {
-        status: 0,
-        mensagem: [],
-    }
-
     try{
         query += "select id_entidade,nr_pedido,dt_emissao,id_parcelamento,id_configuracao_cnab,id from venda";
         query += "where id_empresa = '" + EnterpriseID + "'";
@@ -619,6 +614,7 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                 resposta = {
                     status: -2,
                     mensagem: ["" + err],
+                    titulo: null
                 }
                 res.json(resposta);
             }
@@ -630,6 +626,7 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                         resposta = {
                             status: -3,
                             mensagem: ["" + err],
+                            titulo: null
                         }
                         res.json(resposta);
                     }
@@ -682,8 +679,9 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                         }
                         else{
                             resposta = {
-                                status = 0,
-                                mensagem = ["Não foram geradas parcelas para esta venda"]
+                                status:0,
+                                mensagem: ["Não foram geradas parcelas para esta venda"],
+                                titulo: null
                             }
                             res.json(reposta);
                         }
@@ -693,10 +691,12 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
         })
     }
     catch(erro){
-        resposta.status = -1;
-        resposta.mensagem = [];
+        resposta = {
+            status: -1,
+            mensagem: [],
+            titulo: null
+        }
         resposta.mensagem.push("" + erro);
-        titulo = null;
         res.json(resposta);
     }
 })
