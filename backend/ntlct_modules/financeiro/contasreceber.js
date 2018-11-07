@@ -599,15 +599,14 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
     parametros = req.body.parametros;
 
     try{
-        query += "select id_entidade,nr_pedido,dt_emissao,id_parcelamento,id_configuracao_cnab,id from venda";
-        query += "where id_empresa = '" + EnterpriseID + "'";
+        query += "select id_entidade,nr_pedido,dt_emissao,id_parcelamento,id_formapagamento,id_configuracao_cnab,id from venda";
+        query += " where id_empresa = '" + EnterpriseID + "'";
         query += " and id = '" + parametros.idVenda + "'; ";
 
-        query += " select id,vl_valor,dt_vencimento from venda_titulos";
-        query += " where id_empresa = '" + EnterpriseID + "'";
-        query += " and id_venda = '" + parametros.idVenda + "'";
+        query += "select id,vl_valor,dt_vencimento from venda_titulos";
+        query += " where id_venda = '" + parametros.idVenda + "'";
         query += " order by dt_vencimento";
-        
+
         sql.close();
         sql.connect(config, function (err) {
             if (err){
@@ -643,28 +642,29 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                             idPedido: parametros.idVenda,
                             idNotaFiscal: "",
                             nrTitulo: venda.nr_pedido,
-                            emissao: venda.dt_emissao,
+                            emissao: new Date(venda.dt_emissao).toISOString(),
                             competencia: "",
                             valor: "",
                             idContaFinanceira: "",
-                            idParcelamento: "",
+                            idParcelamento: venda.id_parcelamento,
                             observacao: "",
                             dre: 0,
                             parcelas: []
                         };
                         
                         for(i = 0; i < titulosVenda.length; i++){
+                            nrParcela++;
                             parcela = {
                                 idParcela: "",
                                 documento: venda.nr_pedido,
                                 parcela: nrParcela,
-                                vencimento: titulosVenda[i].dt_vencimento,
+                                vencimento: new Date(titulosVenda[i].dt_vencimento).toISOString(),
                                 valor: titulosVenda[i].vl_valor,
                                 idBanco: "",
-                                idFormaPagamento: venda.id_parcelamento,
+                                idFormaPagamento: venda.id_formapagamento,
                                 idConfCNAB: venda.id_configuracao_cnab,
                                 idContaFinanceira: "",
-                                fluxoCaixa: ""
+                                fluxoCaixa: "1"
                             };
                             total += parseFloat(titulosVenda[i].vl_valor);
                             titulo.parcelas.push(parcela);
@@ -673,7 +673,7 @@ router.route('/gerarparcelasvenda').post(function(req, res) {
                         titulo.valor = total;
 
                         if(total > 0){
-                            funAtualizarContas(titulo,(function(repostacallback){
+                            funAtualizarConta(titulo,(function(repostacallback){
                                 res.json(repostacallback);
                             }));
                         }
@@ -727,6 +727,12 @@ router.route('/atualizarconta').post(function(req, res) {
     try{
         parametros = req.body.parametros;
 
+        if(!(parametros.hasOwnProperty("idPedido")))
+            parametros.idPedido = "";
+
+        if(!(parametros.hasOwnProperty("idNotaFiscal")))
+            parametros.idNotaFiscal = "";
+
         funAtualizarConta(parametros,(function(repostacallback){
             res.json(repostacallback);
         }));
@@ -757,6 +763,7 @@ function funAtualizarConta(parametros,callbackf) {
         mensagem: [],
         titulo: null
     }
+    console.log(parametros);
 
     try{
         if(parametros.idTitulo == ""){
@@ -812,13 +819,13 @@ function funAtualizarConta(parametros,callbackf) {
             query += "where id = '" + parametros.idTitulo + "'";
             query += " and id_empresa = '" + EnterpriseID + "'";
         }
-        
+        console.log(query);
         sql.close();
         sql.connect(config, function (err) {    
             if (err){
                 resposta.status = -2;
                 resposta.mensagem = [];
-                resposta.mensagem.push("" + err);
+                resposta.mensagem.push("f: " + err);
                 resposta.titulo = null;
                 callbackf(resposta);
             }
@@ -831,7 +838,7 @@ function funAtualizarConta(parametros,callbackf) {
                             if (err){
                                 resposta.status = -3;
                                 resposta.mensagem = [];
-                                resposta.mensagem.push("" + err);
+                                resposta.mensagem.push("f: " + err);
                                 resposta.titulo = null;
                                 transacao.rollback();
                                 callbackf(resposta);
@@ -844,7 +851,7 @@ function funAtualizarConta(parametros,callbackf) {
                                             if (err){
                                                 resposta.status = -4;
                                                 resposta.mensagem = [];
-                                                resposta.mensagem.push("" + err);
+                                                resposta.mensagem.push("f: " + err);
                                                 titulo = null;
                                                 transacao.rollback();
                                                 callbackf(resposta);
@@ -861,7 +868,7 @@ function funAtualizarConta(parametros,callbackf) {
                                     catch(err){
                                         resposta.status = -5;
                                         resposta.mensagem = [];
-                                        resposta.mensagem.push("" + erro);
+                                        resposta.mensagem.push("f: " + erro);
                                         resposta.titulo = null;                            
                                         callbackf(resposta);
                                     }
@@ -880,7 +887,7 @@ function funAtualizarConta(parametros,callbackf) {
                 catch(err){
                     resposta.status = -6;
                     resposta.mensagem = [];
-                    resposta.mensagem.push("" + erro);
+                    resposta.mensagem.push("f: " + erro);
                     resposta.titulo = null;
                     callbackf(resposta);
                 }
@@ -890,7 +897,7 @@ function funAtualizarConta(parametros,callbackf) {
     catch(erro){
         resposta.status = -1;
         resposta.mensagem = [];
-        resposta.mensagem.push("" + erro);
+        resposta.mensagem.push("f: " + erro);
         resposta.titulo = null;
         callbackf(resposta);
     }
