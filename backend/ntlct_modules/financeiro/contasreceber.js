@@ -763,7 +763,6 @@ function funAtualizarConta(parametros,callbackf) {
         mensagem: [],
         titulo: null
     }
-    console.log(parametros);
 
     try{
         if(parametros.idTitulo == ""){
@@ -819,7 +818,7 @@ function funAtualizarConta(parametros,callbackf) {
             query += "where id = '" + parametros.idTitulo + "'";
             query += " and id_empresa = '" + EnterpriseID + "'";
         }
-        console.log(query);
+        
         sql.close();
         sql.connect(config, function (err) {    
             if (err){
