@@ -7,6 +7,7 @@ var sql = require("mssql");
 const general = require('./general')
 const ObjectID = require('mongodb').ObjectID
 
+const parseJson = require('parse-json');
 
 var pdf = require('html-pdf');
 const PDFDocument = require('pdfkit')
@@ -53,7 +54,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa";  //"homologa"; //"foodtown";
+        dados = "broker";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -1884,7 +1885,7 @@ router.route('/editGridLine/:id/:filtro').get(function(req, res) {
 function incremento(submit, callback){
 	var arrayRetorno = [];
     var countFor = 0;
-
+console.log("incremento")
     sql.close();
     sql.connect(config, function (err) {  
         for (var index = 0; index < submit.length; index++) {
@@ -1913,18 +1914,31 @@ function incremento(submit, callback){
                 if (err) console.log(err)
                 
                 console.log("recordSET - ")
-                if (recordset) {
-                    if (recordset.recordset) {
-                        arrayRetorno.push(recordset.recordset[0]);
+                if(field){
+                   if (recordset) {
+                        if (recordset.recordset) {
+                            if(recordset.recordset[0]){
+                                arrayRetorno.push(recordset.recordset[0]);
+                            }else{
+                                var jsonParse = '{\n\t"nr_incremento": 0, "nm_campo": "' + field + '" \n, "new": true \n }';
+                                            //console.log(submit[ind]);
+                                            //resultado[ind] = parseJson(jsonParse);
+                                            arrayRetorno.push(parseJson(jsonParse));
+                                //arrayRetorno.push(undefined);
+                            }
+                            
+                        }else{
+                            arrayRetorno.push(null);
+                        } 
                     }else{
                         arrayRetorno.push(null);
                     } 
-                }else{
-                    arrayRetorno.push(null);
                 }
+                
                 countFor += 1;
                 
-                if(submit.length == countFor){
+                if(submit.length == countFor){                    
+                    console.log(submit)
                     callback(arrayRetorno, submit); 						
                 }             
             
@@ -1969,7 +1983,8 @@ router.route('/save').post(function(req, res) {
     }else{
         tipo = "alterar"
     }
-
+    console.log("submit == ")
+    console.log(submit)
     userPermission(tipo, layoutID, UserID, function(permission){
         
         if(permission == false){
@@ -1980,9 +1995,12 @@ router.route('/save').post(function(req, res) {
             array.push(objret)
             res.send(array);
         }else{
-
+            
     incremento(submit, function(resultado, submit){
         
+    console.log("incremento == ")
+    console.log(submit)
+        console.log(resultado)
         sql.close()
         sql.connect(config).then(function() {
         for (var index = 0; index < submit.length; index++) {
@@ -2025,6 +2043,10 @@ router.route('/save').post(function(req, res) {
                                 var numberincrement;
                                 var updateincrement = ""
                 
+                                console.log(resultado)
+
+                                
+
                                 if(resultado){
                                     if (resultado.length > 0) {
                                         if (resultado[ind] != null) {
@@ -2035,12 +2057,27 @@ router.route('/save').post(function(req, res) {
                                                     updateincrement = "UPDATE incremento SET nr_incremento=" + numberincrement + " WHERE nm_tabela='" + submit[ind]["TABLE"] + "' AND nm_campo='" + resultado[ind].nm_campo + "'"
                                                 }
                                             }
-                                        }                        
-                                    }                    
+                                        }                       
+                                    }  
+                                    if(resultado[ind]){
+                                        if(resultado[ind].new){
+                                            //var jsonParse = '{\n\t"nr_incremento": 0, "nm_campo": "nm_documento" \n }';
+                                            //console.log(submit[ind]);
+                                            //resultado[ind] = parseJson(jsonParse);
+                                            submit[ind][resultado[ind].nm_campo + "_INCREMENT"] = parseInt(resultado[ind].nr_incremento) + 1
+                                            numberincrement = parseInt(resultado[ind].nr_incremento) + 1 
+                                            updateincrement = "INSERT INTO incremento (nr_incremento, nm_tabela, nm_campo, id, id_empresa) VALUES(" + numberincrement + ", '" + submit[ind]["TABLE"] + "', '" + resultado[ind].nm_campo + "', newID(), '" + EnterpriseID + "')";
+    
+                                        }
+                                    }
+                                    
                                 }
+
+                                
                                 
                                 insertOrUpdate = createInsert(submit, ind, guid, layoutID)
-                                insertOrUpdate += updateincrement;                
+                                insertOrUpdate += updateincrement;   
+                                console.log(insertOrUpdate)             
                                 request = new sql.Request();
                                 request.query(insertOrUpdate).then(function(recordset) {
                                     if (countfor > 0) {
@@ -2293,6 +2330,7 @@ function createInsert(submit, index, guid, layoutID){
                         var dts = submit[index][key].split('/');
                         if (dts.length > 0) {
                             submit[index][key] = dts[1] + "/" + dts[0] + "/" + dts[2];
+                            //submit[index][key] = dts[0] + "/" + dts[1] + "/" + dts[2];
                         }
                         submit[index][key] = "'" + submit[index][key] + "'"
                     }
@@ -2348,6 +2386,7 @@ function createInsert(submit, index, guid, layoutID){
     insertOrUpdate += " INSERT INTO " + table + " ";
     insertOrUpdate +=  sqlfields + " " + sqlvalues
 
+
     return insertOrUpdate;
 }
 
@@ -2395,6 +2434,7 @@ function createUpdate(submit, index){
                         //}
                         var dtsplit = submit[index][key].split("/")
                         submit[index][key] = dtsplit[1] + "/" + dtsplit[0] + "/" + dtsplit[2]
+                        //submit[index][key] = dtsplit[0] + "/" + dtsplit[1] + "/" + dtsplit[2]
 
                         submit[index][key] = "'" + submit[index][key] + "'"
                     }                  

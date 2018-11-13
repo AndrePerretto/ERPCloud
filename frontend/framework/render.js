@@ -525,21 +525,6 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             openData(dados, layoutID, tabGenID);
         }
         $(".wizard-buttons").addClass("hidden");
-
-        var tipoData = $("[data-nativedatatype='Data'][value!='']")
-        var hoje = new Date();
-        var dia = hoje.getDate().toString();
-        var mes = hoje.getMonth();
-        var ano = hoje.getFullYear();
-
-        if(dia.length == 1)
-            dia = "0" + dia;
-        for(var i = 0; i < tipoData.length; i++){
-            $(tipoData[i]).val( dia + "/" + (mes + 1) + "/" + ano);
-        }
-        $(".wizard-buttons").removeClass("hidden");
-        $(".wizard-buttons [data-wizard='back']").addClass("hidden");
-        $(".wizard-buttons .pull-right:contains('Próximo')").addClass("hidden");
     }});
     return tabGenID;
 }

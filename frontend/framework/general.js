@@ -181,7 +181,7 @@ function AjaxParameter(parameters) {
      $.ajax({
         
                 url: url,
-                type: "GET",
+                type: type,
                 crossDomain: true,
                 cors: true,
                 headers: {
