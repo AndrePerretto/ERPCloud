@@ -54,7 +54,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker";  //"homologa"; //"foodtown";
+        dados = "homologa";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -103,7 +103,7 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "broker"; //"foodtown";
+        dados = "homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
@@ -2077,6 +2077,7 @@ router.route('/save').post(function(req, res) {
                                 
                                 insertOrUpdate = createInsert(submit, ind, guid, layoutID)
                                 insertOrUpdate += updateincrement;   
+                                console.log("--------------------insert--------------------");
                                 console.log(insertOrUpdate)             
                                 request = new sql.Request();
                                 request.query(insertOrUpdate).then(function(recordset) {
@@ -2120,6 +2121,8 @@ router.route('/save').post(function(req, res) {
                         
                                 guid = submit[ind]["id"];
                                 insertOrUpdate = createUpdate(submit, ind) 
+                                console.log("--------------------Update--------------------");
+                                console.log(insertOrUpdate);
                                 request = new sql.Request();
                                 request.query(insertOrUpdate).then(function(recordset) {
                                     if (countfor > 0) {
