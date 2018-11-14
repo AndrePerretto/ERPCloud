@@ -162,7 +162,10 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
     var isvalid = false;
 
     var clear = true;
-
+    
+    if ($("#" + form).length == 0) {
+        form = form + "_panel";
+    }
     if ($("#" + form).length == 0) {
         form = form.replace(containerID,layoutID)
     }
@@ -179,12 +182,16 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
     }
 
     var fv = formv.data('formValidation');
-    isvalid = fv.validate();
+    if(fv){
+        isvalid = fv.validate();
 
-    if (isvalid.$invalidFields) {
-        if (isvalid.$invalidFields.length > 0) {
-            isvalid = false;
-            loaderImage(form, false);
+        if (isvalid.$invalidFields) {
+            if (isvalid.$invalidFields.length > 0) {
+                isvalid = false;
+                loaderImage(form, false);
+            } else {
+                isvalid = true;
+            }
         } else {
             isvalid = true;
         }
