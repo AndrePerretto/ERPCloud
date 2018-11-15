@@ -21,4 +21,5 @@ module.exports = function(server) {
     const ContasReceber = require('../ntlct_modules/financeiro/contasreceber')
     const ContasPagar = require('../ntlct_modules/financeiro/contaspagar')
     const movimentacaoservicos = require('../custom_modules/broker/servicos/movimentacaoservicos')
+    const buscacodsequencial = require('../ntlct_modules/produtos/buscacodsequencial')
 }
