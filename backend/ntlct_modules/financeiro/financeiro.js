@@ -307,3 +307,184 @@ function truncateDecimal(value,precision){
     var tmp = Math.trunc(step * value);
     return(tmp / step);
 }
+
+
+
+
+
+exports.moedaPorExternso = function(valor){
+    var milhares = null;
+    var centenas = null;
+    var dezenas = null;
+    var unidades = null;
+    var resposta = null;
+    var moeda = null;
+    var milhar = "";
+    var extenso = "";
+    var strValor = "";
+    var strInteira = "";
+    var strDecimal = "";
+    var juncao = "";
+    var tamanhoValor = 0;
+    var valorMilhar = 0;
+    var posMilhar = 0;
+    var nrGrupos = 0;
+    var centena = 0;
+    var decimal = 0;
+    var unidade = 0;
+    var posDec = 0;
+    var grupo = 0;
+
+    moeda = {
+        nomeSingular: "real",
+        nomePlural: "reais",
+        fracaoSingular: "centavo",
+        fracaoPlural: "centavos"
+    }
+
+    try{
+        milhares = [
+            {"singular":"trilhão","plural":"trilhões","juncao":"de "},
+            {"singular":"bilhão","plural":"bilhões","juncao":"de "},
+            {"singular":"milhão","plural":"milhões","juncao":"de "},
+            {"singular":"mil","plural":"mil","juncao":""},
+            {"singular":"","plural":"","juncao":""}
+        ];
+
+        centenas = [
+            {"singular":"","plural":""},
+            {"singular":"cem","plural":"cento"},
+            {"singular":"duzentos","plural":"duzentos"},
+            {"singular":"trezentos","plural":"trezentos"},
+            {"singular":"quatrocentos","plural":"quatrocentos"},
+            {"singular":"quinhentos","plural":"quinhentos"},
+            {"singular":"seiscentos","plural":"seiscentos"},
+            {"singular":"setecentos","plural":"setecentos"},
+            {"singular":"oitocentos","plural":"oitocentos"},
+            {"singular":"novecentos","plural":"novecentos"},
+        ];
+
+        dezenas = ["","dez","vinte","trinta","quarenta","cinquenta","sessenta","setenta","oitenta","noventa"];
+
+        unidades = ["","um","dois","três","quatro","cinco","seis","sete","oito","nove","dez","onze","doze","treze","quatorze","quinze","dezesseis","dezessete","dezoito","dezenove"]
+
+        strValor = valor.toString();
+
+        posDec = strValor.indexOf(".");
+
+        if(posDec < 0){
+            strInteira = strValor;
+        }
+        else{
+            strInteira = strValor.substring(0,posDec);
+            strDecimal = strValor.substring(posDec + 1,posDec + 3).trim();
+        }
+
+        nrGrupos = milhares.length;
+        tamanhoValor = nrGrupos * 3;
+
+        if(strInteira.length > tamanhoValor){
+            resposta = {
+                status: 0,
+                mensagem: "Valor excede o limite previsto de " + milhares[0].plural
+            }
+        }
+        else{
+            if(strInteira.length < tamanhoValor){
+                strInteira = ("0").repeat(tamanhoValor - strInteira.length) + strInteira;
+            }
+            if(strDecimal.length == 1)
+                strDecimal += "0";
+
+            for(grupo = 0; grupo < nrGrupos; grupo++){
+                posMilhar = 3 * grupo;
+                milhar = strInteira.substring(posMilhar,posMilhar + 3);
+                valorMilhar = parseInt(milhar);
+                if(valorMilhar > 0){
+                    juncao = milhares[grupo].juncao;
+                    if(extenso != "")
+                        extenso+= ", ";
+                    centena = parseInt(milhar.substring(0,1));
+                    dezena = parseInt(milhar.substring(1,3));
+
+                    if(centena > 0){
+                        if(dezena == 0)
+                            extenso += centenas[centena].singular;
+                        else
+                            extenso += centenas[centena].plural + " e ";
+                    }
+                    
+                    if(dezena > 0){
+                        if(dezena < 20){
+                            extenso += unidades[dezena];
+                        }
+                        else{
+                            unidade = dezena % 10;
+                            dezena = Math.trunc(dezena / 10);
+                            if(unidade > 0){
+                                extenso += dezenas[dezena] + " e ";
+                                extenso += unidades[unidade];
+                            }
+                            else{
+                                extenso += dezenas[dezena];
+                            }
+                        }
+                    }
+                    if(valorMilhar == 1)
+                        extenso += " " + milhares[grupo].singular;
+                    else
+                        extenso += " " + milhares[grupo].plural;
+                }
+            }
+
+            if(extenso != ""){
+                if(parseInt(strInteira) > 1)
+                    extenso += " " + juncao + moeda.nomePlural;
+                else
+                    extenso += " " + juncao + moeda.nomeSingular;
+            }
+
+            decimal = parseInt(strDecimal);
+            if(decimal > 0){
+                if(extenso != "")
+                    extenso += " e ";
+                if(decimal < 20){
+                    extenso += unidades[decimal];
+                }
+                else{
+                    unidade = decimal % 10;
+                    dezena = Math.trunc(decimal / 10);
+                    if(unidade > 0){
+                        extenso += dezenas[dezena] + " e ";
+                        extenso += unidades[unidade];
+                    }
+                    else{
+                        extenso += dezenas[dezena];
+                    }
+
+                }
+
+                if(decimal == 1)
+                    extenso += " " + moeda.fracaoSingular;
+                else
+                    extenso += " " + moeda.fracaoPlural;
+            }
+
+
+            resposta = {
+                status: 1,
+                mensagem: extenso
+            }            
+        }
+    }
+    catch(erro){
+        resposta = {
+            status: -1,
+            mensagem: "" + erro
+        }
+    }
+
+    console.log(resposta);
+
+    return(resposta);
+}
