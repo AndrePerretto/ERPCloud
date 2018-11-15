@@ -41,6 +41,10 @@ function CreateAba(nameLayout, layoutID, titleMenu, dados, navigation, container
     fillTab(nameLayout,layoutID,titleMenu,false, enterpriseID, tabGenID, function(){
         openData(dados, layoutID, tabGenID);        
         
+        if(containerType == "MODAL"){
+            $("[layoutid='" + layoutID + "_" + tabGenID + "']").addClass("hidden")
+        }
+
         if(callInstance){
             callInstance()
         }

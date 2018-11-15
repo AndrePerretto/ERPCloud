@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"erpcloud.layouts"}],"uuid":"d2713bca002f48348996b5a9e326ccd6"}
+=======
 {"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"erpcloud.layouts"}]}
+>>>>>>> a9358f698df08409aae31ffe78545ede078ae1c8
