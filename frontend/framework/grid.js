@@ -1061,14 +1061,17 @@ function gridedit(id, source, force){
 function AfterSelectItemGrid(element) {
     var $dropUnidadeMedida = $("[selectid='_CoItensVenda_ddlunidademedida']");
     var idProduto = $(element).attr("data-valuegrid");
+    var ddllistaprecos = $("[id*='CoCabecalhoVenda_ddllistaprecos']").val();
     var text = "";
     var valor = "";
     var Dados = "";
     Dados = Dados + "EnterpriseID=" + returnCookie("EnterpriseID");
     Dados = Dados + "&Class=ClassVenda&Function=BuscarDadosProduto&ValueParameters[0]=" + idProduto;
+    Dados = Dados + "&ValueParameters[1]=" + ddllistaprecos;
+
     var parameters = new Object();
     //parameters.url = getGlobalParameters("urlPlataforma") + "/api/compiler/CsharpCompiler";
-    parameters.url = "http://homologa.empresariocloud.com.br/api/compiler/CsharpCompiler";
+    parameters.url = getGlobalParameters("urlPlataforma") + "/api/compiler/CsharpCompiler";
     parameters.dados = Dados;
     parameters.async = false;
     parameters.type = "GET";
@@ -1089,7 +1092,12 @@ function AfterSelectItemGrid(element) {
             if(result.property[2].value.length > 0){
                 if (a_id.length > 0) {
                     a_id[0] = a_id[0].replace("_", "");
-                    $("[data-idgrid='" + a_id[0] + "_CoItensVenda_txtvalorunitario']").val(result.property[2].value[0]);
+                    var valorunitario = result.property[2].value[0];
+                    if(!valorunitario){
+                        valorunitario = "0";
+                        $("[data-idgrid='" + a_id[0] + "_CoItensVenda_txtvalortotal']").val(valorunitario);
+                    }
+                    $("[data-idgrid='" + a_id[0] + "_CoItensVenda_txtvalorunitario']").val(valorunitario);
                 }               
             }
 

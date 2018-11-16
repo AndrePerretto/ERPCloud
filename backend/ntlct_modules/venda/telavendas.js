@@ -136,9 +136,53 @@ router.route('/*').post(function(req, res, next) {
 
 
 
-router.route('/recarregarValoresListaPreço/:idlista/:produtos').get(function(req, res) {
+router.route('/recarregarValoresListaPreco').post(function(req, res) {
+    var parametros = req.body.parametros;
+    var where = "";
     
-    var select = "SELECT id AS 'id', nm_descricao AS 'nome' FROM simples_nacional  ";
+    var idLista = "";
+    where = " WHERE  ";
+
+    if(parametros.id){
+        idLista = parametros.id;
+    }else{
+        res.send("");
+    }
+    
+    var Produtos = [];
+    if(parametros){
+        if(parametros.produtos){
+            if(parametros.produtos.length > 0){
+                Produtos = parametros.produtos;
+            }
+        }
+    }
+
+    if(!Produtos.length > 0){
+        res.send("");
+    }
+
+    where += "  ( ";
+    for (let index = 0; index < Produtos.length; index++) {
+        if(index == 0){
+            where += " produtos.id='" + Produtos[index] + "' "
+        }else{
+            where += " OR produtos.id='" + Produtos[index] + "' "
+        }
+    }
+    where += " )";
+
+    var select = "SELECT produtos.id AS 'id' , ";
+    select += " IIF( ";
+    select += " (SELECT precos_lista.vl_valor FROM precos_lista WHERE precos_lista.id_dsg_lista_preco='" + idLista + "'   ";
+    select += " AND precos_lista.id_produtos=produtos.id) IS NOT NULL,  ";
+    select += " (SELECT precos_lista.vl_valor FROM precos_lista WHERE precos_lista.id_dsg_lista_preco='" + idLista + "'   ";
+    select += " AND precos_lista.id_produtos=produtos.id), ";
+    select += " '0' ";
+    select += "  ) AS 'valor' ";
+    select += " FROM produtos ";
+    select = select + where;
+    console.log(select);
 
     sql.close(); 
     sql.connect(config, function (err) { 
