@@ -39,12 +39,12 @@ function CreateAba(nameLayout, layoutID, titleMenu, dados, navigation, container
     }
 
     fillTab(nameLayout,layoutID,titleMenu,false, enterpriseID, tabGenID, function(){
-        openData(dados, layoutID, tabGenID);        
+        openData(dados, layoutID, tabGenID);
         
-        if(containerType == "MODAL"){
-            $("[layoutid='" + layoutID + "_" + tabGenID + "']").addClass("hidden")
-        }
-
+    if(containerType == "MODAL"){
+        $("[layoutid='" + layoutID + "_" + tabGenID + "']").addClass("hidden")
+    }
+        
         if(callInstance){
             callInstance()
         }
@@ -528,7 +528,6 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
             var dados = "&Filtro=*"
             openData(dados, layoutID, tabGenID);
         }
-        $(".wizard-buttons").addClass("hidden");
 
         var tipoData = $("[data-nativedatatype='Data'][value!='']")
         var hoje = new Date();
@@ -540,6 +539,11 @@ function fillTab(nameLayout,layoutID,titleMenu,loadData, enterpriseID, tabGenID,
         for(var i = 0; i < tipoData.length; i++){
             $(tipoData[i]).val( dia + "/" + (mes + 1) + "/" + ano);
         }
+
+        $(".wizard-buttons").removeClass("hidden");
+        $(".wizard-buttons [data-wizard='back']").addClass("hidden");
+        $(".wizard-buttons .pull-right:contains('Próximo')").addClass("hidden");
+
     }});
     
     return tabGenID;
