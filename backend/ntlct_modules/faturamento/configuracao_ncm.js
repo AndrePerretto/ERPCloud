@@ -214,3 +214,19 @@ router.route('/listaCboCatNcm').post(function(req, res) {
 })
 
 
+
+router.route('/carregaTabelasSimples').get(function(req, res) {
+    
+    var select = "SELECT id AS 'id', nm_descricao AS 'nome' FROM simples_nacional  ";
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+                if (err) console.log(err);
+                
+                res.send(recordset); 
+        }); 
+    }); 
+});
