@@ -716,8 +716,6 @@ function addRowGrid(containerID, controls, navigation, clearFormIgnore) {
     $(".dropdown-toggle").dropdown();
 }
 
-
-
 function mudaTotalGrid(containerID, parameters) {
     var element = $("#" + containerID + "_table");
     var dataRows = element.find('tbody tr');
@@ -1056,12 +1054,15 @@ function gridedit(id, source, force){
     }
 }
 
-
 //Função temporaria, será transportada para o metadados
 function AfterSelectItemGrid(element) {
     var $dropUnidadeMedida = $("[selectid='_CoItensVenda_ddlunidademedida']");
     var idProduto = $(element).attr("data-valuegrid");
     var ddllistaprecos = $("[id*='CoCabecalhoVenda_ddllistaprecos']").val();
+    var idTela = $(element).attr("data-idgrid").replace("CoItensVenda_txtitensid", "");
+    var quantidade = $("#" + idTela + "CoItensVenda_txtquantidade").val();
+
+
     var text = "";
     var valor = "";
     var Dados = "";
@@ -1070,7 +1071,6 @@ function AfterSelectItemGrid(element) {
     Dados = Dados + "&ValueParameters[1]=" + ddllistaprecos;
 
     var parameters = new Object();
-    //parameters.url = getGlobalParameters("urlPlataforma") + "/api/compiler/CsharpCompiler";
     parameters.url = getGlobalParameters("urlPlataforma") + "/api/compiler/CsharpCompiler";
     parameters.dados = Dados;
     parameters.async = false;
@@ -1117,6 +1117,24 @@ function AfterSelectItemGrid(element) {
             
             CalculaTotaisVenda();
         }        
+    }
+
+
+    parameters = new Object();
+    parameters.url = getGlobalParameters("urlPlataform") + "/ntlct_modules/venda/telavendas/carregarPeso";
+    parameters.url += "/" + idProduto + "/" + quantidade;
+    parameters.dados = Dados;
+    parameters.async = false;
+    parameters.type = "GET";
+    
+    result = AjaxParameter(parameters);
+    if (result) {
+        if (result.recordset) {
+            if (result.recordset.length > 0) {
+                $("#" + idTela + "CoDadosTransportadoraMovimentacao_txtpesobruto").val(result.recordset[0].pesobruto);
+                $("#" + idTela + "CoDadosTransportadoraMovimentacao_txtpesoliquido").val(result.recordset[0].pesoliquido);
+            }
+        }
     }
 }
 

@@ -75,7 +75,6 @@ router.route('/*').get(function(req, res, next) {
     });    
 });
 
-
 router.route('/*').post(function(req, res, next) {
 
     var full = req.host; //"http://homologa.empresarioerpcloud.com.br"; //
@@ -133,9 +132,6 @@ router.route('/*').post(function(req, res, next) {
     });    
 });
 
-
-
-
 router.route('/recarregarValoresListaPreco').post(function(req, res) {
     var parametros = req.body.parametros;
     var where = "";
@@ -183,6 +179,29 @@ router.route('/recarregarValoresListaPreco').post(function(req, res) {
     select += " FROM produtos ";
     select = select + where;
     console.log(select);
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+                if (err) console.log(err);
+                
+                res.send(recordset); 
+        }); 
+    }); 
+});
+
+router.route('/carregarPeso/:idproduto/:quantidade').get(function(req, res) {
+    var idproduto = req.param('idproduto');
+    var quantidade = req.param('quantidade');
+    
+    if(!quantidade){
+        quantidade = "1";
+    }
+
+    var select = "SELECT (vl_pesobruto * " + quantidade + ") AS 'pesobruto', (vl_pesoliquido * " + quantidade + ") AS 'pesoliquido' FROM produtos ";
+    select += " WHERE id='" + idproduto + "'";
 
     sql.close(); 
     sql.connect(config, function (err) { 

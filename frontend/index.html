@@ -713,14 +713,21 @@
 				$(window).keydown(function (event) {
                     if (event.keyCode == 13) {
                         event.preventDefault();
+                        console.log("griiid");
                         if($(".jsgrid-mode-on-button").length == 0){
                             $(".jsgrid-filter-row").remove();
                             $(".jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button").click()
                             $(".jsgrid-cell input[type='text']").first().focus()
                         }else{
-                            $(".jsgrid-filter-row").remove();
-                            $(".jsgrid-button.jsgrid-insert-button").click();
-                            $(".jsgrid-cell input[type='text']").first().focus()
+
+                            var itensid = $("[id*='CoItensVenda_txtitensid']").attr("data-valuegrid");
+                            if(itensid){
+                                $(".jsgrid-filter-row").remove();
+                                $(".jsgrid-button.jsgrid-insert-button").click();
+                                $(".jsgrid-cell input[type='text']").first().focus()
+                            }else{
+                                notification({ messageTitle: "Ops", messageText: "Selecione um produto antes de adicionar o item.", fix: false, type: "error", icon: "thumbs-down" });
+                            }
                         }                        
                         
                         return false;
