@@ -54,7 +54,7 @@ router.route('/*').get(function(req, res, next) {
 
     if(full.indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa";  //"homologa"; //"foodtown";
+        dados = "broker";  //"homologa"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
         local = true;
     }else{
@@ -103,7 +103,7 @@ router.route('/*').get(function(req, res, next) {
 function conectionsLink(full, callback){
     if(String(full).indexOf("localhost") > -1){
         serverWindows = "http://localhost:2444";
-        dados = "homologa"; //"foodtown";
+        dados = "broker"; //"foodtown";
         configEnvironment = {user: 'sa', password: 'IntSql2015@', server: '127.0.0.1',  database: 'Environment'};
     }else{
         var parts = String(full).split('.');
@@ -1887,10 +1887,10 @@ function incremento(submit, callback){
     var countFor = 0;
 console.log("incremento")
     sql.close();
+            var field = "";
     sql.connect(config, function (err) {  
         for (var index = 0; index < submit.length; index++) {
             var table;
-            var field;
             var indexIncrement = -1;
             var fieldincrement = "";
 
@@ -1899,15 +1899,17 @@ console.log("incremento")
                 
                 if (indexIncrement >= 0) {
                     fieldincrement = key;
+                    field = fieldincrement.replace("_INCREMENT","");
+                    table = submit[index]["TABLE"];
                     break;
                 }
             }
             
-            field = fieldincrement.replace("_INCREMENT","");
-            table = submit[index]["TABLE"];
-      
+
+                
+        
             var select = "SELECT nr_incremento, nm_campo FROM incremento WHERE nm_tabela = '" + table + "' AND nm_campo='" + field + "'"
-           
+            
             request = new sql.Request();
             
             request.query(select, function (err, recordset) {	
@@ -1915,7 +1917,7 @@ console.log("incremento")
                 
                 console.log("recordSET - ")
                 if(field){
-                   if (recordset) {
+                    if (recordset) {
                         if (recordset.recordset) {
                             if(recordset.recordset[0]){
                                 arrayRetorno.push(recordset.recordset[0]);
@@ -1942,7 +1944,8 @@ console.log("incremento")
                     callback(arrayRetorno, submit); 						
                 }             
             
-            });     
+            });
+              
         }
     });
 }
