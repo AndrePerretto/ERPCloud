@@ -198,7 +198,7 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
     } else {
         isvalid = true;
     }
-
+    
     if (isvalid) {
         var data = SerializeFields({
             formID: form,
@@ -357,7 +357,8 @@ function SerializeFields(param){
             
             if (campo) {          
                 for (let index = 0; index < campo.length; index++) {
-                    var carac = campo.charAt(index) 
+                    var carac = campo.charAt(index)
+                    carac = carac.toLowerCase();
                     if (arraycaracter.indexOf(carac) >= 0) {
                         newfield +=  carac;
                     }         
@@ -384,7 +385,7 @@ function SerializeFields(param){
         
     }
 
-    arrayObjs = sortBy(arrayObjs, "table")
+    //arrayObjs = sortBy(arrayObjs, "table")
 
     var json = ""    
     json += '['

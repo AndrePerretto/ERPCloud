@@ -802,11 +802,12 @@ function deleteRowGrid(button, containerID ,valueID, layoutID){
     confirm("Deseja deletar este item?",function(){
     if (valueID) {
         var id = valueID;
+        var UserID = returnCookie("UserID");
 
         $.ajax({
             contentType: "application/json",
             accepts: "application/json",
-            url: url + "/" + containerID + "/" + id + "/", 
+            url: url + "/" + layoutID  + "/"  + containerID + "/" + UserID + "/" +  id + "/", 
             type: "GET",
             success: function(result){                    
                 if (result.status) {
