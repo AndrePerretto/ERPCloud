@@ -101,7 +101,7 @@ router.route('/carregaSubServico/:idProdutos/:idEntidade').get(function(req, res
         request.query(select, function (err, recordset){ 
             if (err) console.log(err); 
 
-            
+
             res.send(recordset);
         });
     });
@@ -731,6 +731,7 @@ router.route('/gerarComissao/:id').get(function(req, res) {
 
     select += " WHERE movimentacao_servicos.id='" + id + "' ";
     
+
     sql.close(); 
     sql.connect(config, function (err) { 
         if (err) console.log(err); 
@@ -807,6 +808,9 @@ router.route('/gerarComissao/:id').get(function(req, res) {
                     }
                 }
 
+                if(vl_comissaoOp == ""){
+                    vl_comissaoOp = "0"
+                }
 
                 if(idcomissop == null){
                     if(id_operador){
@@ -820,6 +824,9 @@ router.route('/gerarComissao/:id').get(function(req, res) {
                     }
                 }
                 
+                if(vl_comissaoInd == ""){
+                    vl_comissaoInd = "0";
+                }
                 
                 if(idcomissind == null){
                     if(id_indicador){
@@ -833,6 +840,7 @@ router.route('/gerarComissao/:id').get(function(req, res) {
                     }
                 }
 
+                console.log("insertupdate === ")
                 console.log(insertupdate)
                 sql.close(); 
                 sql.connect(config, function (err) { 

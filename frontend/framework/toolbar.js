@@ -230,7 +230,10 @@ function onSave(form, id, instanceID, containerID, layoutID, async, onAfterSavin
                   
                 if (result[i].status == "success") {
                     var elementID = $($("#" + form.replace(containerID,layoutID))[0]).find("[name*='_PK']")
-                          
+                    if (elementID.length == 0) {
+                        elementID = $("#" + form).find("[name*='_PK']");
+                    }
+
                     if (clear == false) {
                         ClearForm(form, true);
                                           
