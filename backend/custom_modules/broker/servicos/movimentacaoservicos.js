@@ -95,7 +95,8 @@ router.route('/carregaSubServico/:idProdutos/:idEntidade').get(function(req, res
         if (err) console.log(err); 
         var select = "SELECT produtos.id AS 'id', produtos.nm_descricao AS 'desc', (SELECT TOP 1 cliente_servicos.id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'moeda', (SELECT TOP 1 cliente_servicos.vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'precovenda'   FROM produtos_subservicos INNER JOIN produtos ON produtos.id=produtos_subservicos.id_subservicos WHERE produtos_subservicos.id_produtos='" + idProdutos + "';";
         select += " SELECT produtos.id AS 'id',  produtos.nm_descricao AS 'desc', (SELECT TOP 1 cliente_servicos.id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'moeda', (SELECT TOP 1 cliente_servicos.vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=produtos.id) AS 'precovenda'   FROM produtos WHERE produtos.id='" + idProdutos + "' ";
-        
+        select += " SELECT subservico.id AS 'id', subservico.nm_descricao AS 'desc', (SELECT TOP 1 cliente_servicos.id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=subservico.id) AS 'moeda', (SELECT TOP 1 cliente_servicos.vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' AND id_produtos=subservico.id) AS 'precovenda'   FROM produtos_subservicos INNER JOIN subservico ON subservico.id=produtos_subservicos.id_subservicos WHERE produtos_subservicos.id_produtos='" + idProdutos + "';";
+
         console.log(select)
         var request = new sql.Request();
         request.query(select, function (err, recordset){ 
@@ -873,7 +874,6 @@ router.route('/gerarComissao/:id').get(function(req, res) {
     });     
 });
 
-
 router.route('/carregaControleComissaoPagarDesconto/:id').get(function(req, res) {
     var id = req.param('id'); 
     var where = ""; 
@@ -892,8 +892,6 @@ router.route('/carregaControleComissaoPagarDesconto/:id').get(function(req, res)
         }); 
     }); 
 });
-
-
 
 router.route('/editarControleComissaoPagarDesconto/:id').get(function(req, res) {
     var id = req.param('id'); 
@@ -914,8 +912,6 @@ router.route('/editarControleComissaoPagarDesconto/:id').get(function(req, res) 
     }); 
 });
 
-
-
 router.route('/carregaControleComissaoPagarEquipe/:id/:equipe').get(function(req, res) {
     var id = req.param('id'); 
     var equipe = req.param('equipe'); 
@@ -935,4 +931,232 @@ router.route('/carregaControleComissaoPagarEquipe/:id/:equipe').get(function(req
                 res.send(recordset); 
         }); 
     }); 
+});
+
+router.route('/gerarContasReceber/:id').get(function(req, res) {
+    var id = req.param('id'); 
+    
+    var select = "SELECT entidade.id AS 'id', entidade.nm_razaosocial AS 'descricao', ('0') AS 'valor'  ";
+    select += " FROM entidade ";
+    select += " INNER JOIN equipe ON equipe.id=entidade.id_equipe ";
+    select += " WHERE equipe.id='" +  id + "'"; 
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+            if (err) console.log(err);
+            
+            res.send(recordset); 
+        }); 
+    }); 
+});
+
+router.route('/filtrarImportacaoBySisco/:dataDe/:dataAte/:cliente/:servico').get(function(req, res) {
+
+    var dataDe = req.param('dataDe');
+    var dataAte = req.param('dataAte');
+    var cliente = req.param('cliente');
+    var servico = req.param('servico');
+    var where = "";
+    var query = "";
+
+    const { Pool } = require('pg');
+    const pool = new Pool({
+        user: 'Intelecta',
+        host: 'Brokerbrasil.dyndns.org',
+        database: 'BySisco',
+        password: 'Broker2018',
+        port: 5432,
+    })
+
+    query += " SELECT venda.idvenda AS idvenda, ";
+    query += " TO_CHAR(venda.datacadastro, 'DD/MM/YYYY') AS datacadastro , ";
+    query += " pessoa.nome AS nomepessoa, nbs.nome AS nomeservico, ";
+    query += " to_char(venda.valortotal, 'L9G999G990D99') AS  valortotal, ";
+    query += " pessoa.cpfcnpj"
+    query += " FROM venda ";
+    query += " INNER JOIN pessoa ON pessoa.idpessoa = venda.idpessoavenda ";
+    query += " INNER JOIN vendaoperacao ON venda.idvenda = vendaoperacao.idvenda ";
+    query += " INNER JOIN nbs ON nbs.idnbs=vendaoperacao.idnbs ";
+    
+    if(dataDe){ 
+        if(dataDe != "*"){ 
+            dataDe = dataDe.replace("-","/"); 
+            dataDe = dataDe.replace("-","/"); 
+            if(!where){ 
+                where += " WHERE venda.datacadastro >= '" + dataDe + "' "; 
+            }else{ 
+                where += " AND venda.datacadastro >= '" + dataDe + "' "; 
+            } 
+        } 
+    } 
+
+    if(dataAte){ 
+        if(dataAte != "*"){ 
+            dataAte = dataAte.replace("-","/"); 
+            dataAte = dataAte.replace("-","/"); 
+            if(!where){ 
+                where += " WHERE venda.datacadastro <= '" + dataAte + "' "; 
+            }else{ 
+                where += " AND venda.datacadastro <= '" + dataAte + "' "; 
+            } 
+        } 
+    } 
+    
+    /*
+    if(cliente){ 
+        if(cliente != "*"){ 
+            if(!where){ 
+                where += " WHERE (op.id_equipe = '" + cliente + "') "; 
+            }else{ 
+                where += " AND (op.id_equipe = '" + cliente + "')  "; 
+            } 
+        }else{
+            if(!where){ 
+                where += " WHERE (op.id_equipe IS NULL) "; 
+            }else{ 
+                where += " AND (op.id_equipe  IS NULL)  "; 
+            } 
+        } 
+    } 
+    */
+
+   query = query + where; 
+    //query += " WHERE venda.datacadastro >= '01/02/2018' AND venda.datacadastro <= '01/03/2018'";
+
+    query += " ORDER BY venda.datacadastro DESC ";
+
+    console.log(query);
+
+    pool.query(query, (err, rest) => {
+        console.log(err, rest)
+        pool.end()
+        res.send(rest);
+    })
+     
+});
+
+router.route('/onLoadVendedorServicos/:idVendedor').get(function(req, res) {
+    var idVendedor = req.param('idVendedor'); 
+    
+    var  select = "SELECT produtos.id as 'id', produtos.nm_descricao as 'descricao', ";
+    select += " IIF((SELECT vl_comissaooperador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,0,(SELECT vl_comissaooperador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'percOP', ";      
+    select += " IIF((SELECT vl_comissaoindicador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,0,(SELECT vl_comissaoindicador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'percInd' ";    
+    select += " FROM produtos WHERE id_tipoproduto='5F1FCE95-1AAC-43D8-BB0C-689ECEE69574'; ";
+
+    select += "SELECT subservico.id as 'id', subservico.nm_descricao as 'descricao', ";
+    select += " IIF((SELECT vl_comissaooperador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=subservico.id) IS NULL,0,(SELECT vl_comissaooperador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'percOP', ";      
+    select += " IIF((SELECT vl_comissaoindicador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=subservico.id) IS NULL,0,(SELECT vl_comissaoindicador FROM vendedor_servicos WHERE id_vendedor='" + idVendedor + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'percInd' ";
+    
+    select += " FROM subservico ";
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+            if (err) console.log(err);
+            
+            res.send(recordset); 
+        }); 
+    }); 
+});
+
+router.route('/carregarClienteServico/:idEntidade').get(function(req, res) {
+    var idEntidade = req.param('idEntidade'); 
+    
+    var  select = "";
+
+    select += " SELECT produtos.id as 'id', produtos.nm_descricao as 'descricao', ";
+    select += " IIF((SELECT vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,0,(SELECT vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'valor',";
+
+    select += " IIF((SELECT id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,NULL,(SELECT id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'idmoeda',";
+
+    select += " IIF((SELECT nm_descricao FROM cliente_servicos INNER JOIN dsg_moeda ON dsg_moeda.id=cliente_servicos.id_dsg_moeda WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,NULL,(SELECT nm_descricao FROM cliente_servicos INNER JOIN dsg_moeda ON dsg_moeda.id=cliente_servicos.id_dsg_moeda WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'moeda',";
+
+    select += " IIF((SELECT sn_notaunica FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id) IS NULL,0,(SELECT sn_notaunica FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=produtos.id)) AS 'notaunica'";
+    
+    select += " FROM produtos WHERE id_tipoproduto='5F1FCE95-1AAC-43D8-BB0C-689ECEE69574'; ";
+
+    select += " SELECT subservico.id as 'id', subservico.nm_descricao as 'descricao', ";
+    select += " IIF((SELECT vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id) IS NULL,0,(SELECT vl_valor FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'valor',";
+
+    select += " IIF((SELECT id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id) IS NULL,NULL,(SELECT id_dsg_moeda FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'idmoeda',";
+
+    select += " IIF((SELECT nm_descricao FROM cliente_servicos INNER JOIN dsg_moeda ON dsg_moeda.id=cliente_servicos.id_dsg_moeda WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id) IS NULL,NULL,(SELECT nm_descricao FROM cliente_servicos INNER JOIN dsg_moeda ON dsg_moeda.id=cliente_servicos.id_dsg_moeda WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'moeda', ";
+
+    select += " IIF((SELECT sn_notaunica FROM cliente_servicos WHERE id_entidade='" + idEntidade + "'  ";
+    select += " AND id_produtos=subservico.id) IS NULL,0,(SELECT sn_notaunica FROM cliente_servicos WHERE id_entidade='" + idEntidade + "' ";
+    select += " AND id_produtos=subservico.id)) AS 'notaunica' ";
+
+    select += " FROM subservico ";
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(select, function (err, recordset){ 
+            if (err) console.log(err);
+            
+            res.send(recordset); 
+        }); 
+    }); 
+});
+
+router.route('/gravarClienteServico/:idprodutos/:valor/:idmoeda/:unicamoeda/:idEntidade').get(function(req, res) { 
+     
+    var idprodutos = req.param('idprodutos');
+    var valor = req.param('valor');
+    var idmoeda = req.param('idmoeda')
+    var unicamoeda = req.param('unicamoeda');
+    var idEntidade = req.param('idEntidade');
+
+    var insertupdate = ""; 
+
+    if(valor.indexOf(',') >= 0){
+        valor = valor.replace(".", "").replace(",", ".");
+    }
+
+    insertupdate = "DELETE FROM cliente_servicos WHERE id_produtos='" + idprodutos + "' AND id_entidade='" + idEntidade + "';"
+    
+    insertupdate += "INSERT INTO cliente_servicos (id, id_produtos, vl_valor, id_dsg_moeda, sn_notaunica, id_entidade) ";
+    insertupdate += " VALUES(newID(), '" + idprodutos + "', " + valor + ",'" + idmoeda + "',1, '" + idEntidade + "');";
+    
+
+    console.log(insertupdate);
+
+    sql.close(); 
+    sql.connect(config, function (err) { 
+        if (err) console.log(err); 
+        var request = new sql.Request(); 
+        request.query(insertupdate, function (err, recordset){ 
+            if (err) console.log(err);
+                            
+            res.send(true); 
+        }); 
+    });  
 });

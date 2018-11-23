@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "parse-json": "^4.0.0"
+    "parse-json": "^4.0.0",
+    "pg": "^7.6.1"
   },
   "devDependencies": {},
   "scripts": {
