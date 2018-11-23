@@ -1112,7 +1112,8 @@ function fillScreen(data, template, layoutID, fillgrid){
     var idGrid = "";
     var containerID = "";
     var p=data;
-    var rowstring = "";
+    var rowstring = null;
+    var stringrow = "";
     var dataGridRows = [[]];
     var container = "";
 
@@ -1191,8 +1192,11 @@ function fillScreen(data, template, layoutID, fillgrid){
                                   
                     row = {};
                     arraytable.push(table)
-                    row[idfield] = p[i][key]; 
-                    rowstring = " { \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
+                    row[idfield] = p[i][key];
+                    
+                    stringrow = "{ \"" +  idfield + "\" : \"\"}";
+                    rowstring = JSON.parse(stringrow);
+                    rowstring[idfield] = p[i][key];
 
                     arraydatagrid.push([]);
                     arraydataJSON.push([]);
@@ -1206,13 +1210,12 @@ function fillScreen(data, template, layoutID, fillgrid){
 
                     if(row == null){
                         row = {}
-                        rowstring = "{ ";
-                        rowstring += " \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
+                        stringrow = "{ \"" +  idfield + "\" : \"\"}";
+                        rowstring = JSON.parse(stringrow);
+                        rowstring[idfield] = p[i][key];
                     }else{
-                        rowstring += " , \"" +  idfield + "\" : \"" + p[i][key] + "\" ";
-                    }
-
-                    
+                        rowstring[idfield] = p[i][key];
+                    }                    
                     
                     if(p[i][key] === true && p[i][key] !== 1){
                         p[i][key] = "SIM";
@@ -1221,8 +1224,6 @@ function fillScreen(data, template, layoutID, fillgrid){
                     }
 
                     row[idfield] = p[i][key]; 
-                    
-                    
                     
                 }     
             }else if(template != "MASTERDETAIL" && template != "GRID"){
@@ -1301,14 +1302,8 @@ function fillScreen(data, template, layoutID, fillgrid){
                 if(arraydataJSON[index].indexOf(JSON.stringify(row)) < 0){
                     arraydatagrid[index].push(row);
                     arraydataJSON[index].push(JSON.stringify(row));
-
-                    rowstring +=   " }  ";
-                    dataGridRows[index].push(JSON.parse(rowstring));
-                }
-
-                
-                rowstring =   "{  ";
-                
+                    dataGridRows[index].push(rowstring);
+                }                
             }       
             row = null; 
         }
